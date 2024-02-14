@@ -12,19 +12,19 @@ public class Controller {
 
     private GUI gui;
 
-    private List<Shape> shapes = new ArrayList<>();
+    private final List<Shape> shapes = new ArrayList<>();
     public Controller(GUI gui) {
         this.gui = gui;
     }
 
     public void addShape(double x, double y, double x1, double y1, ShapeType shapeType) {
-        switch (shapeType){
-            case LINE:
+        switch (shapeType) {
+            case LINE -> {
                 Shape line = new Line(x, y, x1, y1);
                 shapes.add(line);
-                break;
-            case RECTANGLE:
-
+            }
+            case RECTANGLE -> {
+            }
         }
         System.out.println("Line added");
     }

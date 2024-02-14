@@ -40,16 +40,12 @@ public class GUI extends Application {
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
+                gc.beginPath();
                 switch (currentShape) {
-                    case LINE:
-                        gc.lineTo(event.getX(), event.getY());
-                        break;
-                    case RECTANGLE:
-                        gc.rect(x, y, event.getX() - x, event.getY() - y);
-                        break;
+                    case LINE -> gc.lineTo(event.getX(), event.getY());
+                    case RECTANGLE -> gc.rect(x, y, event.getX() - x, event.getY() - y);
                 }
                 gc.stroke();
-                gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
             }
             clicks++;
@@ -60,13 +56,11 @@ public class GUI extends Application {
             previewGc.clearRect(0, 0, 500, 500);
             previewGc.beginPath();
             switch (currentShape) {
-                case LINE:
+                case LINE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
-                    break;
-                case RECTANGLE:
-                    previewGc.rect(x, y, event.getX() - x, event.getY() - y);
-                    break;
+                }
+                case RECTANGLE -> previewGc.rect(x, y, event.getX() - x, event.getY() - y);
             }
             previewGc.stroke();
         });
