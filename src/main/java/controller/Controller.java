@@ -3,16 +3,12 @@ package controller;
 import model.Line;
 import model.Shape;
 import view.GUI;
+import view.ShapeType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-
-
-    public enum ShapeType {
-        LINE, RECTANGLE, CIRCLE, TRIANGLE
-    }
 
     private GUI gui;
 
@@ -21,9 +17,15 @@ public class Controller {
         this.gui = gui;
     }
 
-    public void addLine(double x, double y, double x1, double y1) {
-        Shape line = new Line(x, y, x1, y1);
-        shapes.add(line);
+    public void addShape(double x, double y, double x1, double y1, ShapeType shapeType) {
+        switch (shapeType){
+            case LINE:
+                Shape line = new Line(x, y, x1, y1);
+                shapes.add(line);
+                break;
+            case RECTANGLE:
+
+        }
         System.out.println("Line added");
     }
 
