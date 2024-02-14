@@ -16,7 +16,7 @@ public class GUI extends Application {
 
     Controller controller;
 
-    private ShapeType currentShape = ShapeType.RECTANGLE;
+    private ShapeType currentShape = ShapeType.LINE;
 
     @Override
     public void init() {
@@ -40,12 +40,13 @@ public class GUI extends Application {
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
-                gc.beginPath();
+
                 switch (currentShape) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
                     case RECTANGLE -> gc.rect(x, y, event.getX() - x, event.getY() - y);
                 }
                 gc.stroke();
+                gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
             }
             clicks++;
