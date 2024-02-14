@@ -14,11 +14,11 @@ public class GUI extends Application {
 
     private double x, y;
 
-    Controller Crontroller;
+    Controller controller;
 
     @Override
     public void init() {
-        Crontroller = new Controller(this);
+        controller = new Controller(this);
     }
 
     @Override
@@ -42,9 +42,11 @@ public class GUI extends Application {
             }
             else {
                 previewGc.clearRect(0, 0, 500, 500);
-                gc.lineTo(event.getX(), event.getY());
+                //gc.lineTo(event.getX(), event.getY());
+                gc.rect(x, y, event.getX() - x, event.getY() - y);
                 gc.stroke();
                 gc.beginPath();
+                controller.addLine(x, y, event.getX(), event.getY());
             }
             clicks++;
         });
@@ -52,8 +54,8 @@ public class GUI extends Application {
             if (clicks % 2 == 0) return;
             previewGc.clearRect(0, 0, 500, 500);
             previewGc.beginPath();
-            previewGc.moveTo(x, y);
-            previewGc.lineTo(event.getX(), event.getY());
+            //previewGc.moveTo(x, y);
+            previewGc.rect(x, y, event.getX() - x, event.getY() - y);
             previewGc.stroke();
         });
 
