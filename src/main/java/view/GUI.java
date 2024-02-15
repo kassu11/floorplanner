@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 
 import static javafx.scene.paint.Color.*;
@@ -45,25 +46,14 @@ public class GUI extends Application {
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
+                gc.beginPath();
 
                 switch (currentShape) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
-                    case RECTANGLE -> {
-                        gc.lineTo(event.getX(), y);
-                        gc.lineTo(event.getX(), event.getY());
-                        gc.lineTo(x, event.getY());
-                        gc.lineTo(x, y);
-                    }
-                    case CIRCLE -> {
-                        gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
-                    }
+                    case RECTANGLE -> gc.rect(x, y, event.getX() - x, event.getY() - y);
+                    case CIRCLE -> gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
                 }
                 gc.stroke();
-//                if(currentShape == ShapeType.CIRCLE) {          // Erase the radius line if the shape is a circle
-//                    double radiusX = Math.abs( x* Math.cos(0));
-//                    eraseSingleLine(gc, x, y, radiusX, y);
-//                }
-                gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
             }
             clicks++;
@@ -94,7 +84,7 @@ public class GUI extends Application {
     }
     // This method only erases the line from the canvas and not the shape from the list
     public void eraseSingleLine(GraphicsContext gc , double x, double y, double x1, double y1){
-        gc.setStroke(RED);
+        gc.setStroke(WHITE);
         gc.setLineWidth(2);
         gc.strokeLine(x, y, x1, y1);
         gc.setLineWidth(1);
