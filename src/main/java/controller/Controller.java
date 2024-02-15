@@ -2,6 +2,7 @@ package controller;
 
 import model.Line;
 import model.Rectangle;
+import model.Circle;
 import model.Shape;
 import view.GUI;
 import view.ShapeType;
@@ -37,6 +38,10 @@ public class Controller {
                     rectangle.addChild(line);
                 }
                 shapes.add(rectangle);
+            }
+            case CIRCLE -> {
+                Shape circle = new Circle(x, y, x1, y1);
+                shapes.add(circle);
             }
         }
         System.out.println(shapes.size());

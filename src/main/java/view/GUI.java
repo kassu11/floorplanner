@@ -5,8 +5,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
+import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
 
@@ -16,7 +20,7 @@ public class GUI extends Application {
 
     Controller controller;
 
-    private ShapeType currentShape = ShapeType.RECTANGLE;
+    private ShapeType currentShape = ShapeType.CIRCLE;
 
     @Override
     public void init() {
@@ -34,6 +38,7 @@ public class GUI extends Application {
         GraphicsContext previewGc = previewCanvas.getGraphicsContext2D();
 
         canvasContainer.setOnMouseClicked(event -> {
+            // This is the actual drawing
             if (clicks % 2 == 0) {
                 gc.moveTo(event.getX(), event.getY());
                 x = event.getX();
@@ -49,14 +54,21 @@ public class GUI extends Application {
                         gc.lineTo(x, event.getY());
                         gc.lineTo(x, y);
                     }
+                    case CIRCLE -> {
+                        gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
+                    }
                 }
                 gc.stroke();
+//                if(currentShape == ShapeType.CIRCLE) {          // Erase the radius line if the shape is a circle
+//                    double radiusX = Math.abs( x* Math.cos(0));
+//                    eraseSingleLine(gc, x, y, radiusX, y);
+//                }
                 gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
             }
             clicks++;
         });
-
+        // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             if (clicks % 2 == 0) return;
             previewGc.clearRect(0, 0, 500, 500);
@@ -67,6 +79,7 @@ public class GUI extends Application {
                     previewGc.lineTo(event.getX(), event.getY());
                 }
                 case RECTANGLE -> previewGc.rect(x, y, event.getX() - x, event.getY() - y);
+                case CIRCLE -> previewGc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
             }
             previewGc.stroke();
         });
@@ -78,5 +91,13 @@ public class GUI extends Application {
         stage.setTitle("view.FPGUI");
         stage.setScene(view);
         stage.show();
+    }
+    // This method only erases the line from the canvas and not the shape from the list
+    public void eraseSingleLine(GraphicsContext gc , double x, double y, double x1, double y1){
+        gc.setStroke(RED);
+        gc.setLineWidth(2);
+        gc.strokeLine(x, y, x1, y1);
+        gc.setLineWidth(1);
+        gc.setStroke(BLACK);
     }
 }
