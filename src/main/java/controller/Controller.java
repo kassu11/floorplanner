@@ -1,11 +1,14 @@
 package controller;
 
 import model.Line;
+import model.Rectangle;
 import model.Shape;
 import view.GUI;
 import view.ShapeType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
@@ -28,10 +31,12 @@ public class Controller {
                 Shape line2 = new Line(x1, y, x1, y1);
                 Shape line3 = new Line(x1, y1, x, y1);
                 Shape line4 = new Line(x, y1, x, y);
-                shapes.add(line1);
-                shapes.add(line2);
-                shapes.add(line3);
-                shapes.add(line4);
+                List<Shape> lines = new ArrayList<>(Arrays.asList(line1, line2, line3, line4));
+                Shape rectangle = new Rectangle(x, y, x1, y1);
+                for (Shape line : lines) {
+                    rectangle.addChild(line);
+                }
+                shapes.add(rectangle);
             }
         }
         System.out.println(shapes.size());
