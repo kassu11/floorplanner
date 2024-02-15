@@ -28,15 +28,7 @@ public class Controller {
                 shapes.add(line);
             }
             case RECTANGLE -> {
-                Shape line1 = new Line(x, y, x1, y);
-                Shape line2 = new Line(x1, y, x1, y1);
-                Shape line3 = new Line(x1, y1, x, y1);
-                Shape line4 = new Line(x, y1, x, y);
-                List<Shape> lines = new ArrayList<>(Arrays.asList(line1, line2, line3, line4));
                 Shape rectangle = new Rectangle(x, y, x1, y1);
-                for (Shape line : lines) {
-                    rectangle.addChild(line);
-                }
                 shapes.add(rectangle);
             }
             case CIRCLE -> {
