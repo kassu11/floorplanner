@@ -24,9 +24,17 @@ public class Controller {
                 shapes.add(line);
             }
             case RECTANGLE -> {
+                Shape line1 = new Line(x, y, x1, y);
+                Shape line2 = new Line(x1, y, x1, y1);
+                Shape line3 = new Line(x1, y1, x, y1);
+                Shape line4 = new Line(x, y1, x, y);
+                shapes.add(line1);
+                shapes.add(line2);
+                shapes.add(line3);
+                shapes.add(line4);
             }
         }
-        System.out.println("Line added");
+        System.out.println(shapes.size());
     }
 
 
