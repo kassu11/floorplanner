@@ -20,7 +20,7 @@ public class GUI extends Application {
 
     Controller controller;
 
-    private ShapeType currentShape = ShapeType.CIRCLE;
+    private ShapeType currentShape = ShapeType.RECTANGLE;
 
     @Override
     public void init() {
