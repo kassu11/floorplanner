@@ -5,12 +5,15 @@ import java.util.List;
 
 public class Rectangle extends AbstractShape{
 
-    public Rectangle(double x, double y, double x1, double y1) {
-        super(x, y, x1, y1);
-        addChild(new Line(x, y, x1, y));
-        addChild(new Line(x1, y, x1, y1));
-        addChild(new Line(x1, y1, x, y1));
-        addChild(new Line(x, y1, x, y));
+    public Rectangle(Point pointA, Point pointB) {
+        super(pointA, pointB);
+        Point pointC = new Point(pointA.getX(), pointB.getY());
+        Point pointD = new Point(pointB.getX(), pointA.getY());
+
+        addChild(new Line(pointA, pointD));
+        addChild(new Line(pointD, pointB));
+        addChild(new Line(pointB, pointC));
+        addChild(new Line(pointC, pointA));
     }
 
     public void addChild(Shape shape) {

@@ -6,13 +6,13 @@ import java.util.List;
 public abstract class AbstractShape implements Shape {
 
     private double x, y, x1, y1;
+    private Point pointA, pointB;
     private List<Shape> children = new ArrayList<>();
+    private Shape parentShape;
 
-    public AbstractShape(double x, double y, double x1, double y1) {
-        this.x = x;
-        this.y = y;
-        this.x1 = x1;
-        this.y1 = y1;
+    public AbstractShape(Point pointA, Point pointB) {
+        this.pointA = pointA;
+        this.pointB = pointB;
     }
 
     public void addChild(Shape shape) {
@@ -80,4 +80,11 @@ public abstract class AbstractShape implements Shape {
         this.y1 = y1;
     }
 
+    public Shape getParentShape() {
+        return parentShape;
+    }
+
+    public void setParentShape(Shape parentShape) {
+        this.parentShape = parentShape;
+    }
 }

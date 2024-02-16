@@ -21,7 +21,7 @@ public class GUI extends Application {
 
     Controller controller;
 
-    private ShapeType currentShape = ShapeType.RECTANGLE;
+    private ShapeType currentShape = ShapeType.LINE;
 
     @Override
     public void init() {
@@ -41,12 +41,11 @@ public class GUI extends Application {
         canvasContainer.setOnMouseClicked(event -> {
             // This is the actual drawing
             if (clicks % 2 == 0) {
-                gc.moveTo(event.getX(), event.getY());
+                if (currentShape.equals(ShapeType.LINE)) gc.moveTo(event.getX(), event.getY());
                 x = event.getX();
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
-                gc.beginPath();
 
                 switch (currentShape) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
@@ -54,6 +53,7 @@ public class GUI extends Application {
                     case CIRCLE -> gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
                 }
                 gc.stroke();
+                gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
             }
             clicks++;
@@ -82,8 +82,9 @@ public class GUI extends Application {
         stage.setScene(view);
         stage.show();
     }
+
     // This method only erases the line from the canvas and not the shape from the list
-    public void eraseSingleLine(GraphicsContext gc , double x, double y, double x1, double y1){
+    public void eraseSingleLine(GraphicsContext gc, double x, double y, double x1, double y1) {
         gc.setStroke(WHITE);
         gc.setLineWidth(2);
         gc.strokeLine(x, y, x1, y1);

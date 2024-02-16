@@ -1,9 +1,6 @@
 package controller;
 
-import model.Line;
-import model.Rectangle;
-import model.Circle;
-import model.Shape;
+import model.*;
 import view.GUI;
 import view.ShapeType;
 
@@ -17,25 +14,34 @@ public class Controller {
     private GUI gui;
 
     private final List<Shape> shapes = new ArrayList<>();
+
     public Controller(GUI gui) {
         this.gui = gui;
     }
 
     public void addShape(double x, double y, double x1, double y1, ShapeType shapeType) {
+        Point pointA = new Point(x, y);
+        Point pointB = new Point(x1, y1);
+
+        this.addShape(pointA, pointB, shapeType);
+    }
+
+    public void addShape(Point pointA, double x1, double y1, ShapeType shapeType) {
+        Point pointB = new Point(x1, y1);
+        this.addShape(pointA, pointB, shapeType);
+    }
+
+    public void addShape(Point pointA, Point pointB, ShapeType shapeType) {
+        // TODO: Refactor this to use a factory
+        Shape shape = null;
+
         switch (shapeType) {
-            case LINE -> {
-                Shape line = new Line(x, y, x1, y1);
-                shapes.add(line);
-            }
-            case RECTANGLE -> {
-                Shape rectangle = new Rectangle(x, y, x1, y1);
-                shapes.add(rectangle);
-            }
-            case CIRCLE -> {
-                Shape circle = new Circle(x, y, x1, y1);
-                shapes.add(circle);
-            }
+            case LINE -> shape = new Line(pointA, pointB);
+            case RECTANGLE -> shape = new Rectangle(pointA, pointB);
+            case CIRCLE -> shape = new Circle(pointA, pointB);
         }
+
+        shapes.add(shape);
         System.out.println(shapes.size());
     }
 
