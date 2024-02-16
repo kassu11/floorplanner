@@ -5,40 +5,49 @@ import java.util.List;
 
 public abstract class AbstractShape implements Shape {
 
-    private double x, y, x1, y1;
-    private Point pointA, pointB;
+    private double x, y;
+    private double width, height;
+    private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
 
     public AbstractShape(Point pointA, Point pointB) {
-        this.pointA = pointA;
-        this.pointB = pointB;
+        points.add(pointA);
+        points.add(pointB);
+        updateDimensions();
+    }
+
+
+    public AbstractShape(Point pointA, Point pointB, Point pointC) {
+        points.add(pointA);
+        points.add(pointB);
+        points.add(pointC);
+        updateDimensions();
+    }
+
+    public AbstractShape(Point pointA, Point pointB, Point pointC, Point pointD) {
+        points.add(pointA);
+        points.add(pointB);
+        points.add(pointC);
+        points.add(pointD);
+        updateDimensions();
+    }
+
+    private Point calculateDimensions(Point a, Point b) {
+        this.x = Math.min(a.getX(), b.getX());
+        this.y = Math.min(a.getY(), b.getY());
+        this.width = Math.max(a.getX(), b.getX()) - this.x;
+        this.height = Math.max(a.getY(), b.getY()) - this.y;
+        return b;
+    }
+
+    private void updateDimensions() {
+        points.stream().reduce(this::calculateDimensions);
     }
 
     public void addChild(Shape shape) {
         children.add(shape);
     }
-
-    @Override
-    public void draw() {
-
-    }
-
-    @Override
-    public void resize() {
-
-    }
-
-    @Override
-    public void move() {
-
-    }
-
-    @Override
-    public void delete() {
-
-    }
-
 
     public void removeChild(Shape shape) {
         children.remove(shape);
@@ -62,22 +71,6 @@ public abstract class AbstractShape implements Shape {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public double getX1() {
-        return x1;
-    }
-
-    public void setX1(double x1) {
-        this.x1 = x1;
-    }
-
-    public double getY1() {
-        return y1;
-    }
-
-    public void setY1(double y1) {
-        this.y1 = y1;
     }
 
     public Shape getParentShape() {
