@@ -5,40 +5,62 @@ import java.util.List;
 
 public abstract class AbstractShape implements Shape {
 
-    private double x, y, x1, y1;
+    private double x, y;
+    private double width, height;
+    private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
+    private Shape parentShape;
 
-    public AbstractShape(double x, double y, double x1, double y1) {
-        this.x = x;
-        this.y = y;
-        this.x1 = x1;
-        this.y1 = y1;
+    public AbstractShape(Point pointA, Point pointB) {
+        points.add(pointA);
+        points.add(pointB);
+        updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
+    }
+
+
+    public AbstractShape(Point pointA, Point pointB, Point pointC) {
+        points.add(pointA);
+        points.add(pointB);
+        points.add(pointC);
+        updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
+    }
+
+    public AbstractShape(Point pointA, Point pointB, Point pointC, Point pointD) {
+        points.add(pointA);
+        points.add(pointB);
+        points.add(pointC);
+        points.add(pointD);
+        updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
+    }
+
+    private Point calculateDimensions(Point a, Point b) {
+        this.x = Math.min(a.getX(), b.getX());
+        this.y = Math.min(a.getY(), b.getY());
+        this.width = Math.max(a.getX(), b.getX()) - this.x;
+        this.height = Math.max(a.getY(), b.getY()) - this.y;
+        return b;
+    }
+
+    private void updateDimensions() {
+        points.stream().reduce(this::calculateDimensions);
     }
 
     public void addChild(Shape shape) {
         children.add(shape);
     }
 
-    @Override
-    public void draw() {
-
+    public List<Point> getPoints() {
+        return points;
     }
-
-    @Override
-    public void resize() {
-
-    }
-
-    @Override
-    public void move() {
-
-    }
-
-    @Override
-    public void delete() {
-
-    }
-
 
     public void removeChild(Shape shape) {
         children.remove(shape);
@@ -64,20 +86,19 @@ public abstract class AbstractShape implements Shape {
         this.y = y;
     }
 
-    public double getX1() {
-        return x1;
+    public Shape getParentShape() {
+        return parentShape;
     }
 
-    public void setX1(double x1) {
-        this.x1 = x1;
+    public void setParentShape(Shape parentShape) {
+        this.parentShape = parentShape;
     }
 
-    public double getY1() {
-        return y1;
+    public double getWidth() {
+        return width;
     }
 
-    public void setY1(double y1) {
-        this.y1 = y1;
+    public double getHeight() {
+        return height;
     }
-
 }

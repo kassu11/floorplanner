@@ -1,9 +1,6 @@
 package controller;
 
-import model.Line;
-import model.Rectangle;
-import model.Circle;
-import model.Shape;
+import model.*;
 import view.GUI;
 import view.ShapeType;
 
@@ -13,30 +10,37 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
-
     private GUI gui;
 
-    private final List<Shape> shapes = new ArrayList<>();
     public Controller(GUI gui) {
         this.gui = gui;
     }
 
     public void addShape(double x, double y, double x1, double y1, ShapeType shapeType) {
+        Point pointA = new Point(x, y);
+        Point pointB = new Point(x1, y1);
+
+        this.addShape(pointA, pointB, shapeType);
+    }
+
+    public void addShape(Point pointA, double x1, double y1, ShapeType shapeType) {
+        Point pointB = new Point(x1, y1);
+        this.addShape(pointA, pointB, shapeType);
+    }
+
+    public void addShape(Point pointA, Point pointB, ShapeType shapeType) {
+        // TODO: Refactor this to use a factory
+
+
         switch (shapeType) {
-            case LINE -> {
-                Shape line = new Line(x, y, x1, y1);
-                shapes.add(line);
-            }
+            case LINE -> new Line(pointA, pointB);
             case RECTANGLE -> {
-                Shape rectangle = new Rectangle(x, y, x1, y1);
-                shapes.add(rectangle);
+                Point pointC = new Point(pointB.getX(), pointA.getY());
+                Point pointD = new Point(pointA.getX(), pointB.getY());
+                new Rectangle(pointA, pointB, pointC, pointD);
             }
-            case CIRCLE -> {
-                Shape circle = new Circle(x, y, x1, y1);
-                shapes.add(circle);
-            }
+            case CIRCLE -> new Circle(pointA, pointB);
         }
-        System.out.println(shapes.size());
     }
 
 

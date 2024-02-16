@@ -5,11 +5,11 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
+import model.Point;
+import model.Shape;
+import model.ShapesSingleton;
 
 import static javafx.scene.paint.Color.*;
 
@@ -21,7 +21,7 @@ public class GUI extends Application {
 
     Controller controller;
 
-    private ShapeType currentShape = ShapeType.RECTANGLE;
+    private ShapeType currentShape = ShapeType.LINE;
 
     @Override
     public void init() {
@@ -41,12 +41,11 @@ public class GUI extends Application {
         canvasContainer.setOnMouseClicked(event -> {
             // This is the actual drawing
             if (clicks % 2 == 0) {
-                gc.moveTo(event.getX(), event.getY());
+                if (currentShape.equals(ShapeType.LINE)) gc.moveTo(event.getX(), event.getY());
                 x = event.getX();
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
-                gc.beginPath();
 
                 switch (currentShape) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
@@ -54,7 +53,29 @@ public class GUI extends Application {
                     case CIRCLE -> gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
                 }
                 gc.stroke();
+                gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
+                gc.clearRect(0, 0, 500, 500);
+
+
+                for(Shape shape : ShapesSingleton.getShapes()){
+                    gc.beginPath();
+                    if(shape.getClass().equals(Point.class)){
+                        Point point = (Point) shape;
+                        gc.fillOval(point.getX() - point.getHeight()/2, point.getY() - point.getWidth()/2, point.getWidth(), point.getHeight());
+                        System.out.println("Point");
+                        continue;
+                    }
+                    switch (currentShape) {
+                        case LINE -> {
+                            gc.moveTo(shape.getPoints().get(0).getX(), shape.getPoints().get(0).getY());
+                            gc.lineTo(shape.getPoints().get(1).getX(), shape.getPoints().get(1).getY());
+                        }
+                        case RECTANGLE -> gc.rect(x, y, shape.getX() - x, shape.getY() - y);
+                        case CIRCLE -> gc.arc(x, y, Math.abs(shape.getX() - x), Math.abs(shape.getY() - y), 0, 360);
+                    }
+                    gc.stroke();
+                }
             }
             clicks++;
         });
@@ -82,8 +103,9 @@ public class GUI extends Application {
         stage.setScene(view);
         stage.show();
     }
+
     // This method only erases the line from the canvas and not the shape from the list
-    public void eraseSingleLine(GraphicsContext gc , double x, double y, double x1, double y1){
+    public void eraseSingleLine(GraphicsContext gc, double x, double y, double x1, double y1) {
         gc.setStroke(WHITE);
         gc.setLineWidth(2);
         gc.strokeLine(x, y, x1, y1);
