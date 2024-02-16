@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Point implements Shape {
     private double x, y;
-    private double width = 5, height = 5;
+    private double width = 15, height = 15;
     private List<Shape> children = new ArrayList<>();
 
     public Point(double x, double y) {

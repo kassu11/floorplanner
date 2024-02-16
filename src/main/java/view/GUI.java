@@ -11,6 +11,9 @@ import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
@@ -20,6 +23,7 @@ public class GUI extends Application {
     private double x, y;
 
     Controller controller;
+    List<Shape> hoveredPoints = new ArrayList<>();
 
     private ShapeType currentShape = ShapeType.LINE;
 
@@ -37,6 +41,9 @@ public class GUI extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         GraphicsContext previewGc = previewCanvas.getGraphicsContext2D();
+
+        gc.setLineWidth(5);
+        previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
             // This is the actual drawing
@@ -63,7 +70,6 @@ public class GUI extends Application {
                     if(shape.getClass().equals(Point.class)){
                         Point point = (Point) shape;
                         gc.fillOval(point.getX() - point.getHeight()/2, point.getY() - point.getWidth()/2, point.getWidth(), point.getHeight());
-                        System.out.println("Point");
                         continue;
                     }
                     switch (currentShape) {
@@ -81,8 +87,45 @@ public class GUI extends Application {
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
-            if (clicks % 2 == 0) return;
             previewGc.clearRect(0, 0, 500, 500);
+            Shape hoveredShape = null;
+//            hoveredPoint = null;
+            double minDistance = Double.MAX_VALUE;
+
+            for(Shape shape : ShapesSingleton.getShapes()) {
+                if(contains(event.getX(), event.getY(), shape)) {
+                    double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
+                    if(distance < minDistance) {
+                        minDistance = distance;
+                        hoveredShape = shape;
+                    }
+                }
+            }
+
+            if(hoveredShape != null) {
+                previewGc.beginPath();
+
+                previewGc.setFill(RED);
+                previewGc.setStroke(RED);
+                if(hoveredShape.getClass().equals(Point.class)){
+                    previewGc.fillOval(hoveredShape.getX() - hoveredShape.getHeight()/2, hoveredShape.getY() - hoveredShape.getWidth()/2, hoveredShape.getWidth(), hoveredShape.getHeight());
+//                    hoveredPoint = hoveredShape;
+                } else {
+                    switch (currentShape) {
+                        case LINE -> {
+                            previewGc.moveTo(hoveredShape.getPoints().get(0).getX(), hoveredShape.getPoints().get(0).getY());
+                            previewGc.lineTo(hoveredShape.getPoints().get(1).getX(), hoveredShape.getPoints().get(1).getY());
+                        }
+                        case RECTANGLE -> previewGc.rect(x, y, hoveredShape.getX() - x, hoveredShape.getY() - y);
+                        case CIRCLE -> previewGc.arc(x, y, Math.abs(hoveredShape.getX() - x), Math.abs(hoveredShape.getY() - y), 0, 360);
+                    }
+                    previewGc.stroke();
+                }
+            };
+
+
+            if (clicks % 2 == 0) return;
+
             previewGc.beginPath();
             switch (currentShape) {
                 case LINE -> {
@@ -111,5 +154,9 @@ public class GUI extends Application {
         gc.strokeLine(x, y, x1, y1);
         gc.setLineWidth(1);
         gc.setStroke(BLACK);
+    }
+
+    private boolean contains(double x, double y, Shape shape) {
+        return !(x < shape.getX() || y < shape.getY() || x > shape.getX() + shape.getWidth() || y > shape.getY() + shape.getHeight());
     }
 }
