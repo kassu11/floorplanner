@@ -30,8 +30,6 @@ public class GUI extends Application {
 
     private Controller controller;
 
-    private ShapeType currentShape = ShapeType.LINE;
-
     @Override
     public void init() {
         controller = new Controller(this);
@@ -51,20 +49,20 @@ public class GUI extends Application {
         canvasContainer.setOnMouseClicked(event -> {
             // This is the actual drawing
             if (clicks % 2 == 0) {
-                if (currentShape.equals(ShapeType.LINE)) gc.moveTo(event.getX(), event.getY());
+                if (CurrentShapeSingleton.getCurrentShape().equals(ShapeType.LINE)) gc.moveTo(event.getX(), event.getY());
                 x = event.getX();
                 y = event.getY();
             } else {
                 previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
 
-                switch (currentShape) {
+                switch (CurrentShapeSingleton.getCurrentShape()) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
                     case RECTANGLE -> gc.rect(x, y, event.getX() - x, event.getY() - y);
                     case CIRCLE -> gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
                 }
                 gc.stroke();
                 gc.beginPath();
-                controller.addShape(x, y, event.getX(), event.getY(), currentShape);
+                controller.addShape(x, y, event.getX(), event.getY(), CurrentShapeSingleton.getCurrentShape());
                 gc.clearRect(0, 0, canvasWidth, canvasHeight);
 
 
@@ -76,7 +74,7 @@ public class GUI extends Application {
                         System.out.println("Point");
                         continue;
                     }
-                    switch (currentShape) {
+                    switch (CurrentShapeSingleton.getCurrentShape()) {
                         case LINE -> {
                             gc.moveTo(shape.getPoints().get(0).getX(), shape.getPoints().get(0).getY());
                             gc.lineTo(shape.getPoints().get(1).getX(), shape.getPoints().get(1).getY());
@@ -94,7 +92,7 @@ public class GUI extends Application {
             if (clicks % 2 == 0) return;
             previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
             previewGc.beginPath();
-            switch (currentShape) {
+            switch (CurrentShapeSingleton.getCurrentShape()) {
                 case LINE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
@@ -107,12 +105,10 @@ public class GUI extends Application {
 
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);
         drawToolbar.getButtons().get("Mode").setOnAction(event -> {
-            currentShape = drawToolbar.changeMode(currentShape);
+            drawToolbar.changeMode();
         });
         OptionsToolbar optionBar = new OptionsToolbar();
 
-        drawToolbar.setOrientation(Orientation.VERTICAL);
-        optionBar.setOrientation(Orientation.HORIZONTAL);
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);

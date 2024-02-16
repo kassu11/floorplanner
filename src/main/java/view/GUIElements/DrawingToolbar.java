@@ -3,6 +3,7 @@ package view.GUIElements;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import view.CurrentShapeSingleton;
 import view.ShapeType;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();
     private double cursorX, cursorY;
+
+    private CustomMenuItem lineMode, rectangleMode, circleMode;
     private Stage stage;
     private HashMap<String, Button> buttons = new HashMap<>();
 
@@ -23,6 +26,11 @@ public class DrawingToolbar extends ToolBar {
         addButton(new Button("Mode"));
         addButton(new Button("Delete"));
         this.stage = stage;
+
+        this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
+        this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
+        this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
+        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode);
     }
 
     public void addButton(Button button) {
@@ -36,26 +44,15 @@ public class DrawingToolbar extends ToolBar {
         this.cursorY = stage.getY() + this.getLayoutY();
     }
 
-    public ShapeType changeMode(ShapeType currentMode) {
+    public void changeMode() {
         setCursorCoordinates();
-        AtomicReference<ShapeType> newMode = new AtomicReference<>(currentMode);
-        CustomMenuItem lineMode = new CustomMenuItem("Line", ShapeType.LINE);
-        CustomMenuItem rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
-        CustomMenuItem circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
 
         modeMenu.setOnAction(event -> {
-            newMode.set(((CustomMenuItem) event.getTarget()).getShapeType());
+            CurrentShapeSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
             System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
         });
 
-        switch(currentMode) {
-            case LINE -> modeMenu.getItems().addAll(rectangleMode, circleMode);
-            case RECTANGLE -> modeMenu.getItems().addAll(lineMode, circleMode);
-            case CIRCLE -> modeMenu.getItems().addAll(lineMode, rectangleMode);
-        }
-
         modeMenu.show(this, cursorX + this.getWidth(), cursorY + buttons.get("Mode").getHeight());
-        return newMode.get();
     }
 
 
