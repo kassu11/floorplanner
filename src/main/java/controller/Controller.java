@@ -31,7 +31,6 @@ public class Controller {
     public void addShape(Point pointA, Point pointB, ShapeType shapeType) {
         // TODO: Refactor this to use a factory
 
-
         switch (shapeType) {
             case LINE -> new Line(pointA, pointB);
             case RECTANGLE -> {
