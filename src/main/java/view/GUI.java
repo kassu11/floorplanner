@@ -2,14 +2,20 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
+import view.GUIElements.OptionsToolbar;
+import view.GUIElements.DrawingToolbar;
 
 import static javafx.scene.paint.Color.*;
 
@@ -19,7 +25,10 @@ public class GUI extends Application {
 
     private double x, y;
 
-    Controller controller;
+    private int canvasWidth = 750;
+    private int canvasHeight = 750;
+
+    private Controller controller;
 
     private ShapeType currentShape = ShapeType.LINE;
 
@@ -31,9 +40,10 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) {
 
+        BorderPane root = new BorderPane();
         GridPane canvasContainer = new GridPane();
-        Canvas canvas = new Canvas(500, 500);
-        Canvas previewCanvas = new Canvas(500, 500);
+        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
+        Canvas previewCanvas = new Canvas(canvasWidth, canvasHeight);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         GraphicsContext previewGc = previewCanvas.getGraphicsContext2D();
@@ -45,7 +55,7 @@ public class GUI extends Application {
                 x = event.getX();
                 y = event.getY();
             } else {
-                previewGc.clearRect(0, 0, 500, 500);
+                previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
 
                 switch (currentShape) {
                     case LINE -> gc.lineTo(event.getX(), event.getY());
@@ -55,7 +65,7 @@ public class GUI extends Application {
                 gc.stroke();
                 gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
-                gc.clearRect(0, 0, 500, 500);
+                gc.clearRect(0, 0, canvasWidth, canvasHeight);
 
 
                 for(Shape shape : ShapesSingleton.getShapes()){
@@ -82,7 +92,7 @@ public class GUI extends Application {
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             if (clicks % 2 == 0) return;
-            previewGc.clearRect(0, 0, 500, 500);
+            previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
             previewGc.beginPath();
             switch (currentShape) {
                 case LINE -> {
@@ -95,10 +105,23 @@ public class GUI extends Application {
             previewGc.stroke();
         });
 
+        DrawingToolbar drawToolbar = new DrawingToolbar(stage);
+        drawToolbar.getButtons().get("Mode").setOnAction(event -> {
+            currentShape = drawToolbar.changeMode(currentShape);
+        });
+        OptionsToolbar optionBar = new OptionsToolbar();
+
+        drawToolbar.setOrientation(Orientation.VERTICAL);
+        optionBar.setOrientation(Orientation.HORIZONTAL);
+
+        root.setLeft(drawToolbar);
+        root.setTop(optionBar);
+        root.setCenter(canvasContainer);
+
         canvasContainer.add(canvas, 0, 0);
         canvasContainer.add(previewCanvas, 0, 0);
 
-        Scene view = new Scene(canvasContainer, 500, 500);
+        Scene view = new Scene(root, canvasWidth, canvasHeight);
         stage.setTitle("view.FPGUI");
         stage.setScene(view);
         stage.show();
