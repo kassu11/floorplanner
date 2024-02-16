@@ -5,11 +5,11 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
+import model.Point;
+import model.Shape;
+import model.ShapesSingleton;
 
 import static javafx.scene.paint.Color.*;
 
@@ -55,6 +55,27 @@ public class GUI extends Application {
                 gc.stroke();
                 gc.beginPath();
                 controller.addShape(x, y, event.getX(), event.getY(), currentShape);
+                gc.clearRect(0, 0, 500, 500);
+
+
+                for(Shape shape : ShapesSingleton.getShapes()){
+                    gc.beginPath();
+                    if(shape.getClass().equals(Point.class)){
+                        Point point = (Point) shape;
+                        gc.fillOval(point.getX() - point.getHeight()/2, point.getY() - point.getWidth()/2, point.getWidth(), point.getHeight());
+                        System.out.println("Point");
+                        continue;
+                    }
+                    switch (currentShape) {
+                        case LINE -> {
+                            gc.moveTo(shape.getPoints().get(0).getX(), shape.getPoints().get(0).getY());
+                            gc.lineTo(shape.getPoints().get(1).getX(), shape.getPoints().get(1).getY());
+                        }
+                        case RECTANGLE -> gc.rect(x, y, shape.getX() - x, shape.getY() - y);
+                        case CIRCLE -> gc.arc(x, y, Math.abs(shape.getX() - x), Math.abs(shape.getY() - y), 0, 360);
+                    }
+                    gc.stroke();
+                }
             }
             clicks++;
         });

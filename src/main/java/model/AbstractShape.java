@@ -58,7 +58,9 @@ public abstract class AbstractShape implements Shape {
         children.add(shape);
     }
 
-
+    public List<Point> getPoints() {
+        return points;
+    }
 
     public void removeChild(Shape shape) {
         children.remove(shape);

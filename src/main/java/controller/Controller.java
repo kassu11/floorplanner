@@ -10,10 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
-
     private GUI gui;
-
-    private final List<Shape> shapes = new ArrayList<>();
 
     public Controller(GUI gui) {
         this.gui = gui;
@@ -33,20 +30,17 @@ public class Controller {
 
     public void addShape(Point pointA, Point pointB, ShapeType shapeType) {
         // TODO: Refactor this to use a factory
-        Shape shape = null;
+
 
         switch (shapeType) {
-            case LINE -> shape = new Line(pointA, pointB);
+            case LINE -> new Line(pointA, pointB);
             case RECTANGLE -> {
                 Point pointC = new Point(pointB.getX(), pointA.getY());
                 Point pointD = new Point(pointA.getX(), pointB.getY());
-                shape = new Rectangle(pointA, pointB, pointC, pointD);
+                new Rectangle(pointA, pointB, pointC, pointD);
             }
-            case CIRCLE -> shape = new Circle(pointA, pointB);
+            case CIRCLE -> new Circle(pointA, pointB);
         }
-
-        shapes.add(shape);
-        System.out.println(shapes.size());
     }
 
 
