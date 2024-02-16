@@ -1,11 +1,13 @@
 package model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Point implements Shape {
     private double x, y;
-    private double width = 15, height = 15;
+    private double width = 25, height = 25;
     private List<Shape> children = new ArrayList<>();
 
     public Point(double x, double y) {
@@ -54,5 +56,9 @@ public class Point implements Shape {
     @Override
     public double getHeight() {
         return height;
+    }
+
+    public void draw(GraphicsContext gc) {
+        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(), this.getHeight());
     }
 }

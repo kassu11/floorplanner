@@ -21,10 +21,9 @@ public class GUI extends Application {
 
     private int clicks;
 
-    private double x, y;
-
     Controller controller;
-    List<Shape> hoveredPoints = new ArrayList<>();
+    Point lastPoint;
+    private Point hoveredPoint;
 
     private ShapeType currentShape = ShapeType.LINE;
 
@@ -47,42 +46,21 @@ public class GUI extends Application {
         previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
-            // This is the actual drawing
+            Point endPoint = hoveredPoint;
             if (clicks % 2 == 0) {
-                if (currentShape.equals(ShapeType.LINE)) gc.moveTo(event.getX(), event.getY());
-                x = event.getX();
-                y = event.getY();
+                if (hoveredPoint != null) lastPoint = hoveredPoint;
+                else lastPoint = controller.createPoint(event.getX(), event.getY());
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
 
-                switch (currentShape) {
-                    case LINE -> gc.lineTo(event.getX(), event.getY());
-                    case RECTANGLE -> gc.rect(x, y, event.getX() - x, event.getY() - y);
-                    case CIRCLE -> gc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
-                }
-                gc.stroke();
-                gc.beginPath();
-                controller.addShape(x, y, event.getX(), event.getY(), currentShape);
+                if (hoveredPoint == null) endPoint = controller.createPoint(event.getX(), event.getY());
+
+                Shape newShape = controller.addShape(lastPoint, endPoint, currentShape);
+                newShape.draw(gc);
                 gc.clearRect(0, 0, 500, 500);
 
-
-                for (Shape shape : ShapesSingleton.getShapes()) {
-                    gc.beginPath();
-                    if (shape.getClass().equals(Point.class)) {
-                        Point point = (Point) shape;
-                        gc.fillOval(point.getX() - point.getHeight() / 2, point.getY() - point.getWidth() / 2, point.getWidth(), point.getHeight());
-                        continue;
-                    }
-                    switch (currentShape) {
-                        case LINE -> {
-                            gc.moveTo(shape.getPoints().get(0).getX(), shape.getPoints().get(0).getY());
-                            gc.lineTo(shape.getPoints().get(1).getX(), shape.getPoints().get(1).getY());
-                        }
-                        case RECTANGLE -> gc.rect(x, y, shape.getX() - x, shape.getY() - y);
-                        case CIRCLE -> gc.arc(x, y, Math.abs(shape.getX() - x), Math.abs(shape.getY() - y), 0, 360);
-                    }
-                    gc.stroke();
-                }
+                for (Shape shape : ShapesSingleton.getShapes()) shape.draw(gc);
+                lastPoint = null;
             }
             clicks++;
         });
@@ -90,7 +68,7 @@ public class GUI extends Application {
         canvasContainer.setOnMouseMoved(event -> {
             previewGc.clearRect(0, 0, 500, 500);
             Shape hoveredShape = null;
-//            hoveredPoint = null;
+            hoveredPoint = null;
             double minDistance = 15;
 
             for (Shape shape : ShapesSingleton.getShapes()) {
@@ -102,52 +80,42 @@ public class GUI extends Application {
                         double y1 = shape.getPoints().get(1).getY();
                         double y2 = shape.getPoints().get(0).getY();
 
-                        System.out.println(x1 + " " + x2 + " " + y1 + " " + y2);
-
+//                        System.out.println(x1 + " " + x2 + " " + y1 + " " + y2);
                         double slope = (y2 - y1) / (x2 - x1);
-
                         double b = y1 - slope * x1;
 
-                        System.out.println(slope + " " + b);
-
+//                        System.out.println(slope + " " + b);
                         double distance = Math.abs(slope * event.getX() - event.getY() + b) / Math.sqrt(Math.pow(slope, 2) + 1);
 
-                        System.out.println(distance);
+//                        System.out.println(distance);
                         // double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
                         if (distance < minDistance) {
                             hoveredShape = shape;
+                        }
+                    } else {
+                        double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
+                        if (distance < minDistance) {
+                            hoveredShape = shape;
+                            if (shape.getClass().equals(Point.class)) {
+                                hoveredPoint = (Point) shape;
+                            }
                         }
                     }
                 }
             }
 
             if (hoveredShape != null) {
-                previewGc.beginPath();
-
                 previewGc.setFill(RED);
                 previewGc.setStroke(RED);
-                if (hoveredShape.getClass().equals(Point.class)) {
-                    previewGc.fillOval(hoveredShape.getX() - hoveredShape.getHeight() / 2, hoveredShape.getY() - hoveredShape.getWidth() / 2, hoveredShape.getWidth(), hoveredShape.getHeight());
-//                    hoveredPoint = hoveredShape;
-                } else {
-                    switch (currentShape) {
-                        case LINE -> {
-                            previewGc.moveTo(hoveredShape.getPoints().get(0).getX(), hoveredShape.getPoints().get(0).getY());
-                            previewGc.lineTo(hoveredShape.getPoints().get(1).getX(), hoveredShape.getPoints().get(1).getY());
-                        }
-                        case RECTANGLE -> previewGc.rect(x, y, hoveredShape.getX() - x, hoveredShape.getY() - y);
-                        case CIRCLE ->
-                                previewGc.arc(x, y, Math.abs(hoveredShape.getX() - x), Math.abs(hoveredShape.getY() - y), 0, 360);
-                    }
-                    previewGc.stroke();
-                }
+                hoveredShape.draw(previewGc);
             }
-            ;
 
 
             if (clicks % 2 == 0) return;
 
             previewGc.beginPath();
+            double x = lastPoint.getX();
+            double y = lastPoint.getY();
             switch (currentShape) {
                 case LINE -> {
                     previewGc.moveTo(x, y);

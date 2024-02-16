@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 import java.util.List;
 
 public interface Shape {
@@ -13,5 +15,5 @@ public interface Shape {
 
     double getHeight();
 
-
+    void draw(GraphicsContext gc);
 }

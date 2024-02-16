@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +91,7 @@ public abstract class AbstractShape implements Shape {
     public Shape getParentShape() {
         return parentShape;
     }
+    public abstract void draw(GraphicsContext gc);
 
     public void setParentShape(Shape parentShape) {
         this.parentShape = parentShape;
