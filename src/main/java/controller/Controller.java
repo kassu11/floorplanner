@@ -37,7 +37,11 @@ public class Controller {
 
         switch (shapeType) {
             case LINE -> shape = new Line(pointA, pointB);
-            case RECTANGLE -> shape = new Rectangle(pointA, pointB);
+            case RECTANGLE -> {
+                Point pointC = new Point(pointB.getX(), pointA.getY());
+                Point pointD = new Point(pointA.getX(), pointB.getY());
+                shape = new Rectangle(pointA, pointB, pointC, pointD);
+            }
             case CIRCLE -> shape = new Circle(pointA, pointB);
         }
 

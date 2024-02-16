@@ -2,10 +2,8 @@ package model;
 
 public class Rectangle extends AbstractShape{
 
-    public Rectangle(Point pointA, Point pointB) {
-        super(pointA, pointB);
-        Point pointC = new Point(pointA.getX(), pointB.getY());
-        Point pointD = new Point(pointB.getX(), pointA.getY());
+    public Rectangle(Point pointA, Point pointB, Point pointC, Point pointD) {
+        super(pointA, pointB, pointC, pointD);
 
         addChild(new Line(pointA, pointD));
         addChild(new Line(pointD, pointB));

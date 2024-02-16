@@ -15,6 +15,9 @@ public abstract class AbstractShape implements Shape {
         points.add(pointA);
         points.add(pointB);
         updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
     }
 
 
@@ -23,6 +26,9 @@ public abstract class AbstractShape implements Shape {
         points.add(pointB);
         points.add(pointC);
         updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
     }
 
     public AbstractShape(Point pointA, Point pointB, Point pointC, Point pointD) {
@@ -31,6 +37,9 @@ public abstract class AbstractShape implements Shape {
         points.add(pointC);
         points.add(pointD);
         updateDimensions();
+        for (Point point : points) {
+            point.addChild(this);
+        }
     }
 
     private Point calculateDimensions(Point a, Point b) {
@@ -48,6 +57,8 @@ public abstract class AbstractShape implements Shape {
     public void addChild(Shape shape) {
         children.add(shape);
     }
+
+
 
     public void removeChild(Shape shape) {
         children.remove(shape);
@@ -79,5 +90,13 @@ public abstract class AbstractShape implements Shape {
 
     public void setParentShape(Shape parentShape) {
         this.parentShape = parentShape;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 }
