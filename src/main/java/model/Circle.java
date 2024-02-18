@@ -10,6 +10,11 @@ public class Circle  extends AbstractShape{
     }
 
     @Override
+    public double calculateShapeLength() {
+        return 0;
+    }
+
+    @Override
     public void draw(GraphicsContext gc) {
         gc.beginPath();
         gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360, ArcType.OPEN);

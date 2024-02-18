@@ -12,9 +12,6 @@ import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
@@ -25,7 +22,7 @@ public class GUI extends Application {
     Point lastPoint;
     private Point hoveredPoint;
 
-    private ShapeType currentShape = ShapeType.LINE;
+    private ShapeType currentShape = ShapeType.RECTANGLE;
 
     @Override
     public void init() {
@@ -57,6 +54,7 @@ public class GUI extends Application {
 
                 Shape newShape = controller.addShape(lastPoint, endPoint, currentShape);
                 newShape.draw(gc);
+                newShape.calculateShapeLength();
                 gc.clearRect(0, 0, 500, 500);
 
                 for (Shape shape : ShapesSingleton.getShapes()) shape.draw(gc);

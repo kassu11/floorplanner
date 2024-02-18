@@ -12,6 +12,17 @@ public class Rectangle extends AbstractShape{
         addChild(new Line(pointC, pointA));
     }
 
+    @Override
+    public double calculateShapeLength() {
+        double line1 = this.getChildren().get(0).calculateShapeLength();
+        double line2 = this.getChildren().get(1).calculateShapeLength();
+        double line3 = this.getChildren().get(2).calculateShapeLength();
+        double line4 = this.getChildren().get(3).calculateShapeLength();
+        double perimeter = line1 + line2 + line3 + line4;
+        System.out.println("Perimeter of rectangle: " + perimeter);
+        return perimeter;
+    }
+
     public void addChild(Shape shape) {
         super.addChild(shape);
     }

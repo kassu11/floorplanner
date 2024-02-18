@@ -16,4 +16,6 @@ public interface Shape {
     double getHeight();
 
     void draw(GraphicsContext gc);
+
+    double calculateShapeLength();
 }
