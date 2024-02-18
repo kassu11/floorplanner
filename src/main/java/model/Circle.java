@@ -4,6 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.ArcType;
 
 public class Circle  extends AbstractShape{
+
+    double length;
+    double area;
     public Circle(Point pointA, Point pointB) {
         super(pointA, pointB);
         ShapesSingleton.addShape(this);
@@ -11,7 +14,20 @@ public class Circle  extends AbstractShape{
 
     @Override
     public double calculateShapeLength() {
-        return 0;
+        double a = this.getWidth() / 2;
+        double b = this.getHeight() / 2;
+        length = Math.PI * (a + b);
+        System.out.println("Length of circle: " + length);
+        return length;
+    }
+
+    @Override
+    public double calculateShapeArea() {
+        double a = this.getWidth() / 2;
+        double b = this.getHeight() / 2;
+        area = Math.PI * a * b;
+        System.out.println("Area of circle: " + area);
+        return area;
     }
 
     @Override

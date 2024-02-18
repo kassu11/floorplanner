@@ -18,4 +18,6 @@ public interface Shape {
     void draw(GraphicsContext gc);
 
     double calculateShapeLength();
+
+    double calculateShapeArea();
 }

@@ -54,7 +54,7 @@ public class GUI extends Application {
 
                 Shape newShape = controller.addShape(lastPoint, endPoint, currentShape);
                 newShape.draw(gc);
-                newShape.calculateShapeLength();
+                newShape.calculateShapeArea();
                 gc.clearRect(0, 0, 500, 500);
 
                 for (Shape shape : ShapesSingleton.getShapes()) shape.draw(gc);

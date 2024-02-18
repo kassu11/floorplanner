@@ -66,4 +66,9 @@ public class Point implements Shape {
     public double calculateShapeLength() {
         return 0;
     }
+
+    @Override
+    public double calculateShapeArea() {
+        return 0;
+    }
 }

@@ -20,6 +20,12 @@ public class Line extends AbstractShape{
     }
 
     @Override
+    public double calculateShapeArea() {
+        System.out.println("Line has no area");
+        return 0;
+    }
+
+    @Override
     public void draw(GraphicsContext gc) {
         gc.beginPath();
         gc.moveTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
