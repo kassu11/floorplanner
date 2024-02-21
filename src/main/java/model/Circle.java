@@ -35,4 +35,11 @@ public class Circle  extends AbstractShape{
         gc.beginPath();
         gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360, ArcType.OPEN);
     }
+
+    public double calculateDistanceFromMouse(double x, double y) {
+        double deltaX = this.getX() - x + this.getWidth() / 2;
+        double deltaY = this.getY() - y + this.getHeight() / 2;
+
+        return Math.hypot(deltaX, deltaY);
+    }
 }

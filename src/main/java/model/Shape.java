@@ -20,4 +20,6 @@ public interface Shape {
     double calculateShapeLength();
 
     double calculateShapeArea();
+    int getPriority();
+    double calculateDistanceFromMouse(double x, double y);
 }

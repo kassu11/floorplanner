@@ -9,6 +9,7 @@ public class Point implements Shape {
     private double x, y;
     private double width = 25, height = 25;
     private List<Shape> children = new ArrayList<>();
+    private int priority = 1;
 
     public Point(double x, double y) {
         this.x = x;
@@ -70,5 +71,17 @@ public class Point implements Shape {
     @Override
     public double calculateShapeArea() {
         return 0;
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    public double calculateDistanceFromMouse(double x, double y) {
+        double deltaX = this.getX() - x;
+        double deltaY = this.getY() - y;
+
+        return Math.hypot(deltaX, deltaY);
     }
 }

@@ -22,7 +22,7 @@ public class GUI extends Application {
     Point lastPoint;
     private Point hoveredPoint;
 
-    private ShapeType currentShape = ShapeType.RECTANGLE;
+    private ShapeType currentShape = ShapeType.LINE;
 
     @Override
     public void init() {
@@ -67,47 +67,56 @@ public class GUI extends Application {
             previewGc.clearRect(0, 0, 500, 500);
             Shape hoveredShape = null;
             hoveredPoint = null;
-            double minDistance = 15;
+            double distanceCutOff = 15;
+            double lowestDistance = distanceCutOff;
 
             for (Shape shape : ShapesSingleton.getShapes()) {
+                double distance = shape.calculateDistanceFromMouse(event.getX(), event.getY());
+                int bestPriority = hoveredShape != null ? hoveredShape.getPriority() : 0;
+                if ((distance < lowestDistance && shape.getPriority() >= bestPriority) || (distance < distanceCutOff && bestPriority < shape.getPriority())) {
+                    lowestDistance = distance;
+                    hoveredShape = shape;
+                    if (shape.getClass().equals(Point.class)) hoveredPoint = (Point) shape;
+                }
 //             ***   if (contains(event.getX(), event.getY(), shape)) {
 
-                if (shape.getClass().equals(Line.class)) {
-
-                    double x1 = shape.getPoints().get(1).getX();
-                    double x2 = shape.getPoints().get(0).getX();
-                    double y1 = shape.getPoints().get(1).getY();
-                    double y2 = shape.getPoints().get(0).getY();
-
-                    if (x1 == x2) {
-                        // System.out.println("Vertical line detected!");
-                        if (betweenLinesWithoutSlope(event.getX(), event.getY(), x1, x2, y1, y2)) {
-                            double distance = getDistanceWithoutSlope(event.getX(), x1);
-                            if (distance < minDistance) {
-                                hoveredShape = shape;
-                            }
-                        }
-                    } else {
-                        double slope = (y2 - y1) / (x2 - x1);
-                        if (betweenLines(event.getX(), event.getY(), x1, x2, y1, y2, slope)) {
-                            double distance = getDistance(event.getX(), event.getY(), x1, y1, slope);
-                            // double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
-                            if (distance < minDistance) {
-                                hoveredShape = shape;
-                            }
-                        }
-                    }
-
-                } else {
-                    double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
-                    if (distance < minDistance) {
-                        hoveredShape = shape;
-                        if (shape.getClass().equals(Point.class)) {
-                            hoveredPoint = (Point) shape;
-                        }
-                    }
-                }
-//              ***  }
+//                if (shape.getClass().equals(Line.class)) {
+//
+//                    double x1 = shape.getPoints().get(1).getX();
+//                    double x2 = shape.getPoints().get(0).getX();
+//                    double y1 = shape.getPoints().get(1).getY();
+//                    double y2 = shape.getPoints().get(0).getY();
+//
+//                    if (x1 == x2) {
+//                        // System.out.println("Vertical line detected!");
+//                        if (betweenLinesWithoutSlope(event.getX(), event.getY(), x1, x2, y1, y2)) {
+//                            double distance = getDistanceWithoutSlope(event.getX(), x1);
+//                            if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
+//                                hoveredShape = shape;
+//                            }
+//                        }
+//                    } else {
+//                        double slope = (y2 - y1) / (x2 - x1);
+//                        if (betweenLines(event.getX(), event.getY(), x1, x2, y1, y2, slope)) {
+//                            double distance = getDistance(event.getX(), event.getY(), x1, y1, slope);
+//                            // double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
+//                            if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
+//                                hoveredShape = shape;
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                else {
+//                    double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
+//                    if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
+//                        hoveredShape = shape;
+//                        if (shape.getClass().equals(Point.class)) {
+//                            hoveredPoint = (Point) shape;
+//                        }
+//                    }
+//                }
+////              ***  }
             }
 
             if (hoveredShape != null) {
