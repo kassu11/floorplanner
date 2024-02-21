@@ -12,9 +12,9 @@ public class Line extends AbstractShape{
 
     @Override
     public double calculateShapeLength() {
-        double deltax = this.getPoints().get(0).getX() - this.getPoints().get(1).getX();
-        double deltay = this.getPoints().get(0).getY() - this.getPoints().get(1).getY();
-        double length = Math.sqrt(deltax * deltax + deltay * deltay);
+        double deltaX = this.getPoints().get(0).getX() - this.getPoints().get(1).getX();
+        double deltaY = this.getPoints().get(0).getY() - this.getPoints().get(1).getY();
+        double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         System.out.println("Length of line: " + length);
         return length;
     }
@@ -40,7 +40,6 @@ public class Line extends AbstractShape{
         double y2 = this.getPoints().get(0).getY();
 
         if (x1 == x2) {
-            // System.out.println("Vertical line detected!");
             if (betweenLinesWithoutSlope(x, y, x1, x2, y1, y2)) return getDistanceWithoutSlope(x, x1);
         } else {
             double slope = (y2 - y1) / (x2 - x1);
@@ -51,11 +50,7 @@ public class Line extends AbstractShape{
     }
 
     private static double getDistance(double mouseX, double mouseY, double x1, double y1, double slope) {
-
-//      System.out.println(x1 + " " + x2 + " " + y1 + " " + y2);
         double b = y1 - slope * x1;
-
-//      System.out.println(slope + " " + b);
         return Math.abs(slope * mouseX - mouseY + b) / Math.sqrt(Math.pow(slope, 2) + 1);
     }
 
@@ -68,7 +63,6 @@ public class Line extends AbstractShape{
         double perpendicularSlope;
 
         if (slope == 0) {
-            // System.out.println("Horizontal line detected!");
             return !(getDistanceWithoutSlope(mouseX, x1) > lineLength || getDistanceWithoutSlope(mouseX, x2) > lineLength);
         }
 

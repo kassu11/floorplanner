@@ -74,49 +74,11 @@ public class GUI extends Application {
                 double distance = shape.calculateDistanceFromMouse(event.getX(), event.getY());
                 int bestPriority = hoveredShape != null ? hoveredShape.getPriority() : 0;
                 if ((distance < lowestDistance && shape.getPriority() >= bestPriority) || (distance < distanceCutOff && bestPriority < shape.getPriority())) {
+                    if (shape == lastPoint) continue;
                     lowestDistance = distance;
                     hoveredShape = shape;
                     if (shape.getClass().equals(Point.class)) hoveredPoint = (Point) shape;
                 }
-//             ***   if (contains(event.getX(), event.getY(), shape)) {
-
-//                if (shape.getClass().equals(Line.class)) {
-//
-//                    double x1 = shape.getPoints().get(1).getX();
-//                    double x2 = shape.getPoints().get(0).getX();
-//                    double y1 = shape.getPoints().get(1).getY();
-//                    double y2 = shape.getPoints().get(0).getY();
-//
-//                    if (x1 == x2) {
-//                        // System.out.println("Vertical line detected!");
-//                        if (betweenLinesWithoutSlope(event.getX(), event.getY(), x1, x2, y1, y2)) {
-//                            double distance = getDistanceWithoutSlope(event.getX(), x1);
-//                            if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
-//                                hoveredShape = shape;
-//                            }
-//                        }
-//                    } else {
-//                        double slope = (y2 - y1) / (x2 - x1);
-//                        if (betweenLines(event.getX(), event.getY(), x1, x2, y1, y2, slope)) {
-//                            double distance = getDistance(event.getX(), event.getY(), x1, y1, slope);
-//                            // double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
-//                            if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
-//                                hoveredShape = shape;
-//                            }
-//                        }
-//                    }
-//
-//                }
-//                else {
-//                    double distance = Math.sqrt(Math.pow(event.getX() - shape.getX(), 2) + Math.pow(event.getY() - shape.getY(), 2));
-//                    if (distance < minDistance || (hoveredShape != null && hoveredShape.getPriority() < shape.getPriority())) {
-//                        hoveredShape = shape;
-//                        if (shape.getClass().equals(Point.class)) {
-//                            hoveredPoint = (Point) shape;
-//                        }
-//                    }
-//                }
-////              ***  }
             }
 
             if (hoveredShape != null) {
@@ -159,40 +121,5 @@ public class GUI extends Application {
         gc.strokeLine(x, y, x1, y1);
         gc.setLineWidth(1);
         gc.setStroke(BLACK);
-    }
-
-    private boolean contains(double x, double y, Shape shape) {
-        return !(x < shape.getX() || y < shape.getY() || x > shape.getX() + shape.getWidth() || y > shape.getY() + shape.getHeight());
-    }
-
-    private boolean betweenLines(double mouseX, double mouseY, double x1, double x2, double y1, double y2, double slope) {
-        double lineLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        double perpendicularSlope;
-
-        if (slope == 0) {
-            // System.out.println("Horizontal line detected!");
-            return !(getDistanceWithoutSlope(mouseX, x1) > lineLength || getDistanceWithoutSlope(mouseX, x2) > lineLength);
-        }
-
-        perpendicularSlope = -1 / slope;
-        return !(getDistance(mouseX, mouseY, x1, y1, perpendicularSlope) > lineLength || getDistance(mouseX, mouseY, x2, y2, perpendicularSlope) > lineLength);
-    }
-
-    private boolean betweenLinesWithoutSlope(double mouseX, double mouseY, double x1, double x2, double y1, double y2) {
-        double lineLength = Math.abs(y2 - y1);
-        return !(getDistance(mouseX, mouseY, x1, y1, 0) > lineLength || getDistance(mouseX, mouseY, x2, y2, 0) > lineLength);
-    }
-
-    private static double getDistance(double mouseX, double mouseY, double x1, double y1, double slope) {
-
-//      System.out.println(x1 + " " + x2 + " " + y1 + " " + y2);
-        double b = y1 - slope * x1;
-
-//      System.out.println(slope + " " + b);
-        return Math.abs(slope * mouseX - mouseY + b) / Math.sqrt(Math.pow(slope, 2) + 1);
-    }
-
-    private static double getDistanceWithoutSlope(double mouseX, double x1) {
-        return Math.abs(mouseX - x1);
     }
 }
