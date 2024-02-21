@@ -32,7 +32,7 @@ public class Controller {
         // TODO: Refactor this to use a factory
 
         return switch (shapeType) {
-            case LINE -> new Line(pointA, pointB);
+            case LINE, MULTILINE -> new Line(pointA, pointB);
             case RECTANGLE -> {
                 Point pointC = new Point(pointB.getX(), pointA.getY());
                 Point pointD = new Point(pointA.getX(), pointB.getY());

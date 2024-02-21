@@ -20,7 +20,7 @@ public class GUI extends Application {
     Point lastPoint;
     private Point hoveredPoint;
 
-    private ShapeType currentShape = ShapeType.LINE;
+    private ShapeType currentShape = ShapeType.MULTILINE;
 
     @Override
     public void init() {
@@ -56,7 +56,9 @@ public class GUI extends Application {
                 gc.clearRect(0, 0, 500, 500);
 
                 for (Shape shape : ShapesSingleton.getShapes()) shape.draw(gc);
-                lastPoint = null;
+
+                if(currentShape.equals(ShapeType.MULTILINE)) lastPoint = endPoint;
+                else lastPoint = null;
             }
         });
         // This is the preview drawing
@@ -84,14 +86,13 @@ public class GUI extends Application {
                 hoveredShape.draw(previewGc);
             }
 
-
             if (lastPoint == null) return;
 
             previewGc.beginPath();
             double x = lastPoint.getX();
             double y = lastPoint.getY();
             switch (currentShape) {
-                case LINE -> {
+                case LINE, MULTILINE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
                 }
@@ -108,6 +109,20 @@ public class GUI extends Application {
         stage.setTitle("view.FPGUI");
         stage.setScene(view);
         stage.show();
+
+        view.setOnKeyPressed(event -> {
+            System.out.println(event.getCode());
+            switch (event.getCode()) {
+                case DIGIT1 -> currentShape = ShapeType.LINE;
+                case DIGIT2 -> currentShape = ShapeType.RECTANGLE;
+                case DIGIT3 -> currentShape = ShapeType.CIRCLE;
+                case DIGIT4 -> currentShape = ShapeType.MULTILINE;
+                case ESCAPE -> {
+                    lastPoint = null;
+                    previewGc.clearRect(0, 0, 500, 500);
+                }
+            }
+        });
     }
 
 
