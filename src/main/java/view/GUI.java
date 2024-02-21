@@ -16,8 +16,6 @@ import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
 
-    private int clicks;
-
     Controller controller;
     Point lastPoint;
     private Point hoveredPoint;
@@ -44,13 +42,13 @@ public class GUI extends Application {
 
         canvasContainer.setOnMouseClicked(event -> {
             Point endPoint = hoveredPoint;
-            if (clicks % 2 == 0) {
+            if (lastPoint == null) {
                 if (hoveredPoint != null) lastPoint = hoveredPoint;
                 else lastPoint = controller.createPoint(event.getX(), event.getY());
             } else {
                 previewGc.clearRect(0, 0, 500, 500);
 
-                if (hoveredPoint == null) endPoint = controller.createPoint(event.getX(), event.getY());
+                if (endPoint == null) endPoint = controller.createPoint(event.getX(), event.getY());
 
                 Shape newShape = controller.addShape(lastPoint, endPoint, currentShape);
                 newShape.draw(gc);
@@ -60,7 +58,6 @@ public class GUI extends Application {
                 for (Shape shape : ShapesSingleton.getShapes()) shape.draw(gc);
                 lastPoint = null;
             }
-            clicks++;
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
@@ -88,7 +85,7 @@ public class GUI extends Application {
             }
 
 
-            if (clicks % 2 == 0) return;
+            if (lastPoint == null) return;
 
             previewGc.beginPath();
             double x = lastPoint.getX();
