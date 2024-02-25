@@ -28,8 +28,6 @@ public class GUI extends Application {
     private int canvasWidth = 750;
     private int canvasHeight = 750;
 
-    private ShapeType currentShape = ShapeType.MULTILINE;
-
     @Override
     public void init() {
         controller = new Controller(this);
@@ -62,15 +60,15 @@ public class GUI extends Application {
                 if (endPoint == null)
                     endPoint = controller.createPoint(event.getX(), event.getY());
 
-                Shape newShape = controller.addShape(lastPoint, endPoint, currentShape);
+                Shape newShape = controller.addShape(lastPoint, endPoint, CurrentShapeSingleton.getCurrentShape());
                 newShape.draw(gc);
                 newShape.calculateShapeArea();
-                gc.clearRect(0, 0, 500, 500);
+                gc.clearRect(0, 0, canvasWidth, canvasHeight);
 
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
 
-                if (currentShape.equals(ShapeType.MULTILINE))
+                if (CurrentShapeSingleton.isShapeType(ShapeType.MULTILINE))
                     lastPoint = endPoint;
                 else
                     lastPoint = null;
@@ -78,7 +76,7 @@ public class GUI extends Application {
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
-            previewGc.clearRect(0, 0, 500, 500);
+            previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
             Shape hoveredShape = null;
             hoveredPoint = null;
             double distanceCutOff = 15;
@@ -110,13 +108,15 @@ public class GUI extends Application {
             previewGc.beginPath();
             double x = lastPoint.getX();
             double y = lastPoint.getY();
-            switch (currentShape) {
+            switch (CurrentShapeSingleton.getCurrentShape()) {
                 case LINE, MULTILINE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
                 }
                 case RECTANGLE -> previewGc.rect(x, y, event.getX() - x, event.getY() - y);
                 case CIRCLE -> previewGc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
+                case TRIANGLE -> {
+                }
             }
             previewGc.stroke();
         });
@@ -142,13 +142,13 @@ public class GUI extends Application {
         view.setOnKeyPressed(event -> {
             System.out.println(event.getCode());
             switch (event.getCode()) {
-                case DIGIT1 -> currentShape = ShapeType.LINE;
-                case DIGIT2 -> currentShape = ShapeType.RECTANGLE;
-                case DIGIT3 -> currentShape = ShapeType.CIRCLE;
-                case DIGIT4 -> currentShape = ShapeType.MULTILINE;
+                case DIGIT1 -> CurrentShapeSingleton.setCurrentShape(ShapeType.LINE);
+                case DIGIT2 -> CurrentShapeSingleton.setCurrentShape(ShapeType.RECTANGLE);
+                case DIGIT3 -> CurrentShapeSingleton.setCurrentShape(ShapeType.CIRCLE);
+                case DIGIT4 -> CurrentShapeSingleton.setCurrentShape(ShapeType.MULTILINE);
                 case ESCAPE -> {
                     lastPoint = null;
-                    previewGc.clearRect(0, 0, 500, 500);
+                    previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
                 }
             }
         });

@@ -15,7 +15,7 @@ public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();
     private double cursorX, cursorY;
 
-    private CustomMenuItem lineMode, rectangleMode, circleMode;
+    private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
     private Stage stage;
     private HashMap<String, Button> buttons = new HashMap<>();
 
@@ -30,16 +30,17 @@ public class DrawingToolbar extends ToolBar {
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
         this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
         this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
-        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode);
+        this.multilineMode = new CustomMenuItem("Multiline", ShapeType.MULTILINE);
+        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
     }
 
     public void addButton(Button button) {
         this.getItems().add(button);
         this.getItems().add(new Separator());
-        buttons.put(button.getText(),button);
+        buttons.put(button.getText(), button);
     }
 
-    public void setCursorCoordinates(){
+    public void setCursorCoordinates() {
         this.cursorX = stage.getX() + this.getLayoutX();
         this.cursorY = stage.getY() + this.getLayoutY();
     }
@@ -54,7 +55,6 @@ public class DrawingToolbar extends ToolBar {
 
         modeMenu.show(this, cursorX + this.getWidth(), cursorY + buttons.get("Mode").getHeight());
     }
-
 
     public void setCursorX(double cursorX) {
         this.cursorX = cursorX;

@@ -23,4 +23,8 @@ public class CurrentShapeSingleton {
         currentShape = shape;
         System.out.println("Current shape: " + currentShape);
     }
+
+    public static boolean isShapeType(ShapeType shape) {
+        return currentShape == shape;
+    }
 }
