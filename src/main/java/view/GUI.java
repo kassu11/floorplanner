@@ -2,16 +2,12 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import model.Line;
 import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
@@ -149,6 +145,8 @@ public class GUI extends Application {
                 case ESCAPE -> {
                     lastPoint = null;
                     previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+                }
+                default -> {
                 }
             }
         });

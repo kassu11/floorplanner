@@ -1,7 +1,6 @@
 package view;
 
 public class CurrentShapeSingleton {
-    private static CurrentShapeSingleton instance = null;
     private static ShapeType currentShape = ShapeType.LINE;
 
     private CurrentShapeSingleton() {

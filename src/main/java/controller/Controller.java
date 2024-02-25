@@ -4,10 +4,6 @@ import model.*;
 import view.GUI;
 import view.ShapeType;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Controller {
     private GUI gui;
@@ -46,7 +42,6 @@ public class Controller {
     public Point createPoint(double x, double y) {
         return new Point(x, y);
     }
-
 
     public static void main(String[] args) {
         GUI.launch(GUI.class);

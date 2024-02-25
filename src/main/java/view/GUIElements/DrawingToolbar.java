@@ -6,10 +6,7 @@ import javafx.stage.Stage;
 import view.CurrentShapeSingleton;
 import view.ShapeType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();

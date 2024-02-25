@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapesSingleton {
-    private static ShapesSingleton instance = null;
     private static final List<Shape> shapes = new ArrayList<>();
 
     private ShapesSingleton() {
@@ -14,7 +13,9 @@ public class ShapesSingleton {
         private static final ShapesSingleton INSTANCE = new ShapesSingleton();
     }
 
-    public static ShapesSingleton getInstance() {return ShapesSingletonHelper.INSTANCE;}
+    public static ShapesSingleton getInstance() {
+        return ShapesSingletonHelper.INSTANCE;
+    }
 
     public static List<Shape> getShapes() {
         return shapes;
