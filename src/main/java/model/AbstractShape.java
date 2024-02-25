@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.canvas.GraphicsContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ public abstract class AbstractShape implements Shape {
     private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
+    private int priority;
 
     public AbstractShape(Point pointA, Point pointB) {
         points.add(pointA);
@@ -89,6 +92,7 @@ public abstract class AbstractShape implements Shape {
     public Shape getParentShape() {
         return parentShape;
     }
+    public abstract void draw(GraphicsContext gc);
 
     public void setParentShape(Shape parentShape) {
         this.parentShape = parentShape;
@@ -100,5 +104,16 @@ public abstract class AbstractShape implements Shape {
 
     public double getHeight() {
         return height;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public double calculateDistanceFromMouse(double x, double y) {
+        double deltaX = this.getX() - x + this.getWidth() / 2;
+        double deltaY = this.getY() - y + this.getHeight() / 2;
+
+        return Math.hypot(deltaX, deltaY);
     }
 }
