@@ -191,13 +191,4 @@ public class GUI extends Application {
         });
     }
 
-    // This method only erases the line from the canvas and not the shape from the
-    // list
-    public void eraseSingleLine(GraphicsContext gc, double x, double y, double x1, double y1) {
-        gc.setStroke(WHITE);
-        gc.setLineWidth(2);
-        gc.strokeLine(x, y, x1, y1);
-        gc.setLineWidth(1);
-        gc.setStroke(BLACK);
-    }
 }
