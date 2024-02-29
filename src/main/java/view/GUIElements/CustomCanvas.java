@@ -44,4 +44,6 @@ public interface CustomCanvas {
 
   public void setY(double y);
 
+  public void setZoom(double zoom);
+
 }

@@ -7,7 +7,7 @@ import javafx.scene.shape.ArcType;
 
 public class DrawingCanvas extends Canvas implements CustomCanvas {
   private double width, height;
-  private double x, y;
+  private double x, y, zoom;
   private GraphicsContext gc;
 
   public DrawingCanvas(double width, double height) {
@@ -16,6 +16,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     this.height = height;
     this.x = 0;
     this.y = 0;
+    this.zoom = 1;
     gc = getGraphicsContext2D();
   }
 
@@ -31,23 +32,23 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
   }
 
   public void moveTo(double x, double y) {
-    gc.moveTo(x - this.x, y - this.y);
+    gc.moveTo(-this.x + x * zoom, -this.y + y * zoom);
   }
 
   public void lineTo(double x, double y) {
-    gc.lineTo(x - this.x, y - this.y);
+    gc.lineTo(-this.x + x * zoom, -this.y + y * zoom);
   }
 
   public void rect(double x, double y, double width, double height) {
-    gc.strokeRect(x - this.x, y - this.y, width, height);
+    gc.strokeRect(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom);
   }
 
   public void fillOval(double x, double y, double width, double height) {
-    gc.fillOval(x - this.x, y - this.y, width, height);
+    gc.fillOval(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom);
   }
 
   public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length) {
-    gc.arc(x - this.x, y - this.y, radiusX, radiusY, startAngle, length);
+    gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
   }
 
   public void setLineWidth(int width) {
@@ -63,7 +64,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
   }
 
   public void setStrokeWidth(int width) {
-    gc.setLineWidth(width);
+    gc.setLineWidth(width * zoom);
   }
 
   public void setFill(Color color) {
@@ -84,7 +85,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
   public void strokeArc(double x, double y, double width, double height, double startAngle, double length,
       ArcType open) {
-    gc.strokeArc(x - this.x, y - this.y, width, height, startAngle, length, open);
+    gc.strokeArc(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom, startAngle, length, open);
   }
 
   public Canvas getCanvas() {
@@ -97,5 +98,9 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
   public void setY(double y) {
     this.y = y;
+  }
+
+  public void setZoom(double zoom) {
+    this.zoom = zoom;
   }
 }

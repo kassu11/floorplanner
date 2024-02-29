@@ -4,16 +4,21 @@ import javafx.scene.layout.GridPane;
 
 public class CanvasContainer extends GridPane {
   private final CustomCanvas[] layers = new CustomCanvas[2];
-  private double x, y;
+  private double x, y, zoom;
 
   public CanvasContainer(double width, double height) {
     super();
+    x = 0;
+    y = 0;
+    zoom = 1;
 
     for (int i = 0; i < layers.length; i++) {
       DrawingCanvas canvas = new DrawingCanvas(width, height);
       layers[i] = canvas;
       add(canvas, 0, 0);
     }
+
+    setZoom(1);
   }
 
   public CustomCanvas getLayer(int index) {
@@ -46,11 +51,22 @@ public class CanvasContainer extends GridPane {
     }
   }
 
+  public void setZoom(double zoom) {
+    this.zoom = zoom;
+    for (CustomCanvas layer : layers) {
+      layer.setZoom(zoom);
+    }
+  }
+
   public double getX() {
     return x;
   }
 
   public double getY() {
     return y;
+  }
+
+  public double getZoom() {
+    return zoom;
   }
 }

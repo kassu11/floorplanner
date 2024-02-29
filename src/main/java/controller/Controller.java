@@ -12,7 +12,7 @@ public class Controller {
 
     public Controller(GUI gui) {
         this.gui = gui;
-        this.canvasMath = new CanvasMath(gui.getCanvasContainer());
+        this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
     }
 
     public Shape addShape(double x, double y, double x1, double y1, ShapeType shapeType) {

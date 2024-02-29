@@ -86,24 +86,26 @@ public class GUI extends Application {
                         selectedShape = hoveredShape;
                     } else if (selectedShape != null) {
                         gc.clear();
-                        if(selectedShape.getClass().equals(Point.class)) {
+                        if (selectedShape.getClass().equals(Point.class)) {
                             selectedShape.setCoordinates(mouseX, mouseY);
                             for (Shape shape : selectedShape.getChildren()) {
                                 if (hoveredPoint != null) {
                                     for (Point point : shape.getPoints()) {
                                         if (point.equals(selectedShape)) {
-                                            shape.getPoints().set(shape.getPoints().indexOf(point), (Point) hoveredShape);
+                                            shape.getPoints().set(shape.getPoints().indexOf(point),
+                                                    (Point) hoveredShape);
                                             hoveredPoint.addChild(shape);
                                             ShapesSingleton.getShapes().remove(point);
                                             break;
                                         }
                                     }
                                 }
-                                shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(), shape.getY() + mouseY - selectedShape.getY());
+                                shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(),
+                                        shape.getY() + mouseY - selectedShape.getY());
                                 shape.draw(gc);
                             }
                         }
-                    //    if(selectedShape.getClass().equals(Line.class))
+                        // if(selectedShape.getClass().equals(Line.class))
                         selectedShape = null;
                         controller.drawAllShapes(gc);
                         previewGc.clear();
@@ -112,15 +114,15 @@ public class GUI extends Application {
                 case DELETE -> {
                     if (hoveredShape != null) {
                         ShapesSingleton.getShapes().remove(hoveredShape);
-                        if(hoveredShape.getClass().equals(Line.class)){
+                        if (hoveredShape.getClass().equals(Line.class)) {
                             for (Point point : hoveredShape.getPoints()) {
                                 point.getChildren().remove(hoveredShape);
                             }
                         }
-                        if(hoveredShape.getClass().equals(Point.class)){
+                        if (hoveredShape.getClass().equals(Point.class)) {
                             for (Shape shape : hoveredShape.getChildren()) {
-                                for(int i = 0; i < shape.getPoints().size(); i++){
-                                    if(!shape.getPoints().get(i).equals(hoveredShape)){
+                                for (int i = 0; i < shape.getPoints().size(); i++) {
+                                    if (!shape.getPoints().get(i).equals(hoveredShape)) {
                                         shape.getPoints().get(i).getChildren().remove(shape);
                                         shape.getPoints().remove(i);
                                         i--;
@@ -228,6 +230,24 @@ public class GUI extends Application {
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
             }
+        });
+
+        final double minScale = .05, maxScale = 150.0;
+        canvasContainer.setOnScroll(event -> {
+            double zoomLevel = canvasContainer.getZoom();
+            if (event.getDeltaY() < 0)
+                canvasContainer.setZoom(Math.max(Math.pow(canvasContainer.getZoom(), 0.9) - .1, minScale));
+            else
+                canvasContainer.setZoom(Math.min(Math.pow(canvasContainer.getZoom(), 1.15) + .1, maxScale));
+
+            double scale = canvasContainer.getZoom() / zoomLevel;
+            double deltaX = (event.getX() * scale) - event.getX();
+            double deltaY = (event.getY() * scale) - event.getY();
+
+            canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
+            canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
+            canvasContainer.clear();
+            controller.drawAllShapes(gc);
         });
 
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);

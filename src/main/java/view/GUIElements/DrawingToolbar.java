@@ -8,7 +8,6 @@ import view.SettingsSingleton;
 import view.ShapeType;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();
@@ -25,7 +24,7 @@ public class DrawingToolbar extends ToolBar {
         addButton(new Button("Delete"));
         this.stage = stage;
 
-        //Set up the mode menu
+        // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
         this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
         this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
