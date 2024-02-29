@@ -58,7 +58,7 @@ public class GUI extends Application {
                         else
                             lastPoint = controller.createPoint(event.getX(), event.getY());
                     } else {
-                        previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+                        previewGc.clear();
 
                         if (endPoint == null)
                             endPoint = controller.createPoint(event.getX(), event.getY());
@@ -66,7 +66,7 @@ public class GUI extends Application {
                         Shape newShape = controller.addShape(lastPoint, endPoint, SettingsSingleton.getCurrentShape());
                         newShape.draw(gc);
                         newShape.calculateShapeArea();
-                        gc.clearRect(0, 0, canvasWidth, canvasHeight);
+                        gc.clear();
 
                         for (Shape shape : ShapesSingleton.getShapes())
                             shape.draw(gc);
@@ -81,7 +81,7 @@ public class GUI extends Application {
                     if (hoveredPoint != null) {
                         selectedShape = hoveredPoint;
                     } else if (selectedShape != null) {
-                        gc.clearRect(0, 0, canvasWidth, canvasHeight);
+                        gc.clear();
                         selectedShape.setCoordinates(event.getX(), event.getY());
                         for (Shape shape : selectedShape.getChildren()) {
                             shape.setCoordinates(shape.getX() + event.getX() - selectedShape.getX(), shape.getY() + event.getY() - selectedShape.getY());
