@@ -12,7 +12,7 @@ public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();
     private double cursorX, cursorY;
 
-    private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
+    private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode, customShapeMode;
     private Stage stage;
     private HashMap<String, Button> buttons = new HashMap<>();
 
@@ -28,7 +28,8 @@ public class DrawingToolbar extends ToolBar {
         this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
         this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
         this.multilineMode = new CustomMenuItem("Multiline", ShapeType.MULTILINE);
-        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
+        this.customShapeMode = new CustomMenuItem("Custom Shape", ShapeType.CUSTOM_SHAPE);
+        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode, customShapeMode);
     }
 
     public void addButton(Button button) {

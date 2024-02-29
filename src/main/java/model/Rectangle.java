@@ -46,6 +46,7 @@ public class Rectangle extends AbstractShape{
         gc.lineTo(this.getPoints().get(2).getX(), this.getPoints().get(2).getY());
         gc.lineTo(this.getPoints().get(3).getX(), this.getPoints().get(3).getY());
         gc.lineTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
+        System.out.println("Drawing rectangle");
         gc.stroke();
     }
 

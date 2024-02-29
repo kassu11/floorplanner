@@ -29,6 +29,7 @@ public class Controller {
 
         return switch (shapeType) {
             case LINE, MULTILINE -> new Line(pointA, pointB);
+            case CUSTOM_SHAPE -> new CustomShape(pointA, pointB);
             case RECTANGLE -> {
                 Point pointC = new Point(pointB.getX(), pointA.getY());
                 Point pointD = new Point(pointA.getX(), pointB.getY());

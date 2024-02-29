@@ -74,4 +74,6 @@ public class Line extends AbstractShape{
         double lineLength = Math.abs(y2 - y1);
         return !(getDistance(mouseX, mouseY, x1, y1, 0) > lineLength || getDistance(mouseX, mouseY, x2, y2, 0) > lineLength);
     }
+
+
 }

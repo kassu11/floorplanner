@@ -64,10 +64,13 @@ public class GUI extends Application {
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
 
-                if (CurrentShapeSingleton.isShapeType(ShapeType.MULTILINE))
+                if (CurrentShapeSingleton.isShapeType(ShapeType.CUSTOM_SHAPE)
+                        || CurrentShapeSingleton.isShapeType(ShapeType.MULTILINE))
                     lastPoint = endPoint;
                 else
                     lastPoint = null;
+
+
             }
         });
         // This is the preview drawing
@@ -105,7 +108,7 @@ public class GUI extends Application {
             double x = lastPoint.getX();
             double y = lastPoint.getY();
             switch (CurrentShapeSingleton.getCurrentShape()) {
-                case LINE, MULTILINE -> {
+                case LINE, MULTILINE, CUSTOM_SHAPE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
                 }
