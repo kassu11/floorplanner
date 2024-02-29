@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.Line;
 import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
@@ -24,7 +25,7 @@ public class GUI extends Application {
     Controller controller;
     Point lastPoint;
     private Point hoveredPoint;
-    private Shape selectedShape;
+    private Shape selectedShape, hoveredShape;
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
@@ -81,26 +82,28 @@ public class GUI extends Application {
                     }
                 }
                 case SELECT -> {
-                    if (hoveredPoint != null && selectedShape == null) {
-                        selectedShape = hoveredPoint;
+                    if (hoveredShape != null && selectedShape == null) {
+                        selectedShape = hoveredShape;
                     } else if (selectedShape != null) {
                         gc.clear();
-                        selectedShape.setCoordinates(mouseX, mouseY);
-                        for (Shape shape : selectedShape.getChildren()) {
-                            if (hoveredPoint != null) {
-                                for (Point point : shape.getPoints()) {
-                                    if (point.equals(selectedShape)) {
-                                        shape.getPoints().set(shape.getPoints().indexOf(point), hoveredPoint);
-                                        hoveredPoint.addChild(shape);
-                                        ShapesSingleton.getShapes().remove(point);
-                                        break;
+                        if(selectedShape.getClass().equals(Point.class)) {
+                            selectedShape.setCoordinates(mouseX, mouseY);
+                            for (Shape shape : selectedShape.getChildren()) {
+                                if (hoveredPoint != null) {
+                                    for (Point point : shape.getPoints()) {
+                                        if (point.equals(selectedShape)) {
+                                            shape.getPoints().set(shape.getPoints().indexOf(point), (Point) hoveredShape);
+                                            hoveredPoint.addChild(shape);
+                                            ShapesSingleton.getShapes().remove(point);
+                                            break;
+                                        }
                                     }
                                 }
+                                shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(), shape.getY() + mouseY - selectedShape.getY());
+                                shape.draw(gc);
                             }
-                            shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(),
-                                    shape.getY() + mouseY - selectedShape.getY());
-                            shape.draw(gc);
                         }
+                    //    if(selectedShape.getClass().equals(Line.class))
                         selectedShape = null;
                         controller.drawAllShapes(gc);
                         previewGc.clear();
@@ -112,7 +115,7 @@ public class GUI extends Application {
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             previewGc.clear();
-            Shape hoveredShape = null;
+            hoveredShape = null;
             List<Shape> startingPoints = new ArrayList<>();
             hoveredPoint = null;
             double distanceCutOff = 15;
