@@ -84,4 +84,10 @@ public class Point implements Shape {
 
         return Math.hypot(deltaX, deltaY);
     }
+
+    @Override
+    public void setCoordinates(double x, double y) {
+        this.setX(x);
+        this.setY(y);
+    }
 }

@@ -22,4 +22,6 @@ public interface Shape {
     double calculateShapeArea();
     int getPriority();
     double calculateDistanceFromMouse(double x, double y);
+
+    void setCoordinates(double x, double y);
 }

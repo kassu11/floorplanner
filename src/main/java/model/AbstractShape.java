@@ -116,4 +116,9 @@ public abstract class AbstractShape implements Shape {
 
         return Math.hypot(deltaX, deltaY);
     }
+
+    public void setCoordinates(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
 }
