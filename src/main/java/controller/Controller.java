@@ -1,7 +1,9 @@
 package controller;
 
+import javafx.scene.canvas.GraphicsContext;
 import model.*;
 import view.GUI;
+import view.GUIElements.CustomCanvas;
 import view.ShapeType;
 
 
@@ -37,6 +39,12 @@ public class Controller {
             case CIRCLE -> new Circle(pointA, pointB);
             case TRIANGLE -> null;
         };
+    }
+
+    public void drawAllShapes(CustomCanvas customCanvas){
+        for (Shape shape : ShapesSingleton.getShapes()) {
+            shape.draw(customCanvas);
+        }
     }
 
     public Point createPoint(double x, double y) {

@@ -16,6 +16,9 @@ import view.GUIElements.CustomCanvas;
 import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
@@ -78,17 +81,28 @@ public class GUI extends Application {
                     }
                 }
                 case SELECT -> {
-                    if (hoveredPoint != null) {
+                    if (hoveredPoint != null && selectedShape == null) {
                         selectedShape = hoveredPoint;
                     } else if (selectedShape != null) {
                         gc.clear();
                         selectedShape.setCoordinates(event.getX(), event.getY());
                         for (Shape shape : selectedShape.getChildren()) {
+                            if(hoveredPoint != null) {
+                                for (Point point : shape.getPoints()) {
+                                    if (point.equals(selectedShape)){
+                                        shape.getPoints().set(shape.getPoints().indexOf(point), hoveredPoint);
+                                        hoveredPoint.addChild(shape);
+                                        ShapesSingleton.getShapes().remove(point);
+                                        break;
+                                    }
+                                }
+                            }
                             shape.setCoordinates(shape.getX() + event.getX() - selectedShape.getX(), shape.getY() + event.getY() - selectedShape.getY());
                             shape.draw(gc);
                         }
-                        System.out.println("selected shape is now null");
                         selectedShape = null;
+                        controller.drawAllShapes(gc);
+                        previewGc.clear();
                     }
                 }
 
@@ -98,7 +112,7 @@ public class GUI extends Application {
         canvasContainer.setOnMouseMoved(event -> {
             previewGc.clear();
             Shape hoveredShape = null;
-            Shape startingPoint = null;
+            List<Shape> startingPoints = new ArrayList<>();
             hoveredPoint = null;
             double distanceCutOff = 15;
             double lowestDistance = distanceCutOff;
@@ -130,7 +144,7 @@ public class GUI extends Application {
                 for (Shape shape : selectedShape.getChildren()) {
                     for (Point point : shape.getPoints()) {
                         if(!point.equals(selectedShape)){
-                            startingPoint = point;
+                            startingPoints.add(point);
                         }
                     }
                 }
@@ -153,9 +167,11 @@ public class GUI extends Application {
                     }
                 }
             }
-            else if (startingPoint != null){
-                previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
-                previewGc.lineTo(event.getX(), event.getY());
+            else if (!startingPoints.isEmpty()){
+                for(Shape startingPoint : startingPoints) {
+                    previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
+                    previewGc.lineTo(event.getX(), event.getY());
+                }
             }
 
             previewGc.stroke();

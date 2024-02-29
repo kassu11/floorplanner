@@ -47,6 +47,7 @@ public class DrawingToolbar extends ToolBar {
     public void changeMode(ModeType mode) {
         setCursorCoordinates();
         SettingsSingleton.setCurrentMode(mode);
+        modeMenu.hide();
         if (mode == ModeType.DRAW) {
             modeMenu.setOnAction(event -> {
                 SettingsSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
