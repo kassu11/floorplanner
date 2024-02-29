@@ -1,6 +1,6 @@
 package model;
 
-import javafx.scene.canvas.GraphicsContext;
+import view.GUIElements.CustomCanvas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,6 @@ public abstract class AbstractShape implements Shape {
             point.addChild(this);
         }
     }
-
 
     public AbstractShape(Point pointA, Point pointB, Point pointC) {
         points.add(pointA);
@@ -92,7 +91,8 @@ public abstract class AbstractShape implements Shape {
     public Shape getParentShape() {
         return parentShape;
     }
-    public abstract void draw(GraphicsContext gc);
+
+    public abstract void draw(CustomCanvas gc);
 
     public void setParentShape(Shape parentShape) {
         this.parentShape = parentShape;
