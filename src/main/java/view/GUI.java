@@ -109,6 +109,34 @@ public class GUI extends Application {
                         previewGc.clear();
                     }
                 }
+                case DELETE -> {
+                    if (hoveredShape != null) {
+                        ShapesSingleton.getShapes().remove(hoveredShape);
+                        if(hoveredShape.getClass().equals(Line.class)){
+                            for (Point point : hoveredShape.getPoints()) {
+                                point.getChildren().remove(hoveredShape);
+                            }
+                        }
+                        if(hoveredShape.getClass().equals(Point.class)){
+                            for (Shape shape : hoveredShape.getChildren()) {
+                                for(int i = 0; i < shape.getPoints().size(); i++){
+                                    if(!shape.getPoints().get(i).equals(hoveredShape)){
+                                        shape.getPoints().get(i).getChildren().remove(shape);
+                                        shape.getPoints().remove(i);
+                                        i--;
+                                    }
+                                    ShapesSingleton.getShapes().remove(shape);
+                                }
+                            }
+                            ShapesSingleton.getShapes().remove(hoveredShape);
+                        }
+                        hoveredShape = null;
+                        selectedShape = null;
+                        lastPoint = null;
+                        gc.clear();
+                        controller.drawAllShapes(gc);
+                    }
+                }
 
             }
         });
@@ -205,6 +233,7 @@ public class GUI extends Application {
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
+        drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         OptionsToolbar optionBar = new OptionsToolbar();
 
         root.setLeft(drawToolbar);
@@ -218,6 +247,7 @@ public class GUI extends Application {
 
         view.setOnKeyPressed(event -> {
             System.out.println(event.getCode());
+            SettingsSingleton.setCurrentMode(ModeType.DRAW);
             switch (event.getCode()) {
                 case DIGIT1 -> SettingsSingleton.setCurrentShape(ShapeType.LINE);
                 case DIGIT2 -> SettingsSingleton.setCurrentShape(ShapeType.RECTANGLE);
