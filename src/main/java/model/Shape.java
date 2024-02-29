@@ -28,4 +28,6 @@ public interface Shape {
     int getPriority();
 
     double calculateDistanceFromMouse(double x, double y);
+
+    void setCoordinates(double x, double y);
 }
