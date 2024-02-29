@@ -4,6 +4,7 @@ import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Point;
@@ -23,6 +24,7 @@ public class GUI extends Application {
     private Point hoveredPoint;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
+    private double middleX, middleY;
 
     @Override
     public void init() {
@@ -43,6 +45,7 @@ public class GUI extends Application {
         previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
+            if(event.getButton() != MouseButton.PRIMARY) return;
             Point endPoint = hoveredPoint;
             if (lastPoint == null) {
                 if (hoveredPoint != null)
@@ -114,6 +117,24 @@ public class GUI extends Application {
                 }
             }
             previewGc.stroke();
+        });
+
+
+        canvasContainer.setOnMousePressed(event -> {
+            if(event.getButton() == MouseButton.MIDDLE) {
+                middleX = event.getX() - canvasContainer.getX() ;
+                middleY = event.getY() - canvasContainer.getY();
+            }
+        });
+
+        canvasContainer.setOnMouseDragged(event -> {
+            if(event.getButton() == MouseButton.MIDDLE) {
+                canvasContainer.setX(event.getX() - middleX);
+                canvasContainer.setY(event.getY() - middleY);
+                canvasContainer.clear();
+                for (Shape shape : ShapesSingleton.getShapes())
+                    shape.draw(gc);
+            }
         });
 
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);

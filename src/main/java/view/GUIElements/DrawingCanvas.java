@@ -90,4 +90,12 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
   public Canvas getCanvas() {
     return this;
   }
+
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
+  }
 }
