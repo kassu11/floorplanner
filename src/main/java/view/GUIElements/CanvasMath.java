@@ -1,7 +1,17 @@
 package view.GUIElements;
 
 public class CanvasMath {
-    public static double canvasXtoShapeX(double x, double canvasWidth, double shapeWidth) {
-        return x * shapeWidth / canvasWidth;
+    private CanvasContainer canvasContainer;
+
+    public CanvasMath(CanvasContainer canvasContainer) {
+        this.canvasContainer = canvasContainer;
+    }
+
+    public double relativeXtoAbsoluteX(double relativeX) {
+        return canvasContainer.getX() + relativeX;
+    }
+
+    public double relativeYtoAbsoluteY(double relativeY) {
+        return canvasContainer.getY() + relativeY;
     }
 }

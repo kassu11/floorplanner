@@ -1,10 +1,8 @@
 package view;
 
-import com.sun.scenario.Settings;
 import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -27,20 +25,19 @@ public class GUI extends Application {
     Point lastPoint;
     private Point hoveredPoint;
     private Shape selectedShape;
+    private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
     private double middleX, middleY;
 
     @Override
     public void init() {
+        canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
         controller = new Controller(this);
     }
 
     @Override
     public void start(Stage stage) {
-
-        CanvasContainer canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
-
         BorderPane root = new BorderPane();
 
         CustomCanvas gc = canvasContainer.getLayer(0);
@@ -50,8 +47,11 @@ public class GUI extends Application {
         previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
-            if(event.getButton() != MouseButton.PRIMARY) return;
+            if (event.getButton() != MouseButton.PRIMARY)
+                return;
             Point endPoint = hoveredPoint;
+            double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
+            double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
 
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
@@ -59,12 +59,12 @@ public class GUI extends Application {
                         if (hoveredPoint != null)
                             lastPoint = hoveredPoint;
                         else
-                            lastPoint = controller.createPoint(event.getX(), event.getY());
+                            lastPoint = controller.createAbsolutePoint(mouseX, mouseY);
                     } else {
                         previewGc.clear();
 
                         if (endPoint == null)
-                            endPoint = controller.createPoint(event.getX(), event.getY());
+                            endPoint = controller.createAbsolutePoint(mouseX, mouseY);
 
                         Shape newShape = controller.addShape(lastPoint, endPoint, SettingsSingleton.getCurrentShape());
                         newShape.draw(gc);
@@ -85,11 +85,11 @@ public class GUI extends Application {
                         selectedShape = hoveredPoint;
                     } else if (selectedShape != null) {
                         gc.clear();
-                        selectedShape.setCoordinates(event.getX(), event.getY());
+                        selectedShape.setCoordinates(mouseX, mouseY);
                         for (Shape shape : selectedShape.getChildren()) {
-                            if(hoveredPoint != null) {
+                            if (hoveredPoint != null) {
                                 for (Point point : shape.getPoints()) {
-                                    if (point.equals(selectedShape)){
+                                    if (point.equals(selectedShape)) {
                                         shape.getPoints().set(shape.getPoints().indexOf(point), hoveredPoint);
                                         hoveredPoint.addChild(shape);
                                         ShapesSingleton.getShapes().remove(point);
@@ -97,7 +97,8 @@ public class GUI extends Application {
                                     }
                                 }
                             }
-                            shape.setCoordinates(shape.getX() + event.getX() - selectedShape.getX(), shape.getY() + event.getY() - selectedShape.getY());
+                            shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(),
+                                    shape.getY() + mouseY - selectedShape.getY());
                             shape.draw(gc);
                         }
                         selectedShape = null;
@@ -117,8 +118,12 @@ public class GUI extends Application {
             double distanceCutOff = 15;
             double lowestDistance = distanceCutOff;
 
+            double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
+            double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+
             for (Shape shape : ShapesSingleton.getShapes()) {
-                double distance = shape.calculateDistanceFromMouse(event.getX(), event.getY());
+
+                double distance = shape.calculateDistanceFromMouse(mouseX, mouseY);
                 int bestPriority = hoveredShape != null ? hoveredShape.getPriority() : 0;
                 if ((distance < lowestDistance && shape.getPriority() >= bestPriority)
                         || (distance < distanceCutOff && bestPriority < shape.getPriority())) {
@@ -143,7 +148,7 @@ public class GUI extends Application {
                 selectedShape.draw(previewGc);
                 for (Shape shape : selectedShape.getChildren()) {
                     for (Point point : shape.getPoints()) {
-                        if(!point.equals(selectedShape)){
+                        if (!point.equals(selectedShape)) {
                             startingPoints.add(point);
                         }
                     }
@@ -152,43 +157,42 @@ public class GUI extends Application {
 
             previewGc.beginPath();
 
-            if(SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
-                if (lastPoint == null) return;
+            if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
+                if (lastPoint == null)
+                    return;
                 double x = lastPoint.getX();
                 double y = lastPoint.getY();
                 switch (SettingsSingleton.getCurrentShape()) {
                     case LINE, MULTILINE -> {
                         previewGc.moveTo(x, y);
-                        previewGc.lineTo(event.getX(), event.getY());
+                        previewGc.lineTo(mouseX, mouseY);
                     }
-                    case RECTANGLE -> previewGc.rect(x, y, event.getX() - x, event.getY() - y);
-                    case CIRCLE -> previewGc.arc(x, y, Math.abs(event.getX() - x), Math.abs(event.getY() - y), 0, 360);
+                    case RECTANGLE -> previewGc.rect(x, y, mouseX - x, mouseY - y);
+                    case CIRCLE -> previewGc.arc(x, y, Math.abs(mouseX - x), Math.abs(mouseY - y), 0, 360);
                     case TRIANGLE -> {
                     }
                 }
-            }
-            else if (!startingPoints.isEmpty()){
-                for(Shape startingPoint : startingPoints) {
+            } else if (!startingPoints.isEmpty()) {
+                for (Shape startingPoint : startingPoints) {
                     previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
-                    previewGc.lineTo(event.getX(), event.getY());
+                    previewGc.lineTo(mouseX, mouseY);
                 }
             }
 
             previewGc.stroke();
         });
 
-
         canvasContainer.setOnMousePressed(event -> {
-            if(event.getButton() == MouseButton.MIDDLE) {
-                middleX = event.getX() - canvasContainer.getX() ;
-                middleY = event.getY() - canvasContainer.getY();
+            if (event.getButton() == MouseButton.MIDDLE) {
+                middleX = canvasContainer.getX() + event.getX();
+                middleY = canvasContainer.getY() + event.getY();
             }
         });
 
         canvasContainer.setOnMouseDragged(event -> {
-            if(event.getButton() == MouseButton.MIDDLE) {
-                canvasContainer.setX(event.getX() - middleX);
-                canvasContainer.setY(event.getY() - middleY);
+            if (event.getButton() == MouseButton.MIDDLE) {
+                canvasContainer.setX(middleX - event.getX());
+                canvasContainer.setY(middleY - event.getY());
                 canvasContainer.clear();
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
@@ -226,4 +230,8 @@ public class GUI extends Application {
         });
     }
 
+    public CanvasContainer getCanvasContainer() {
+        System.out.println(canvasContainer);
+        return canvasContainer;
+    }
 }
