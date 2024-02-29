@@ -1,12 +1,13 @@
 package model;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.ArcType;
+import view.GUIElements.CustomCanvas;
 
-public class Circle  extends AbstractShape{
+public class Circle extends AbstractShape {
 
     double length;
     double area;
+
     public Circle(Point pointA, Point pointB) {
         super(pointA, pointB);
         ShapesSingleton.addShape(this);
@@ -31,9 +32,10 @@ public class Circle  extends AbstractShape{
     }
 
     @Override
-    public void draw(GraphicsContext gc) {
+    public void draw(CustomCanvas gc) {
         gc.beginPath();
-        gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360, ArcType.OPEN);
+        gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360,
+                ArcType.OPEN);
     }
 
     public double calculateDistanceFromMouse(double x, double y) {

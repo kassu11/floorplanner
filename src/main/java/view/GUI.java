@@ -3,14 +3,14 @@ package view;
 import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
+import view.GUIElements.CanvasContainer;
+import view.GUIElements.CustomCanvas;
 import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
 
@@ -32,13 +32,12 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) {
 
-        BorderPane root = new BorderPane();
-        GridPane canvasContainer = new GridPane();
-        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        Canvas previewCanvas = new Canvas(canvasWidth, canvasHeight);
+        CanvasContainer canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        GraphicsContext previewGc = previewCanvas.getGraphicsContext2D();
+        BorderPane root = new BorderPane();
+
+        CustomCanvas gc = canvasContainer.getLayer(0);
+        CustomCanvas previewGc = canvasContainer.getLayer(1);
 
         gc.setLineWidth(5);
         previewGc.setLineWidth(5);
@@ -51,7 +50,7 @@ public class GUI extends Application {
                 else
                     lastPoint = controller.createPoint(event.getX(), event.getY());
             } else {
-                previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+                previewGc.clear();
 
                 if (endPoint == null)
                     endPoint = controller.createPoint(event.getX(), event.getY());
@@ -59,7 +58,7 @@ public class GUI extends Application {
                 Shape newShape = controller.addShape(lastPoint, endPoint, CurrentShapeSingleton.getCurrentShape());
                 newShape.draw(gc);
                 newShape.calculateShapeArea();
-                gc.clearRect(0, 0, canvasWidth, canvasHeight);
+                gc.clear();
 
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
@@ -72,7 +71,7 @@ public class GUI extends Application {
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
-            previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+            previewGc.clear();
             Shape hoveredShape = null;
             hoveredPoint = null;
             double distanceCutOff = 15;
@@ -127,9 +126,6 @@ public class GUI extends Application {
         root.setTop(optionBar);
         root.setCenter(canvasContainer);
 
-        canvasContainer.add(canvas, 0, 0);
-        canvasContainer.add(previewCanvas, 0, 0);
-
         Scene view = new Scene(root, canvasWidth, canvasHeight);
         stage.setTitle("view.FPGUI");
         stage.setScene(view);
@@ -144,7 +140,7 @@ public class GUI extends Application {
                 case DIGIT4 -> CurrentShapeSingleton.setCurrentShape(ShapeType.MULTILINE);
                 case ESCAPE -> {
                     lastPoint = null;
-                    previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+                    previewGc.clear();
                 }
                 default -> {
                 }
