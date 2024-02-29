@@ -1,8 +1,8 @@
 package model;
 
-import javafx.scene.canvas.GraphicsContext;
+import view.GUIElements.CustomCanvas;
 
-public class Rectangle extends AbstractShape{
+public class Rectangle extends AbstractShape {
 
     double line1, line2, line3, line4;
 
@@ -39,7 +39,7 @@ public class Rectangle extends AbstractShape{
     }
 
     @Override
-    public void draw(GraphicsContext gc) {
+    public void draw(CustomCanvas gc) {
         gc.beginPath();
         gc.moveTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
         gc.lineTo(this.getPoints().get(1).getX(), this.getPoints().get(1).getY());

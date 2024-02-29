@@ -4,14 +4,15 @@ import com.sun.scenario.Settings;
 import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Point;
 import model.Shape;
 import model.ShapesSingleton;
+import view.GUIElements.CanvasContainer;
+import view.GUIElements.CustomCanvas;
 import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
 
@@ -25,6 +26,7 @@ public class GUI extends Application {
     private Shape selectedShape;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
+    private double middleX, middleY;
 
     @Override
     public void init() {
@@ -34,19 +36,20 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) {
 
-        BorderPane root = new BorderPane();
-        GridPane canvasContainer = new GridPane();
-        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        Canvas previewCanvas = new Canvas(canvasWidth, canvasHeight);
+        CanvasContainer canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        GraphicsContext previewGc = previewCanvas.getGraphicsContext2D();
+        BorderPane root = new BorderPane();
+
+        CustomCanvas gc = canvasContainer.getLayer(0);
+        CustomCanvas previewGc = canvasContainer.getLayer(1);
 
         gc.setLineWidth(5);
         previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
+            if(event.getButton() != MouseButton.PRIMARY) return;
             Point endPoint = hoveredPoint;
+
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
                     if (lastPoint == null) {
@@ -88,11 +91,12 @@ public class GUI extends Application {
                         selectedShape = null;
                     }
                 }
+
             }
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
-            previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+            previewGc.clear();
             Shape hoveredShape = null;
             Shape startingPoint = null;
             hoveredPoint = null;
@@ -157,6 +161,24 @@ public class GUI extends Application {
             previewGc.stroke();
         });
 
+
+        canvasContainer.setOnMousePressed(event -> {
+            if(event.getButton() == MouseButton.MIDDLE) {
+                middleX = event.getX() - canvasContainer.getX() ;
+                middleY = event.getY() - canvasContainer.getY();
+            }
+        });
+
+        canvasContainer.setOnMouseDragged(event -> {
+            if(event.getButton() == MouseButton.MIDDLE) {
+                canvasContainer.setX(event.getX() - middleX);
+                canvasContainer.setY(event.getY() - middleY);
+                canvasContainer.clear();
+                for (Shape shape : ShapesSingleton.getShapes())
+                    shape.draw(gc);
+            }
+        });
+
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
@@ -165,9 +187,6 @@ public class GUI extends Application {
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
         root.setCenter(canvasContainer);
-
-        canvasContainer.add(canvas, 0, 0);
-        canvasContainer.add(previewCanvas, 0, 0);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
         stage.setTitle("view.FPGUI");
@@ -183,7 +202,7 @@ public class GUI extends Application {
                 case DIGIT4 -> SettingsSingleton.setCurrentShape(ShapeType.MULTILINE);
                 case ESCAPE -> {
                     lastPoint = null;
-                    previewGc.clearRect(0, 0, canvasWidth, canvasHeight);
+                    previewGc.clear();
                 }
                 default -> {
                 }
