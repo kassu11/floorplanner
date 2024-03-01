@@ -254,6 +254,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
+        drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.clearShapes());
         OptionsToolbar optionBar = new OptionsToolbar();
 
         root.setLeft(drawToolbar);
@@ -284,7 +285,6 @@ public class GUI extends Application {
     }
 
     public CanvasContainer getCanvasContainer() {
-        System.out.println(canvasContainer);
         return canvasContainer;
     }
 }

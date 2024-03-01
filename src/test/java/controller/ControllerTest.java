@@ -65,16 +65,62 @@ class ControllerTest {
         assertEquals(8, ShapesSingleton.getShapes().size(), "Should have 8 shapes");
     }
 
-    @Disabled
     @Test
-    void testAddShape() {
-        fail("Not yet implemented");
+    void addRectangleShape() {
+        controller.addShape(0, 234, 23, 65, ShapeType.RECTANGLE);
+        assertEquals(8, ShapesSingleton.getShapes().size(), "Should have 8 shapes");
     }
 
-    @Disabled
     @Test
-    void testAddShape1() {
-        fail("Not yet implemented");
+    void addMultipleRectangleShapes() {
+        controller.addShape(0, 12, 43, 54, ShapeType.RECTANGLE);
+        controller.addShape(123, 2, 3, 45, ShapeType.RECTANGLE);
+        assertEquals(16, ShapesSingleton.getShapes().size(), "Should have 16 shapes");
+    }
+
+    @Test
+    void linkRectangleToPoint() {
+        Point pointA = controller.createAbsolutePoint(-23, 23);
+        controller.addShape(pointA, 3, 3, ShapeType.RECTANGLE);
+        assertEquals(8, ShapesSingleton.getShapes().size(), "Should have 8 shapes");
+    }
+
+    @Test
+    void linkRectanglesToPoints() {
+        Point pointA = controller.createAbsolutePoint(0, 0);
+        Point pointB = controller.createAbsolutePoint(5, 3);
+        controller.addShape(pointA, pointB, ShapeType.RECTANGLE);
+        assertEquals(8, ShapesSingleton.getShapes().size(), "Should have 8 shapes");
+    }
+
+    @Test
+    void testAddShapeWithCoordinates() {
+        controller.addShape(0, 234, 23, 65, ShapeType.LINE);
+        controller.addShape(0, 12, 43, 54, ShapeType.LINE);
+        controller.addShape(0, 12, 43, 54, ShapeType.RECTANGLE);
+        controller.addShape(0, 12, 43, 54, ShapeType.RECTANGLE);
+        assertEquals(22, ShapesSingleton.getShapes().size(), "Should have 22 shapes");
+    }
+
+    @Test
+    void testAddShapeWithOnePoint() {
+        Point pointA = controller.createAbsolutePoint(0, 0);
+        controller.addShape(pointA, 23, 20, ShapeType.LINE);
+        controller.addShape(pointA, 43, 62, ShapeType.LINE);
+        controller.addShape(pointA, -324, 54, ShapeType.RECTANGLE);
+        controller.addShape(pointA, -563, 14, ShapeType.RECTANGLE);
+        assertEquals(19, ShapesSingleton.getShapes().size(), "Should have 19 shapes");
+    }
+
+    @Test
+    void testAddShapeWithTwoPoints() {
+        Point pointA = controller.createAbsolutePoint(0, 0);
+        Point pointB = controller.createAbsolutePoint(5, 3);
+        controller.addShape(pointA, pointB, ShapeType.LINE);
+        controller.addShape(pointA, pointB, ShapeType.LINE);
+        controller.addShape(pointA, pointB, ShapeType.RECTANGLE);
+        controller.addShape(pointA, pointB, ShapeType.RECTANGLE);
+        assertEquals(16, ShapesSingleton.getShapes().size(), "Should have 16 shapes");
     }
 
     @Disabled

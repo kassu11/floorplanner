@@ -60,6 +60,11 @@ public class Controller {
         return canvasMath;
     }
 
+    public void clearShapes() {
+        ShapesSingleton.clearShapes();
+        gui.getCanvasContainer().clear();
+    }
+
     public static void main(String[] args) {
         GUI.launch(GUI.class);
     }
