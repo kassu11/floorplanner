@@ -206,23 +206,19 @@ public class GUI extends Application {
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
                 if (lastPoint == null)
                     return;
-                double x = lastPoint.getX();
-                double y = lastPoint.getY();
-                switch (SettingsSingleton.getCurrentShape()) {
-                    case LINE, MULTILINE -> {
-                        previewGc.moveTo(x, y);
-                        previewGc.lineTo(mouseX, mouseY);
-                    }
-                    case RECTANGLE -> previewGc.rect(x, y, mouseX - x, mouseY - y);
-                    case CIRCLE -> previewGc.arc(x, y, Math.abs(mouseX - x), Math.abs(mouseY - y), 0, 360);
-
-                }
+               // if(!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().isEmpty()){
+                Point point = controller.createRelativePoint(mouseX, mouseY, null);
+                controller.createShape(point ,lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             }
             if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
                 if (!startingPoints.isEmpty()) {
                     if (selectedShape.getClass().equals(Point.class)) {
-                        previewGc.moveTo(startingPoints.getFirst().getX(), startingPoints.getFirst().getY());
-                        previewGc.lineTo(mouseX, mouseY);
+                        for (Shape startingPoint : startingPoints) {
+                            previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
+                            previewGc.lineTo(mouseX, mouseY);
+                        }
+                        System.out.println(controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().size());
+                        System.out.println(controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().size());
                     }
                 }
 

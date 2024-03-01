@@ -82,13 +82,13 @@ public class Controller {
 
     public Point createRelativePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(canvasMath.relativeXtoAbsoluteX(x), canvasMath.relativeYtoAbsoluteY(y));
-        getShapeContainer(singletonType).addShape(point);
+        if(singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
     }
 
     public Point createAbsolutePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(x, y);
-        getShapeContainer(singletonType).addShape(point);
+        if(singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
     }
 
@@ -101,7 +101,8 @@ public class Controller {
         gui.getCanvasContainer().clear();
     }
 
-    private ShapeContainer getShapeContainer(SingletonType type){
+    public ShapeContainer getShapeContainer(SingletonType type){
+        if(type == null) return null;
         return switch(type){
             case FINAL -> finalShapes;
             case PREVIEW -> previewShapes;
