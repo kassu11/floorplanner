@@ -121,4 +121,8 @@ public abstract class AbstractShape implements Shape {
         this.x = x;
         this.y = y;
     }
+
+    public void addToShapeContainer(ShapeContainer shapeContainer){
+        shapeContainer.addShape(this);
+    }
 }

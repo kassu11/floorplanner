@@ -14,7 +14,6 @@ public class Point implements Shape {
     public Point(double x, double y) {
         this.x = x;
         this.y = y;
-        ShapesSingleton.addShape(this);
     }
 
     public double getX() {
@@ -90,5 +89,10 @@ public class Point implements Shape {
     public void setCoordinates(double x, double y) {
         this.setX(x);
         this.setY(y);
+    }
+
+    @Override
+    public void addToShapeContainer(ShapeContainer shapeContainer) {
+        shapeContainer.addShape(this);
     }
 }
