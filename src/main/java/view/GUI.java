@@ -29,7 +29,7 @@ public class GUI extends Application {
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
-    private double middleX, middleY;
+    private double middleX, middleY, selectedX, selectedY;
 
     @Override
     public void init() {
@@ -84,6 +84,8 @@ public class GUI extends Application {
                 case SELECT -> {
                     if (hoveredShape != null && selectedShape == null) {
                         selectedShape = hoveredShape;
+                        selectedX = mouseX;
+                        selectedY = mouseY;
                     } else if (selectedShape != null) {
                         gc.clear();
                         if (selectedShape.getClass().equals(Point.class)) {
@@ -105,7 +107,14 @@ public class GUI extends Application {
                                 shape.draw(gc);
                             }
                         }
-                        // if(selectedShape.getClass().equals(Line.class))
+                        if(selectedShape.getClass().equals(Line.class)) {
+                            double deltaX = mouseX - selectedX;
+                            double deltaY = mouseY - selectedY;
+
+                            for (Point point : selectedShape.getPoints()) {
+                                point.setCoordinates(point.getX() + deltaX, point.getY() + deltaY);
+                            }
+                        }
                         selectedShape = null;
                         controller.drawAllShapes(gc);
                         previewGc.clear();
