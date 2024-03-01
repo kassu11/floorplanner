@@ -13,6 +13,8 @@ import view.GUIElements.CanvasContainer;
 import view.GUIElements.CustomCanvas;
 import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
+import view.events.EventCallback;
+import view.events.KeyboardEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +68,8 @@ public class GUI extends Application {
                         if (endPoint == null)
                             endPoint = controller.createAbsolutePoint(mouseX, mouseY, Controller.SingletonType.FINAL);
 
-                        Shape newShape = controller.createShape(lastPoint, endPoint, SettingsSingleton.getCurrentShape(), Controller.SingletonType.FINAL);
+                        Shape newShape = controller.createShape(lastPoint, endPoint,
+                                SettingsSingleton.getCurrentShape(), Controller.SingletonType.FINAL);
                         newShape.draw(gc);
                         newShape.calculateShapeArea();
                         gc.clear();
@@ -167,7 +170,6 @@ public class GUI extends Application {
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                     }
                 }
-
             }
         });
         // This is the preview drawing
@@ -205,6 +207,18 @@ public class GUI extends Application {
             if (selectedShape != null) {
                 previewGc.setFill(BLUE);
                 previewGc.setStroke(BLUE);
+                selectedShape.draw(previewGc);
+                if (selectedShape.getClass().equals(Point.class)) {
+                    for (Shape shape : selectedShape.getChildren()) {
+                        for (Point point : shape.getPoints()) {
+                            if (!point.equals(selectedShape))
+                                startingPoints.add(point);
+                        }
+                    }
+                } else {
+                    startingPoints.addAll(selectedShape.getPoints());
+                }
+
             }
 
             previewGc.beginPath();
@@ -292,25 +306,12 @@ public class GUI extends Application {
         stage.setScene(view);
         stage.show();
 
-        view.setOnKeyPressed(event -> {
-            System.out.println(event.getCode());
-            SettingsSingleton.setCurrentMode(ModeType.DRAW);
-            switch (event.getCode()) {
-                case DIGIT1 -> SettingsSingleton.setCurrentShape(ShapeType.LINE);
-                case DIGIT2 -> SettingsSingleton.setCurrentShape(ShapeType.RECTANGLE);
-                case DIGIT3 -> SettingsSingleton.setCurrentShape(ShapeType.CIRCLE);
-                case DIGIT4 -> SettingsSingleton.setCurrentShape(ShapeType.MULTILINE);
-                case ESCAPE -> {
-                    lastPoint = null;
-                    previewGc.clear();
-                }
-                default -> {
-                }
-            }
-        });
+        EventCallback resetLastPoint = () -> lastPoint = null;
+        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, resetLastPoint)::handle);
     }
 
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }
+
 }
