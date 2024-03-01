@@ -77,8 +77,8 @@ public class Controller {
         }
     }
 
-    public void removeShape(Shape shape) {
-        finalShapes.getShapes().remove(shape);
+    public void removeShape(Shape shape, SingletonType type) {
+        getShapeContainer(type).getShapes().remove(shape);
     }
 
     public List<Shape> getShapes(SingletonType type) {

@@ -113,7 +113,6 @@ public class GUI extends Application {
                                 controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
                             }
                         }
-                        System.out.println("preview shapes amount : " + controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().size());
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                     } else if (selectedShape != null) {
                         gc.clear();
@@ -126,7 +125,7 @@ public class GUI extends Application {
                                             shape.getPoints().set(shape.getPoints().indexOf(point),
                                                     (Point) hoveredShape);
                                             hoveredPoint.addChild(shape);
-                                            controller.removeShape(point);
+                                            controller.removeShape(point, Controller.SingletonType.PREVIEW);
                                             break;
                                         }
                                     }
@@ -144,7 +143,7 @@ public class GUI extends Application {
                 }
                 case DELETE -> {
                     if (hoveredShape != null) {
-                        controller.removeShape(hoveredShape);
+                        controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
                         if (hoveredShape.getClass().equals(Line.class)) {
                             for (Point point : hoveredShape.getPoints()) {
                                 point.getChildren().remove(hoveredShape);
@@ -158,10 +157,10 @@ public class GUI extends Application {
                                         shape.getPoints().remove(i);
                                         i--;
                                     }
-                                    controller.removeShape(shape);
+                                    controller.removeShape(shape, Controller.SingletonType.FINAL);
                                 }
                             }
-                            controller.removeShape(hoveredShape);
+                            controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
                         }
                         hoveredShape = null;
                         selectedShape = null;
@@ -207,18 +206,6 @@ public class GUI extends Application {
             if (selectedShape != null) {
                 previewGc.setFill(BLUE);
                 previewGc.setStroke(BLUE);
-                selectedShape.draw(previewGc);
-                if (selectedShape.getClass().equals(Point.class)) {
-                    for (Shape shape : selectedShape.getChildren()) {
-                        for (Point point : shape.getPoints()) {
-                            if (!point.equals(selectedShape))
-                                startingPoints.add(point);
-                        }
-                    }
-                } else {
-                    startingPoints.addAll(selectedShape.getPoints());
-                }
-
             }
 
             previewGc.beginPath();
@@ -226,7 +213,7 @@ public class GUI extends Application {
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
                 if (lastPoint == null)
                     return;
-                Point point = controller.createRelativePoint(mouseX, mouseY, null);
+                Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
                 controller.createShape(point, lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             }
             if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
