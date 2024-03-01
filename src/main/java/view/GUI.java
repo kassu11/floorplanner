@@ -16,9 +16,6 @@ import view.GUIElements.DrawingToolbar;
 import view.events.EventCallback;
 import view.events.KeyboardEvents;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
@@ -49,11 +46,12 @@ public class GUI extends Application {
         previewGc.setLineWidth(5);
 
         canvasContainer.setOnMouseClicked(event -> {
-            if (event.getButton() != MouseButton.PRIMARY)
-                return;
+            if (event.getButton() != MouseButton.PRIMARY) return;
             Point endPoint = hoveredPoint;
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+
+            if(lastPoint != null && lastPoint == endPoint) return;
 
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
@@ -72,7 +70,6 @@ public class GUI extends Application {
                                 SettingsSingleton.getCurrentShape(), Controller.SingletonType.FINAL);
                         newShape.draw(gc);
                         newShape.calculateShapeArea();
-                        gc.clear();
 
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
@@ -99,10 +96,6 @@ public class GUI extends Application {
                                         for (Point childPoint : shape.getPoints()) {
                                             if(!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(childPoint))
                                                 controller.transferSingleShapeTo(childPoint, Controller.SingletonType.PREVIEW);
-                                            for (Shape childShape : childPoint.getChildren()) {
-                                                if(!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(childShape))
-                                                    controller.transferSingleShapeTo(childShape, Controller.SingletonType.PREVIEW);
-                                            }
                                         }
                                     }
                                 }
@@ -114,16 +107,15 @@ public class GUI extends Application {
                             }
                         }
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                     } else if (selectedShape != null) {
-                        gc.clear();
                         if (selectedShape.getClass().equals(Point.class)) {
                             selectedShape.setCoordinates(mouseX, mouseY);
                             for (Shape shape : selectedShape.getChildren()) {
-                                if (hoveredPoint != null) {
+                                if (hoveredPoint != null && hoveredPoint != selectedShape) {
                                     for (Point point : shape.getPoints()) {
                                         if (point.equals(selectedShape)) {
-                                            shape.getPoints().set(shape.getPoints().indexOf(point),
-                                                    (Point) hoveredShape);
+                                            shape.getPoints().set(shape.getPoints().indexOf(point), (Point) hoveredShape);
                                             hoveredPoint.addChild(shape);
                                             controller.removeShape(point, Controller.SingletonType.PREVIEW);
                                             break;
@@ -165,7 +157,6 @@ public class GUI extends Application {
                         hoveredShape = null;
                         selectedShape = null;
                         lastPoint = null;
-                        gc.clear();
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                     }
                 }
@@ -233,12 +224,8 @@ public class GUI extends Application {
                     }
                     selectedX = mouseX;
                     selectedY = mouseY;
-                    System.out.println("preview shapes amount : " + controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().size());
-                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-                }
-
+                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);}
             }
-
             previewGc.stroke();
         });
 
@@ -254,8 +241,8 @@ public class GUI extends Application {
                 canvasContainer.setX(middleX - event.getX());
                 canvasContainer.setY(middleY - event.getY());
                 canvasContainer.clear();
-                for (Shape shape : controller.getShapes(Controller.SingletonType.FINAL))
-                    shape.draw(gc);
+                controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
         });
 
@@ -273,15 +260,15 @@ public class GUI extends Application {
 
             canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
-            canvasContainer.clear();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
 
         DrawingToolbar drawToolbar = new DrawingToolbar(stage);
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
-        drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.clearShapes());
+        drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
         OptionsToolbar optionBar = new OptionsToolbar();
 
         root.setLeft(drawToolbar);

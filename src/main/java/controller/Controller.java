@@ -72,6 +72,7 @@ public class Controller {
     }
 
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
+        customCanvas.clear();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
         }
@@ -101,8 +102,9 @@ public class Controller {
         return canvasMath;
     }
 
-    public void clearShapes() {
+    public void removeAllShapes() {
         finalShapes.clearShapes();
+        previewShapes.clearShapes();
         gui.getCanvasContainer().clear();
     }
 
