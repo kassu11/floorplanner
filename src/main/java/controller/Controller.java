@@ -24,32 +24,37 @@ public class Controller {
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
         Point pointA = new Point(x, y);
-        Point pointB = new Point(x1, y1);
+        if(singletonType != null) getShapeContainer(singletonType).addShape(pointA);
 
-        return this.createShape(pointA, pointB, shapeType, singletonType);
+        return this.createShape(pointA, x1, y1, shapeType, singletonType);
     }
 
     public Shape createShape(Point pointA, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
         Point pointB = new Point(x1, y1);
+        if(singletonType != null) getShapeContainer(singletonType).addShape(pointB);
+
         return this.createShape(pointA, pointB, shapeType, singletonType);
     }
 
     public Shape createShape(Point pointA, Point pointB, ShapeType shapeType, SingletonType singletonType) {
         // TODO: Refactor this to use a factory
 
-        Shape shape =  switch (shapeType) {
+        Shape shape = switch (shapeType) {
             case LINE, MULTILINE -> new Line(pointA, pointB);
             case RECTANGLE -> {
-                Point pointC = new Point(pointB.getX(), pointA.getY());
-                Point pointD = new Point(pointA.getX(), pointB.getY());
-                yield new Rectangle(pointA, pointB, pointC, pointD);
+                Point pointC = createAbsolutePoint(pointB.getX(), pointA.getY(), singletonType);
+                Point pointD = createAbsolutePoint(pointA.getX(), pointB.getY(), singletonType);
+                Rectangle rectangle = new Rectangle(pointA, pointB, pointC, pointD);
+                if(singletonType != null) getShapeContainer(singletonType).addAllShapes(rectangle.getChildren());
+
+                singletonType = null;
+                yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
         };
         if(singletonType != null) shape.addToShapeContainer(getShapeContainer(singletonType));
         return shape;
     }
-
 
 
     public void transferAllShapes(SingletonType type){

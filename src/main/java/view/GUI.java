@@ -190,9 +190,7 @@ public class GUI extends Application {
                 if (selectedShape.getClass().equals(Point.class)) {
                     for (Shape shape : selectedShape.getChildren()) {
                         for (Point point : shape.getPoints()) {
-                            if (!point.equals(selectedShape)) {
-                                startingPoints.add(point);
-                            }
+                            if (!point.equals(selectedShape)) startingPoints.add(point);
                         }
                     }
                 } else {
@@ -206,7 +204,6 @@ public class GUI extends Application {
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
                 if (lastPoint == null)
                     return;
-               // if(!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().isEmpty()){
                 Point point = controller.createRelativePoint(mouseX, mouseY, null);
                 controller.createShape(point ,lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             }
@@ -217,8 +214,6 @@ public class GUI extends Application {
                             previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
                             previewGc.lineTo(mouseX, mouseY);
                         }
-                        System.out.println(controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().size());
-                        System.out.println(controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().size());
                     }
                 }
 

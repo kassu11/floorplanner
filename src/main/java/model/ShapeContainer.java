@@ -19,7 +19,7 @@ public abstract class ShapeContainer {
     }
 
     public void addAllShapes(List<Shape> shapes) {
-        shapes.addAll(shapes);
+        this.shapes.addAll(shapes);
     }
 
     public void clearShapes() {
