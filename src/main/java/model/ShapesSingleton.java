@@ -29,4 +29,8 @@ public class ShapesSingleton {
         shapes.addAll(shapes);
     }
 
+    public static void clearShapes() {
+        shapes.clear();
+    }
+
 }
