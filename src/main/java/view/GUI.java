@@ -29,7 +29,7 @@ public class GUI extends Application {
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
-    private double middleX, middleY;
+    private double middleX, middleY, selectedX, selectedY;
 
     @Override
     public void init() {
@@ -84,6 +84,8 @@ public class GUI extends Application {
                 case SELECT -> {
                     if (hoveredShape != null && selectedShape == null) {
                         selectedShape = hoveredShape;
+                        selectedX = mouseX;
+                        selectedY = mouseY;
                     } else if (selectedShape != null) {
                         gc.clear();
                         if (selectedShape.getClass().equals(Point.class)) {
@@ -105,7 +107,14 @@ public class GUI extends Application {
                                 shape.draw(gc);
                             }
                         }
-                        // if(selectedShape.getClass().equals(Line.class))
+                        if (selectedShape.getClass().equals(Line.class)) {
+                            double deltaX = mouseX - selectedX;
+                            double deltaY = mouseY - selectedY;
+
+                            for (Point point : selectedShape.getPoints()) {
+                                point.setCoordinates(point.getX() + deltaX, point.getY() + deltaY);
+                            }
+                        }
                         selectedShape = null;
                         controller.drawAllShapes(gc);
                         previewGc.clear();
@@ -179,13 +188,18 @@ public class GUI extends Application {
                 previewGc.setFill(BLUE);
                 previewGc.setStroke(BLUE);
                 selectedShape.draw(previewGc);
-                for (Shape shape : selectedShape.getChildren()) {
-                    for (Point point : shape.getPoints()) {
-                        if (!point.equals(selectedShape)) {
-                            startingPoints.add(point);
+                if (selectedShape.getClass().equals(Point.class)) {
+                    for (Shape shape : selectedShape.getChildren()) {
+                        for (Point point : shape.getPoints()) {
+                            if (!point.equals(selectedShape)) {
+                                startingPoints.add(point);
+                            }
                         }
                     }
+                } else {
+                    startingPoints.addAll(selectedShape.getPoints());
                 }
+
             }
 
             previewGc.beginPath();
@@ -205,11 +219,15 @@ public class GUI extends Application {
                     case TRIANGLE -> {
                     }
                 }
-            } else if (!startingPoints.isEmpty()) {
-                for (Shape startingPoint : startingPoints) {
-                    previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
-                    previewGc.lineTo(mouseX, mouseY);
+            }
+            if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
+                if (!startingPoints.isEmpty()) {
+                    if (selectedShape.getClass().equals(Point.class)) {
+                        previewGc.moveTo(startingPoints.getFirst().getX(), startingPoints.getFirst().getY());
+                        previewGc.lineTo(mouseX, mouseY);
+                    }
                 }
+
             }
 
             previewGc.stroke();
