@@ -208,13 +208,15 @@ public class GUI extends Application {
                     return;
                // if(!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().isEmpty()){
                 Point point = controller.createRelativePoint(mouseX, mouseY, null);
-                controller.createShape(lastPoint, point, SettingsSingleton.getCurrentShape(), null).draw(previewGc);
+                controller.createShape(point ,lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             }
             if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
                 if (!startingPoints.isEmpty()) {
                     if (selectedShape.getClass().equals(Point.class)) {
-                        previewGc.moveTo(startingPoints.getFirst().getX(), startingPoints.getFirst().getY());
-                        previewGc.lineTo(mouseX, mouseY);
+                        for (Shape startingPoint : startingPoints) {
+                            previewGc.moveTo(startingPoint.getX(), startingPoint.getY());
+                            previewGc.lineTo(mouseX, mouseY);
+                        }
                         System.out.println(controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().size());
                         System.out.println(controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().size());
                     }
