@@ -3,7 +3,8 @@ package view.GUIElements;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import view.CurrentShapeSingleton;
+import view.ModeType;
+import view.SettingsSingleton;
 import view.ShapeType;
 
 import java.util.HashMap;
@@ -11,7 +12,6 @@ import java.util.HashMap;
 public class DrawingToolbar extends ToolBar {
     private final ContextMenu modeMenu = new ContextMenu();
     private double cursorX, cursorY;
-
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
     private Stage stage;
     private HashMap<String, Button> buttons = new HashMap<>();
@@ -24,6 +24,7 @@ public class DrawingToolbar extends ToolBar {
         addButton(new Button("Delete"));
         this.stage = stage;
 
+        // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
         this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
         this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
@@ -42,15 +43,17 @@ public class DrawingToolbar extends ToolBar {
         this.cursorY = stage.getY() + this.getLayoutY();
     }
 
-    public void changeMode() {
+    public void changeMode(ModeType mode) {
         setCursorCoordinates();
-
-        modeMenu.setOnAction(event -> {
-            CurrentShapeSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
-            System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
-        });
-
-        modeMenu.show(this, cursorX + this.getWidth(), cursorY + buttons.get("Mode").getHeight());
+        SettingsSingleton.setCurrentMode(mode);
+        modeMenu.hide();
+        if (mode == ModeType.DRAW) {
+            modeMenu.setOnAction(event -> {
+                SettingsSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
+                System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
+            });
+            modeMenu.show(this, cursorX + this.getWidth(), cursorY + buttons.get("Mode").getHeight());
+        }
     }
 
     public void setCursorX(double cursorX) {

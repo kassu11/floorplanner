@@ -2,14 +2,17 @@ package controller;
 
 import model.*;
 import view.GUI;
+import view.GUIElements.CanvasMath;
+import view.GUIElements.CustomCanvas;
 import view.ShapeType;
-
 
 public class Controller {
     private GUI gui;
+    private CanvasMath canvasMath;
 
     public Controller(GUI gui) {
         this.gui = gui;
+        this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
     }
 
     public Shape addShape(double x, double y, double x1, double y1, ShapeType shapeType) {
@@ -39,8 +42,22 @@ public class Controller {
         };
     }
 
-    public Point createPoint(double x, double y) {
+    public void drawAllShapes(CustomCanvas customCanvas) {
+        for (Shape shape : ShapesSingleton.getShapes()) {
+            shape.draw(customCanvas);
+        }
+    }
+
+    public Point createRelativePoint(double x, double y) {
+        return new Point(canvasMath.relativeXtoAbsoluteX(x), canvasMath.relativeYtoAbsoluteY(y));
+    }
+
+    public Point createAbsolutePoint(double x, double y) {
         return new Point(x, y);
+    }
+
+    public CanvasMath getCanvasMath() {
+        return canvasMath;
     }
 
     public static void main(String[] args) {

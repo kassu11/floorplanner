@@ -1,6 +1,6 @@
 package model;
 
-import javafx.scene.canvas.GraphicsContext;
+import view.GUIElements.CustomCanvas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +59,9 @@ public class Point implements Shape {
         return height;
     }
 
-    public void draw(GraphicsContext gc) {
-        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(), this.getHeight());
+    public void draw(CustomCanvas gc) {
+        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(),
+                this.getHeight());
     }
 
     @Override
@@ -83,5 +84,11 @@ public class Point implements Shape {
         double deltaY = this.getY() - y;
 
         return Math.hypot(deltaX, deltaY);
+    }
+
+    @Override
+    public void setCoordinates(double x, double y) {
+        this.setX(x);
+        this.setY(y);
     }
 }
