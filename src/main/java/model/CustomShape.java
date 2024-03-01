@@ -2,14 +2,19 @@ package model;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class CustomShape extends AbstractShape{
+public class CustomShape implements Shape{
 
-    public CustomShape(Point pointA, Point pointB) {
-        super(pointA, pointB);
-        addChild(new Line(pointA, pointB));
+
+    private List<Shape> children;
+    public CustomShape(List<Shape> shapes) {
+        this.children = new ArrayList<>();
+        children.addAll(shapes);
+        ShapesSingleton.addShape(this);
+        System.out.println("Added custom shape to shapes singleton");
     }
 
     @Override
@@ -22,18 +27,52 @@ public class CustomShape extends AbstractShape{
         return 0;
     }
 
+    @Override
+    public int getPriority() {
+        return 0;
+    }
+
+    @Override
+    public double calculateDistanceFromMouse(double x, double y) {
+        return 0;
+    }
+
+    @Override
     public void addChild(Shape shape) {
-        super.addChild(shape);
+
+    }
+
+    @Override
+    public List<Shape> getChildren() {
+        return null;
+    }
+
+    @Override
+    public List<Point> getPoints() {
+        return null;
+    }
+
+    @Override
+    public double getX() {
+        return 0;
+    }
+
+    @Override
+    public double getY() {
+        return 0;
+    }
+
+    @Override
+    public double getWidth() {
+        return 0;
+    }
+
+    @Override
+    public double getHeight() {
+        return 0;
     }
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.beginPath();
-        gc.moveTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
-        gc.lineTo(this.getPoints().get(1).getX(), this.getPoints().get(1).getY());
-        gc.stroke();
-        System.out.println("Drawing custom shape");
-        System.out.println("Number of points: " + getPoints().size());
-        System.out.println("Number of children: " + getChildren().size());
     }
 }

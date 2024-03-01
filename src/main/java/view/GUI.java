@@ -58,15 +58,18 @@ public class GUI extends Application {
 
                 Shape newShape = controller.addShape(lastPoint, endPoint, CurrentShapeSingleton.getCurrentShape());
                 newShape.draw(gc);
-                newShape.calculateShapeArea();
+                newShape.calculateShapeLength();
                 gc.clearRect(0, 0, canvasWidth, canvasHeight);
 
                 for (Shape shape : ShapesSingleton.getShapes())
                     shape.draw(gc);
 
-                if (CurrentShapeSingleton.isShapeType(ShapeType.CUSTOM_SHAPE)
-                        || CurrentShapeSingleton.isShapeType(ShapeType.MULTILINE))
+                if (CurrentShapeSingleton.isShapeType(ShapeType.MULTILINE)
+                        || CurrentShapeSingleton.isShapeType(ShapeType.LINE)) {
                     lastPoint = endPoint;
+                    controller.addCustomShape(newShape);
+                    controller.checkIfConnected(newShape);
+                }
                 else
                     lastPoint = null;
 
@@ -108,7 +111,7 @@ public class GUI extends Application {
             double x = lastPoint.getX();
             double y = lastPoint.getY();
             switch (CurrentShapeSingleton.getCurrentShape()) {
-                case LINE, MULTILINE, CUSTOM_SHAPE -> {
+                case LINE, MULTILINE -> {
                     previewGc.moveTo(x, y);
                     previewGc.lineTo(event.getX(), event.getY());
                 }
