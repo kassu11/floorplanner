@@ -57,22 +57,22 @@ public class Controller {
     }
 
 
-    public void transferAllShapes(SingletonType type){
+    public void transferAllShapesTo(SingletonType type){
         switch(type){
             case PREVIEW -> finalShapes.transferAllShapesTo(previewShapes);
             case FINAL -> previewShapes.transferAllShapesTo(finalShapes);
         }
     }
 
-    public void transferSingleShape(Shape shape, SingletonType type){
+    public void transferSingleShapeTo(Shape shape, SingletonType type){
         switch(type){
             case PREVIEW -> finalShapes.transferSingleShapeTo(shape, previewShapes);
             case FINAL -> previewShapes.transferSingleShapeTo(shape, finalShapes);
         }
     }
 
-    public void drawAllShapes(CustomCanvas customCanvas) {
-        for (Shape shape : finalShapes.getShapes()) {
+    public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
+        for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
         }
     }
