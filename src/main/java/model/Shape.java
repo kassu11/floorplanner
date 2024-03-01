@@ -30,4 +30,6 @@ public interface Shape {
     double calculateDistanceFromMouse(double x, double y);
 
     void setCoordinates(double x, double y);
+
+    void addToShapeContainer(ShapeContainer shapeContainer);
 }
