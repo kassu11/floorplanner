@@ -6,7 +6,9 @@ import view.GUIElements.CanvasMath;
 import view.GUIElements.CustomCanvas;
 import view.ShapeType;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class Controller {
     private GUI gui;
@@ -16,6 +18,8 @@ public class Controller {
     public enum SingletonType {
         FINAL, PREVIEW
     }
+
+    private List<Shape> customShapes = new ArrayList<>();
 
     public Controller(GUI gui) {
         this.gui = gui;
@@ -101,6 +105,34 @@ public class Controller {
     public CanvasMath getCanvasMath() {
         return canvasMath;
     }
+    public void addCustomShape(Shape newShape) {
+        customShapes.add(newShape);
+        System.out.println("Added line to custom shapes!");
+        System.out.println("X: " + newShape.getPoints().get(0).getX() + " Y: " + newShape.getPoints().get(0).getY());
+        System.out.println("X: " + newShape.getPoints().get(1).getX() + " Y: " + newShape.getPoints().get(1).getY());
+    }
+
+    public void checkIfConnected(Shape newShape) {
+        if (customShapes.isEmpty()) {
+            System.out.println("Custom shapes is empty");
+            return;
+        }
+        List<Point> points = new ArrayList<>();
+        for (Shape shape : customShapes) {
+            for (Point point : shape.getPoints()) {
+                if (!points.contains(point)) points.add(point);
+            }
+        }
+        Point customPointB = newShape.getPoints().get(1);
+        for (Shape shape : customShapes) {
+            Point pointA = shape.getPoints().get(0);
+            if (pointA.equals(customPointB)) {
+                new CustomShape(customShapes, points);
+                customShapes.clear();
+                return;
+            }
+        }
+    }
 
     public void removeAllShapes() {
         finalShapes.clearShapes();
@@ -119,4 +151,9 @@ public class Controller {
     public static void main(String[] args) {
         GUI.launch(GUI.class);
     }
+
+
+
+
+
 }
