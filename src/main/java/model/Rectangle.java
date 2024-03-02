@@ -40,14 +40,9 @@ public class Rectangle extends AbstractShape {
 
     @Override
     public void draw(CustomCanvas gc) {
-        gc.beginPath();
-        gc.moveTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
-        gc.lineTo(this.getPoints().get(1).getX(), this.getPoints().get(1).getY());
-        gc.lineTo(this.getPoints().get(2).getX(), this.getPoints().get(2).getY());
-        gc.lineTo(this.getPoints().get(3).getX(), this.getPoints().get(3).getY());
-        gc.lineTo(this.getPoints().get(0).getX(), this.getPoints().get(0).getY());
-        System.out.println("Drawing rectangle");
-        gc.stroke();
+        for (Shape shape : this.getChildren()) {
+            shape.draw(gc);
+        }
     }
 
 }
