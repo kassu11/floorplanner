@@ -1,8 +1,6 @@
 package model;
 
-import java.util.List;
-
-public class FinalShapesSingleton extends ShapeContainer{
+public class FinalShapesSingleton extends ShapeContainer {
 
     private FinalShapesSingleton() {
         super();

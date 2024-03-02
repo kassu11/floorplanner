@@ -1,6 +1,6 @@
 package model;
 
-public class PreviewShapesSingleton extends ShapeContainer{
+public class PreviewShapesSingleton extends ShapeContainer {
     private PreviewShapesSingleton() {
         super();
     }

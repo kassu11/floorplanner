@@ -9,12 +9,12 @@ import view.ShapeType;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Controller {
     private GUI gui;
     private CanvasMath canvasMath;
     private ShapeContainer finalShapes = FinalShapesSingleton.getInstance();
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
+
     public enum SingletonType {
         FINAL, PREVIEW
     }
@@ -28,14 +28,14 @@ public class Controller {
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
         Point pointA = new Point(x, y);
-        if(singletonType != null) getShapeContainer(singletonType).addShape(pointA);
+        if (singletonType != null) getShapeContainer(singletonType).addShape(pointA);
 
         return this.createShape(pointA, x1, y1, shapeType, singletonType);
     }
 
     public Shape createShape(Point pointA, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
         Point pointB = new Point(x1, y1);
-        if(singletonType != null) getShapeContainer(singletonType).addShape(pointB);
+        if (singletonType != null) getShapeContainer(singletonType).addShape(pointB);
 
         return this.createShape(pointA, pointB, shapeType, singletonType);
     }
@@ -49,27 +49,26 @@ public class Controller {
                 Point pointC = createAbsolutePoint(pointB.getX(), pointA.getY(), singletonType);
                 Point pointD = createAbsolutePoint(pointA.getX(), pointB.getY(), singletonType);
                 Rectangle rectangle = new Rectangle(pointA, pointB, pointC, pointD);
-                if(singletonType != null) getShapeContainer(singletonType).addAllShapes(rectangle.getChildren());
+                if (singletonType != null) getShapeContainer(singletonType).addAllShapes(rectangle.getChildren());
 
                 singletonType = null;
                 yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
         };
-        if(singletonType != null) shape.addToShapeContainer(getShapeContainer(singletonType));
+        if (singletonType != null) shape.addToShapeContainer(getShapeContainer(singletonType));
         return shape;
     }
 
-
-    public void transferAllShapesTo(SingletonType type){
-        switch(type){
+    public void transferAllShapesTo(SingletonType type) {
+        switch (type) {
             case PREVIEW -> finalShapes.transferAllShapesTo(previewShapes);
             case FINAL -> previewShapes.transferAllShapesTo(finalShapes);
         }
     }
 
-    public void transferSingleShapeTo(Shape shape, SingletonType type){
-        switch(type){
+    public void transferSingleShapeTo(Shape shape, SingletonType type) {
+        switch (type) {
             case PREVIEW -> finalShapes.transferSingleShapeTo(shape, previewShapes);
             case FINAL -> previewShapes.transferSingleShapeTo(shape, finalShapes);
         }
@@ -92,19 +91,20 @@ public class Controller {
 
     public Point createRelativePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(canvasMath.relativeXtoAbsoluteX(x), canvasMath.relativeYtoAbsoluteY(y));
-        if(singletonType != null) getShapeContainer(singletonType).addShape(point);
+        if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
     }
 
     public Point createAbsolutePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(x, y);
-        if(singletonType != null) getShapeContainer(singletonType).addShape(point);
+        if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
     }
 
     public CanvasMath getCanvasMath() {
         return canvasMath;
     }
+
     public void addCustomShape(Shape newShape) {
         customShapes.add(newShape);
         System.out.println("Added line to custom shapes!");
@@ -140,9 +140,9 @@ public class Controller {
         gui.getCanvasContainer().clear();
     }
 
-    public ShapeContainer getShapeContainer(SingletonType type){
-        if(type == null) return null;
-        return switch(type){
+    public ShapeContainer getShapeContainer(SingletonType type) {
+        if (type == null) return null;
+        return switch (type) {
             case FINAL -> finalShapes;
             case PREVIEW -> previewShapes;
         };
@@ -151,9 +151,5 @@ public class Controller {
     public static void main(String[] args) {
         GUI.launch(GUI.class);
     }
-
-
-
-
 
 }

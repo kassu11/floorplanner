@@ -33,8 +33,7 @@ public class Circle extends AbstractShape {
     @Override
     public void draw(CustomCanvas gc) {
         gc.beginPath();
-        gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360,
-                ArcType.OPEN);
+        gc.strokeArc(this.getX(), this.getY(), Math.abs(this.getWidth()), Math.abs(this.getHeight()), 0, 360, ArcType.OPEN);
     }
 
     public double calculateDistanceFromMouse(double x, double y) {
