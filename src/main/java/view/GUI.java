@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -89,15 +90,9 @@ public class GUI extends Application {
                             for (Point point : selectedShape.getPoints()) {
                                 if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(point))
                                     controller.transferSingleShapeTo(point, Controller.SingletonType.PREVIEW);
-                                if (!point.getChildren().isEmpty()) {
-                                    for (Shape shape : point.getChildren()) {
-                                        if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
-                                            controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
-                                        for (Point childPoint : shape.getPoints()) {
-                                            if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(childPoint))
-                                                controller.transferSingleShapeTo(childPoint, Controller.SingletonType.PREVIEW);
-                                        }
-                                    }
+                                for (Shape shape : point.getChildren()) {
+                                    if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
+                                        controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
                                 }
                             }
                         }
@@ -277,10 +272,34 @@ public class GUI extends Application {
 
         EventCallback resetLastPoint = () -> lastPoint = null;
         view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, resetLastPoint)::handle);
+
+        test(value -> System.out.println(value));
+        test2(previewGc, w -> {
+            w.clear();
+            System.out.println(w);
+        });
     }
 
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }
 
+    public void test(CustomCallback callback) {
+        callback.set("Hello World");
+    }
+
+    public void test2(CustomCanvas canvas, CustomCallback2 callback) {
+        callback.set(canvas);
+    }
+
+}
+
+@FunctionalInterface
+interface CustomCallback {
+    void set(String value);
+}
+
+@FunctionalInterface
+interface CustomCallback2 {
+    void set(CustomCanvas value);
 }
