@@ -89,15 +89,9 @@ public class GUI extends Application {
                             for (Point point : selectedShape.getPoints()) {
                                 if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(point))
                                     controller.transferSingleShapeTo(point, Controller.SingletonType.PREVIEW);
-                                if (!point.getChildren().isEmpty()) {
-                                    for (Shape shape : point.getChildren()) {
-                                        if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
-                                            controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
-                                        for (Point childPoint : shape.getPoints()) {
-                                            if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(childPoint))
-                                                controller.transferSingleShapeTo(childPoint, Controller.SingletonType.PREVIEW);
-                                        }
-                                    }
+                                for (Shape shape : point.getChildren()) {
+                                    if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
+                                        controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
                                 }
                             }
                         }
