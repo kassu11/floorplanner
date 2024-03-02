@@ -14,6 +14,10 @@ public abstract class AbstractShape implements Shape {
     private Shape parentShape;
     private int priority;
 
+    public AbstractShape(List<Shape> shapes, List<Point> points) {
+        this.points.addAll(points);
+    }
+
     public AbstractShape(Point pointA, Point pointB) {
         points.add(pointA);
         points.add(pointB);

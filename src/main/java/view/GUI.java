@@ -73,10 +73,14 @@ public class GUI extends Application {
 
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
-                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE))
-                            lastPoint = endPoint;
-                        else
-                            lastPoint = null;
+                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)
+                        || SettingsSingleton.isShapeType(ShapeType.LINE)) {
+                    lastPoint = endPoint;
+                    controller.addCustomShape(newShape);
+                    controller.checkIfConnected(newShape);
+                }
+                else
+                    lastPoint = null;
                     }
                 }
                 case SELECT -> {
