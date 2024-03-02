@@ -83,8 +83,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     gc.stroke();
   }
 
-  public void strokeArc(double x, double y, double width, double height, double startAngle, double length,
-      ArcType open) {
+  public void strokeArc(double x, double y, double width, double height, double startAngle, double length, ArcType open) {
     gc.strokeArc(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom, startAngle, length, open);
   }
 

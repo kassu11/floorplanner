@@ -34,7 +34,6 @@ public class Rectangle extends AbstractShape {
         return area;
     }
 
-
     public void addChild(Shape shape) {
         super.addChild(shape);
     }

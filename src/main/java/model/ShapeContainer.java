@@ -26,12 +26,12 @@ public abstract class ShapeContainer {
         shapes.clear();
     }
 
-    public void transferAllShapesTo(ShapeContainer shapeContainer){
+    public void transferAllShapesTo(ShapeContainer shapeContainer) {
         shapeContainer.addAllShapes(shapes);
         clearShapes();
     }
-    
-    public void transferSingleShapeTo(Shape shape, ShapeContainer shapeContainer){
+
+    public void transferSingleShapeTo(Shape shape, ShapeContainer shapeContainer) {
         shapeContainer.addShape(shape);
         shapes.remove(shape);
     }

@@ -37,8 +37,7 @@ public interface CustomCanvas {
 
   public void stroke();
 
-  public void strokeArc(double x, double y, double width, double height, double startAngle, double length,
-      ArcType open);
+  public void strokeArc(double x, double y, double width, double height, double startAngle, double length, ArcType open);
 
   public void setX(double x);
 

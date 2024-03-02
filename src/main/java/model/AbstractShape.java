@@ -120,7 +120,7 @@ public abstract class AbstractShape implements Shape {
         this.y = y;
     }
 
-    public void addToShapeContainer(ShapeContainer shapeContainer){
+    public void addToShapeContainer(ShapeContainer shapeContainer) {
         shapeContainer.addShape(this);
     }
 }

@@ -10,6 +10,7 @@ public class KeyboardEvents {
     public interface KeyboardEventHandler {
         void handle(KeyEvent event);
     }
+
     public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, EventCallback lastPoint) {
         KeyboardEventHandler handleKeyboardShortCuts = (KeyEvent event) -> {
             SettingsSingleton.setCurrentMode(ModeType.DRAW);
@@ -31,4 +32,3 @@ public class KeyboardEvents {
     }
 
 }
-

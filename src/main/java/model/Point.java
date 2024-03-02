@@ -59,8 +59,7 @@ public class Point implements Shape {
     }
 
     public void draw(CustomCanvas gc) {
-        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(),
-                this.getHeight());
+        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(), this.getHeight());
     }
 
     @Override
