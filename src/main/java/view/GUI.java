@@ -20,7 +20,6 @@ import static javafx.scene.paint.Color.*;
 public class GUI extends Application {
 
     Controller controller;
-    private Shape selectedShape, hoveredShape;
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
@@ -45,6 +44,8 @@ public class GUI extends Application {
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
             Point endPoint = SettingsSingleton.getHoveredPoint();
+            Shape selectedShape = SettingsSingleton.getSelectedShape();
+            Shape hoveredShape = SettingsSingleton.getHoveredShape();
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
 
@@ -79,6 +80,7 @@ public class GUI extends Application {
                 case SELECT -> {
                     if (hoveredShape != null && selectedShape == null) {
                         selectedShape = hoveredShape;
+                        SettingsSingleton.setSelectedShape(selectedShape);
                         selectedX = mouseX;
                         selectedY = mouseY;
                         controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
@@ -118,6 +120,7 @@ public class GUI extends Application {
                             }
                         }
                         selectedShape = null;
+                        SettingsSingleton.setSelectedShape(null);
                         controller.transferAllShapesTo(Controller.SingletonType.FINAL);
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         previewGc.clear();
@@ -128,8 +131,8 @@ public class GUI extends Application {
 
                     controller.deleteShape(hoveredShape, Controller.SingletonType.FINAL);
 
-                    hoveredShape = null;
-                    selectedShape = null;
+                    SettingsSingleton.setHoveredShape(null);
+                    SettingsSingleton.setSelectedShape(null);
                     SettingsSingleton.setLastPoint(null);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
@@ -138,8 +141,10 @@ public class GUI extends Application {
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
+            Shape selectedShape = SettingsSingleton.getSelectedShape();
+            Shape hoveredShape = null;
+            SettingsSingleton.setHoveredShape(null);
             previewGc.clear();
-            hoveredShape = null;
             SettingsSingleton.setHoveredPoint(null);
             double distanceCutOff = 15;
             double lowestDistance = distanceCutOff;
@@ -155,6 +160,7 @@ public class GUI extends Application {
                     if (shape == SettingsSingleton.getLastPoint()) continue;
                     lowestDistance = distance;
                     hoveredShape = shape;
+                    SettingsSingleton.setHoveredShape(hoveredShape);
                     if (shape.getClass().equals(Point.class)) SettingsSingleton.setHoveredPoint((Point) shape);
                 }
             }

@@ -1,12 +1,14 @@
 package view;
 
 import model.Point;
+import model.Shape;
 
 public class SettingsSingleton {
     private static ShapeType currentShape = ShapeType.LINE;
     private static ModeType currentMode = ModeType.DRAW;
-    private static Point lastPoint;
-    private static Point hoveredPoint;
+    private static Point lastPoint, hoveredPoint;
+    private static Shape selectedShape, hoveredShape;
+    private static double middleX, middleY, selectedX, selectedY;
 
     private SettingsSingleton() {
     }
@@ -54,5 +56,53 @@ public class SettingsSingleton {
 
     public static void setHoveredPoint(Point hoveredPoint) {
         SettingsSingleton.hoveredPoint = hoveredPoint;
+    }
+
+    public static Shape getSelectedShape() {
+        return selectedShape;
+    }
+
+    public static void setSelectedShape(Shape selectedShape) {
+        SettingsSingleton.selectedShape = selectedShape;
+    }
+
+    public static Shape getHoveredShape() {
+        return hoveredShape;
+    }
+
+    public static void setHoveredShape(Shape hoveredShape) {
+        SettingsSingleton.hoveredShape = hoveredShape;
+    }
+
+    public static double getMiddleX() {
+        return middleX;
+    }
+
+    public static void setMiddleX(double middleX) {
+        SettingsSingleton.middleX = middleX;
+    }
+
+    public static double getMiddleY() {
+        return SettingsSingleton.middleY;
+    }
+
+    public static void setMiddleY(double middleY) {
+        SettingsSingleton.middleY = middleY;
+    }
+
+    public static double getSelectedX() {
+        return SettingsSingleton.selectedX;
+    }
+
+    public static void setSelectedX(double selectedX) {
+        SettingsSingleton.selectedX = selectedX;
+    }
+
+    public static double getSelectedY() {
+        return SettingsSingleton.selectedY;
+    }
+
+    public static void setSelectedY(double selectedY) {
+        SettingsSingleton.selectedY = selectedY;
     }
 }
