@@ -248,6 +248,27 @@ public class GUI extends Application {
                     controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                 }
             }
+            if (SettingsSingleton.getCurrentMode() == ModeType.ROTATE) {
+                if (selectedShape != null && !selectedShape.getClass().equals(Point.class)) {
+                    double centroidX = selectedShape.getCentroidX();
+                    double centroidY = selectedShape.getCentroidY();
+                    for (Point point : selectedShape.getPoints()) {
+                        double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
+                        if (centroidX == mouseX) {
+                            if (point.getY() - centroidY < 0) point.setCoordinates(centroidX, centroidY - radians);
+                            else point.setCoordinates(centroidX, centroidY + radians);
+                        } else {
+                            double slope = (mouseY - centroidY) / (mouseX - centroidX);
+                            double angle = Math.atan(slope);
+                            if (point.getX() - centroidX < 0) angle += Math.PI;
+                            point.setCoordinates(centroidX + radians * Math.cos(angle), centroidY + radians * Math.sin(angle));
+                        }
+                    }
+                    selectedX = mouseX;
+                    selectedY = mouseY;
+                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                }
+            }
             previewGc.stroke();
         });
 
