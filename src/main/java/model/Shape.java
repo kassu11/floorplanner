@@ -1,5 +1,6 @@
 package model;
 
+import view.ShapeType;
 import view.GUIElements.CustomCanvas;
 
 import java.util.List;
@@ -36,4 +37,12 @@ public interface Shape {
     void setCoordinates(double x, double y);
 
     void addToShapeContainer(ShapeContainer shapeContainer);
+
+    void removeChild(Shape shape);
+
+    void removePoint(Point point);
+
+    void delete(ShapeContainer shapeContainer);
+
+    ShapeType getType();
 }

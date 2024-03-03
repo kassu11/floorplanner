@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractShape implements Shape {
-
-    private double x, y;
-    private double width, height;
-    private double centroidX, centroidY;
+    private double x, y, width, height, centroidX, centroidY;
     private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
     private int priority;
+
+    public AbstractShape(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public AbstractShape(List<Shape> shapes, List<Point> points) {
         this.points.addAll(points);
@@ -77,6 +79,11 @@ public abstract class AbstractShape implements Shape {
 
     public void removeChild(Shape shape) {
         children.remove(shape);
+    }
+
+    public void removePoint(Point point) {
+        boolean removed = points.remove(point);
+        if (removed) point.removeChild(this);
     }
 
     public List<Shape> getChildren() {
@@ -144,5 +151,9 @@ public abstract class AbstractShape implements Shape {
 
     public void addToShapeContainer(ShapeContainer shapeContainer) {
         shapeContainer.addShape(this);
+    }
+
+    public void delete(ShapeContainer shapeContainer) {
+        System.out.println("AbstractShape does not have a delete method.");
     }
 }

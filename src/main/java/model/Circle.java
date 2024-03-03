@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.shape.ArcType;
 import view.GUIElements.CustomCanvas;
+import view.ShapeType;
 
 public class Circle extends AbstractShape {
 
@@ -41,5 +42,10 @@ public class Circle extends AbstractShape {
         double deltaY = this.getY() - y + this.getHeight() / 2;
 
         return Math.hypot(deltaX, deltaY);
+    }
+
+    @Override
+    public ShapeType getType() {
+        return ShapeType.CIRCLE;
     }
 }

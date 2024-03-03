@@ -2,7 +2,6 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -14,7 +13,6 @@ import view.GUIElements.CanvasContainer;
 import view.GUIElements.CustomCanvas;
 import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
-import view.events.EventCallback;
 import view.events.KeyboardEvents;
 
 import static javafx.scene.paint.Color.*;
@@ -22,9 +20,6 @@ import static javafx.scene.paint.Color.*;
 public class GUI extends Application {
 
     Controller controller;
-    Point lastPoint;
-    private Point hoveredPoint;
-    private Shape selectedShape, hoveredShape;
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
@@ -48,41 +43,44 @@ public class GUI extends Application {
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
-            Point endPoint = hoveredPoint;
+            Point endPoint = SettingsSingleton.getHoveredPoint();
+            Shape selectedShape = SettingsSingleton.getSelectedShape();
+            Shape hoveredShape = SettingsSingleton.getHoveredShape();
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
 
-            if (lastPoint != null && lastPoint == endPoint) return;
+            if (SettingsSingleton.getLastPoint() != null && SettingsSingleton.getLastPoint() == endPoint) return;
 
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
-                    if (lastPoint == null) {
-                        if (hoveredPoint != null)
-                            lastPoint = hoveredPoint;
+                    if (SettingsSingleton.getLastPoint() == null) {
+                        if (SettingsSingleton.getHoveredPoint() != null)
+                            SettingsSingleton.setLastPoint(SettingsSingleton.getHoveredPoint());
                         else
-                            lastPoint = controller.createAbsolutePoint(mouseX, mouseY, Controller.SingletonType.FINAL);
+                            SettingsSingleton.setLastPoint(controller.createAbsolutePoint(mouseX, mouseY, Controller.SingletonType.FINAL));
                     } else {
                         previewGc.clear();
 
                         if (endPoint == null) endPoint = controller.createAbsolutePoint(mouseX, mouseY, Controller.SingletonType.FINAL);
 
-                        Shape newShape = controller.createShape(lastPoint, endPoint, SettingsSingleton.getCurrentShape(), Controller.SingletonType.FINAL);
+                        Shape newShape = controller.createShape(SettingsSingleton.getLastPoint(), endPoint, SettingsSingleton.getCurrentShape(), Controller.SingletonType.FINAL);
                         newShape.draw(gc);
                         newShape.calculateShapeArea();
 
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
-                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE) || SettingsSingleton.isShapeType(ShapeType.LINE)) {
-                            lastPoint = endPoint;
+                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)) {
+                            SettingsSingleton.setLastPoint(endPoint);
                             controller.addCustomShape(newShape);
                             controller.checkIfConnected(newShape);
                         } else
-                            lastPoint = null;
+                            SettingsSingleton.setLastPoint(null);
                     }
                 }
                 case SELECT -> {
                     if (hoveredShape != null && selectedShape == null) {
                         selectedShape = hoveredShape;
+                        SettingsSingleton.setSelectedShape(selectedShape);
                         selectedX = mouseX;
                         selectedY = mouseY;
                         controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
@@ -107,11 +105,11 @@ public class GUI extends Application {
                         if (selectedShape.getClass().equals(Point.class)) {
                             selectedShape.setCoordinates(mouseX, mouseY);
                             for (Shape shape : selectedShape.getChildren()) {
-                                if (hoveredPoint != null && hoveredPoint != selectedShape) {
+                                if (SettingsSingleton.getHoveredPoint() != null && SettingsSingleton.getHoveredPoint() != selectedShape) {
                                     for (Point point : shape.getPoints()) {
                                         if (point.equals(selectedShape)) {
                                             shape.getPoints().set(shape.getPoints().indexOf(point), (Point) hoveredShape);
-                                            hoveredPoint.addChild(shape);
+                                            SettingsSingleton.getHoveredPoint().addChild(shape);
                                             controller.removeShape(point, Controller.SingletonType.PREVIEW);
                                             break;
                                         }
@@ -128,31 +126,15 @@ public class GUI extends Application {
                     }
                 }
                 case DELETE -> {
-                    if (hoveredShape != null) {
-                        controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
-                        if (hoveredShape.getClass().equals(Line.class)) {
-                            for (Point point : hoveredShape.getPoints()) {
-                                point.getChildren().remove(hoveredShape);
-                            }
-                        }
-                        if (hoveredShape.getClass().equals(Point.class)) {
-                            for (Shape shape : hoveredShape.getChildren()) {
-                                for (int i = 0; i < shape.getPoints().size(); i++) {
-                                    if (!shape.getPoints().get(i).equals(hoveredShape)) {
-                                        shape.getPoints().get(i).getChildren().remove(shape);
-                                        shape.getPoints().remove(i);
-                                        i--;
-                                    }
-                                    controller.removeShape(shape, Controller.SingletonType.FINAL);
-                                }
-                            }
-                            controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
-                        }
-                        hoveredShape = null;
-                        selectedShape = null;
-                        lastPoint = null;
-                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-                    }
+                    if (hoveredShape == null) return;
+
+                    controller.deleteShape(hoveredShape, Controller.SingletonType.FINAL);
+
+                    SettingsSingleton.setHoveredShape(null);
+                    SettingsSingleton.setSelectedShape(null);
+                    SettingsSingleton.setLastPoint(null);
+                    controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+
                 }
                 case ROTATE -> {
                     if (hoveredShape != null && selectedShape == null) {
@@ -204,9 +186,11 @@ public class GUI extends Application {
         });
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
+            Shape selectedShape = SettingsSingleton.getSelectedShape();
+            Shape hoveredShape = null;
+            SettingsSingleton.setHoveredShape(null);
             previewGc.clear();
-            hoveredShape = null;
-            hoveredPoint = null;
+            SettingsSingleton.setHoveredPoint(null);
             double distanceCutOff = 15;
             double lowestDistance = distanceCutOff;
 
@@ -218,10 +202,11 @@ public class GUI extends Application {
                 double distance = shape.calculateDistanceFromMouse(mouseX, mouseY);
                 int bestPriority = hoveredShape != null ? hoveredShape.getPriority() : 0;
                 if ((distance < lowestDistance && shape.getPriority() >= bestPriority) || (distance < distanceCutOff && bestPriority < shape.getPriority())) {
-                    if (shape == lastPoint) continue;
+                    if (shape == SettingsSingleton.getLastPoint()) continue;
                     lowestDistance = distance;
                     hoveredShape = shape;
-                    if (shape.getClass().equals(Point.class)) hoveredPoint = (Point) shape;
+                    SettingsSingleton.setHoveredShape(hoveredShape);
+                    if (shape.getClass().equals(Point.class)) SettingsSingleton.setHoveredPoint((Point) shape);
                 }
             }
 
@@ -239,9 +224,10 @@ public class GUI extends Application {
             previewGc.beginPath();
 
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
-                if (lastPoint == null) return;
+                if (SettingsSingleton.getLastPoint() == null) return;
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
-                controller.createShape(point, lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
+                controller.createShape(point, SettingsSingleton.getLastPoint().getX(), SettingsSingleton.getLastPoint().getY(), SettingsSingleton.getCurrentShape(), null)
+                        .draw(previewGc);
             }
             if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
                 if (selectedShape != null) {
@@ -317,8 +303,7 @@ public class GUI extends Application {
         stage.setScene(view);
         stage.show();
 
-        EventCallback resetLastPoint = () -> lastPoint = null;
-        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, resetLastPoint)::handle);
+        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc)::handle);
 
         test(value -> System.out.println(value));
         test2(previewGc, w -> {
