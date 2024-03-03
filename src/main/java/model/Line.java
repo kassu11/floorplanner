@@ -1,6 +1,7 @@
 package model;
 
 import view.GUIElements.CustomCanvas;
+import view.ShapeType;
 
 public class Line extends AbstractShape {
 
@@ -47,6 +48,11 @@ public class Line extends AbstractShape {
         return 1000; // High default value
     }
 
+    @Override
+    public ShapeType getType() {
+        return ShapeType.LINE;
+    }
+
     private static double getDistance(double mouseX, double mouseY, double x1, double y1, double slope) {
         double b = y1 - slope * x1;
         return Math.abs(slope * mouseX - mouseY + b) / Math.sqrt(Math.pow(slope, 2) + 1);
@@ -73,4 +79,20 @@ public class Line extends AbstractShape {
         return !(getDistance(mouseX, mouseY, x1, y1, 0) > lineLength || getDistance(mouseX, mouseY, x2, y2, 0) > lineLength);
     }
 
+    public void delete(ShapeContainer shapeContainer) {
+        if (shapeContainer != null) shapeContainer.getShapes().remove(this);
+
+        for(int i = 0; i < getPoints().size(); i++) {
+            Shape point = getPoints().get(i);
+            getPoints().remove(i);
+            point.removeChild(this);
+            if (point.getChildren().isEmpty() && shapeContainer != null) shapeContainer.getShapes().remove(point);
+            i--;
+        }
+
+//        getPoints().forEach(point -> {
+//            point.removeChild(this);
+//            if (point.getChildren().isEmpty()) point.delete(shapeContainer);
+//        });
+    }
 }

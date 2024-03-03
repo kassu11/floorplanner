@@ -11,7 +11,7 @@ public class KeyboardEvents {
         void handle(KeyEvent event);
     }
 
-    public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, EventCallback lastPoint) {
+    public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc) {
         KeyboardEventHandler handleKeyboardShortCuts = (KeyEvent event) -> {
             SettingsSingleton.setCurrentMode(ModeType.DRAW);
             switch (event.getCode()) {
@@ -20,7 +20,7 @@ public class KeyboardEvents {
                 case DIGIT3 -> SettingsSingleton.setCurrentShape(ShapeType.CIRCLE);
                 case DIGIT4 -> SettingsSingleton.setCurrentShape(ShapeType.MULTILINE);
                 case ESCAPE -> {
-                    lastPoint.reset();
+                    SettingsSingleton.setLastPoint(null);
                     previewGc.clear();
                 }
                 default -> {

@@ -55,6 +55,7 @@ public class Controller {
                 yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
+            default -> null;
         };
         if (singletonType != null) shape.addToShapeContainer(getShapeContainer(singletonType));
         return shape;
@@ -83,6 +84,10 @@ public class Controller {
 
     public void removeShape(Shape shape, SingletonType type) {
         getShapeContainer(type).getShapes().remove(shape);
+    }
+
+    public void deleteShape(Shape shape, SingletonType type) {
+        shape.delete(getShapeContainer(type));
     }
 
     public List<Shape> getShapes(SingletonType type) {

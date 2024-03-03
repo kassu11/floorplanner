@@ -1,51 +1,14 @@
 package model;
 
 import view.GUIElements.CustomCanvas;
+import view.ShapeType;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Point implements Shape {
-    private double x, y;
+public class Point extends AbstractShape {
     private double width = 25, height = 25;
-    private List<Shape> children = new ArrayList<>();
     private int priority = 1;
 
     public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    @Override
-    public List<Shape> getChildren() {
-        return children;
-    }
-
-    @Override
-    public List<Point> getPoints() {
-        System.out.println("point doesnt have a point dummy!");
-        return null;
-    }
-
-    @Override
-    public void addChild(Shape shape) {
-        this.children.add(shape);
+        super(x, y);
     }
 
     @Override
@@ -59,7 +22,7 @@ public class Point implements Shape {
     }
 
     public void draw(CustomCanvas gc) {
-        gc.fillOval(this.getX() - this.getHeight() / 2, this.getY() - this.getWidth() / 2, this.getWidth(), this.getHeight());
+        gc.fillOval(this.getX() - width / 2, this.getY() - height / 2, width, height);
     }
 
     @Override
@@ -70,11 +33,6 @@ public class Point implements Shape {
     @Override
     public double calculateShapeArea() {
         return 0;
-    }
-
-    @Override
-    public int getPriority() {
-        return priority;
     }
 
     public double calculateDistanceFromMouse(double x, double y) {
@@ -90,8 +48,34 @@ public class Point implements Shape {
         this.setY(y);
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
     @Override
     public void addToShapeContainer(ShapeContainer shapeContainer) {
         shapeContainer.addShape(this);
+    }
+
+    @Override
+    public ShapeType getType() {
+        return ShapeType.POINT;
+    }
+
+    public void delete(ShapeContainer shapeContainer) {
+        if (shapeContainer != null) shapeContainer.getShapes().remove(this);
+
+        for(int i = 0; i < getChildren().size(); i++) {
+            Shape shape = getChildren().get(i);
+            getChildren().remove(i);
+            shape.removePoint(this);
+            i--;
+            shape.delete(shapeContainer);
+        }
+//        getChildren().forEach(shape -> {
+//            shape.removePoint(this);
+//            shape.delete(shapeContainer);
+//        });
+
     }
 }

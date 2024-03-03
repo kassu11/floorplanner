@@ -1,9 +1,12 @@
 package view;
 
+import model.Point;
+
 public class SettingsSingleton {
     private static ShapeType currentShape = ShapeType.LINE;
-
     private static ModeType currentMode = ModeType.DRAW;
+    private static Point lastPoint;
+    private static Point hoveredPoint;
 
     private SettingsSingleton() {
     }
@@ -35,5 +38,21 @@ public class SettingsSingleton {
 
     public static boolean isShapeType(ShapeType shape) {
         return currentShape == shape;
+    }
+
+    public static void setLastPoint(Point lastPoint) {
+        SettingsSingleton.lastPoint = lastPoint;
+    }
+
+    public static Point getLastPoint() {
+        return lastPoint;
+    }
+
+    public static Point getHoveredPoint() {
+        return hoveredPoint;
+    }
+
+    public static void setHoveredPoint(Point hoveredPoint) {
+        SettingsSingleton.hoveredPoint = hoveredPoint;
     }
 }
