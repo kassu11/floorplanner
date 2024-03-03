@@ -15,6 +15,10 @@ public interface Shape {
 
     double getY();
 
+    double getCentroidX();
+
+    double getCentroidY();
+
     double getWidth();
 
     double getHeight();

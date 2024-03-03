@@ -9,6 +9,7 @@ public abstract class AbstractShape implements Shape {
 
     private double x, y;
     private double width, height;
+    private double centroidX, centroidY;
     private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
@@ -52,6 +53,18 @@ public abstract class AbstractShape implements Shape {
 
     private void updateDimensions() {
         points.stream().reduce(this::calculateDimensions);
+        calculateCentroid();
+    }
+
+    public void calculateCentroid() {
+        double sumX = 0;
+        double sumY = 0;
+        for (Point point : points) {
+            sumX += point.getX();
+            sumY += point.getY();
+        }
+        centroidX = sumX / points.size();
+        centroidY = sumY / points.size();
     }
 
     public void addChild(Shape shape) {
@@ -86,6 +99,14 @@ public abstract class AbstractShape implements Shape {
         this.y = y;
     }
 
+    public double getCentroidX() {
+        return centroidX;
+    }
+
+    public double getCentroidY() {
+        return centroidY;
+    }
+
     public Shape getParentShape() {
         return parentShape;
     }
@@ -118,6 +139,7 @@ public abstract class AbstractShape implements Shape {
     public void setCoordinates(double x, double y) {
         this.x = x;
         this.y = y;
+        calculateCentroid();
     }
 
     public void addToShapeContainer(ShapeContainer shapeContainer) {

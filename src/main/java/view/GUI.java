@@ -121,7 +121,7 @@ public class GUI extends Application {
                                 shape.draw(gc);
                             }
                         }
-                        selectedShape = null;
+                        SettingsSingleton.setSelectedShape(null);
                         controller.transferAllShapesTo(Controller.SingletonType.FINAL);
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         previewGc.clear();
@@ -152,6 +152,52 @@ public class GUI extends Application {
                         selectedShape = null;
                         lastPoint = null;
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    }
+                }
+                case ROTATE -> {
+                    if (hoveredShape != null && selectedShape == null) {
+                        System.out.println("No selected shape");
+                        selectedShape = hoveredShape;
+                        SettingsSingleton.setSelectedShape(selectedShape);
+                        selectedX = mouseX;
+                        selectedY = mouseY;
+                        controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
+                        if (selectedShape.getClass().equals(Line.class)) {
+                            for (Point point : selectedShape.getPoints()) {
+                                if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(point))
+                                    controller.transferSingleShapeTo(point, Controller.SingletonType.PREVIEW);
+                                for (Shape shape : point.getChildren()) {
+                                    if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
+                                        controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
+                                }
+                            }
+                        }
+                        if (selectedShape.getClass().equals(Point.class)) return;
+                        controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    } else if (selectedShape != null) {
+                        if (!selectedShape.getClass().equals(Point.class)) {
+                            double centroidX = selectedShape.getCentroidX();
+                            double centroidY = selectedShape.getCentroidY();
+                            System.out.println("Centroid X: " + centroidX + " Centroid Y: " + centroidY);
+
+                            for (Point point : selectedShape.getPoints()) {
+                                double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
+                                if (centroidX == mouseX) {
+                                    if (point.getY() - centroidY < 0) point.setCoordinates(centroidX, centroidY - radians);
+                                    else point.setCoordinates(centroidX, centroidY + radians);
+                                } else {
+                                    double slope = (mouseY - centroidY) / (mouseX - centroidX);
+                                    double angle = Math.atan(slope);
+                                    if (point.getX() - centroidX < 0) angle += Math.PI;
+                                    point.setCoordinates(centroidX + radians * Math.cos(angle), centroidY + radians * Math.sin(angle));
+                                }
+                            }
+                        }
+                        SettingsSingleton.setSelectedShape(null);
+                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        previewGc.clear();
                     }
                 }
             }
@@ -259,6 +305,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
+        drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
         OptionsToolbar optionBar = new OptionsToolbar();
 
         root.setLeft(drawToolbar);

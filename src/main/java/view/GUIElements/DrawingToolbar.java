@@ -23,6 +23,7 @@ public class DrawingToolbar extends ToolBar {
         addButton(new Button("Mode"));
         addButton(new Button("Delete"));
         addButton(new Button("Reset"));
+        addButton(new Button("Rotate"));
         this.stage = stage;
 
         // Set up the mode menu
