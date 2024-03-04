@@ -1,6 +1,8 @@
 package model;
 
 import view.GUIElements.CustomCanvas;
+import view.ShapeType;
+
 import java.util.List;
 
 public class CustomShape extends AbstractShape {
@@ -22,6 +24,11 @@ public class CustomShape extends AbstractShape {
     @Override
     public double calculateShapeArea() {
         return 0;
+    }
+
+    @Override
+    public ShapeType getType() {
+        return ShapeType.CUSTOMSHAPE;
     }
 
 }

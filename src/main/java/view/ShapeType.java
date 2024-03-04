@@ -1,5 +1,5 @@
 package view;
 
 public enum ShapeType {
-    LINE, MULTILINE, RECTANGLE, CIRCLE
+    POINT, LINE, MULTILINE, RECTANGLE, CIRCLE, CUSTOMSHAPE
 }

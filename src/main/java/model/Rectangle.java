@@ -1,6 +1,7 @@
 package model;
 
 import view.GUIElements.CustomCanvas;
+import view.ShapeType;
 
 public class Rectangle extends AbstractShape {
 
@@ -32,6 +33,11 @@ public class Rectangle extends AbstractShape {
         double area = Math.sqrt((s - line1) * (s - line2) * (s - line3) * (s - line4));
         System.out.println("Area of rectangle: " + area);
         return area;
+    }
+
+    @Override
+    public ShapeType getType() {
+        return null;
     }
 
     public void addChild(Shape shape) {
