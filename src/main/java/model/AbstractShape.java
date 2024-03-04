@@ -53,7 +53,7 @@ public abstract class AbstractShape implements Shape {
         return b;
     }
 
-    private void updateDimensions() {
+    protected void updateDimensions() {
         points.stream().reduce(this::calculateDimensions);
         calculateCentroid();
     }
