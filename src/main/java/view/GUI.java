@@ -73,26 +73,9 @@ public class GUI extends Application {
                     if (hoveredShape != null && selectedShape == null || event.isShiftDown()) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+
                     } else if (selectedShape != null && !event.isShiftDown()) {
-                        if (selectedShape.getClass().equals(Point.class)) {
-                            selectedShape.setCoordinates(mouseX, mouseY);
-                            for (Shape shape : selectedShape.getChildren()) {
-                                if (SettingsSingleton.getHoveredPoint() != null && SettingsSingleton.getHoveredPoint() != selectedShape) {
-                                    for (Point point : shape.getPoints()) {
-                                        if (point.equals(selectedShape)) {
-                                            shape.getPoints().set(shape.getPoints().indexOf(point), (Point) hoveredShape);
-                                            SettingsSingleton.getHoveredPoint().addChild(shape);
-                                            controller.removeShape(point, Controller.SingletonType.PREVIEW);
-                                            break;
-                                        }
-                                    }
-                                }
-                                shape.setCoordinates(shape.getX() + mouseX - selectedShape.getX(), shape.getY() + mouseY - selectedShape.getY());
-                                shape.draw(gc);
-                            }
-                        }
-                        SettingsSingleton.setSelectedShape(null);
-                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+                        SelectUtilities.finalizeSelectedShapes(controller, gc, mouseX, mouseY);
                         previewGc.clear();
                     }
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
@@ -154,6 +137,7 @@ public class GUI extends Application {
                 controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
                 if(!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
+
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             previewGc.stroke();
