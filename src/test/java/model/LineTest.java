@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import controller.Controller;
 import org.junit.jupiter.api.*;
 import view.GUI;
-import view.SettingsSingleton;
 import view.ShapeType;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,8 +44,8 @@ class LineTest {
 
     @Test
     void calculateShapeArea() {
-        Point pointA = controller.createAbsolutePoint(20, 50, Controller.SingletonType.FINAL);
-        Point pointB = controller.createAbsolutePoint(23, 67, Controller.SingletonType.FINAL);
+        Point pointA = controller.createAbsolutePoint(15, 60, Controller.SingletonType.FINAL);
+        Point pointB = controller.createAbsolutePoint(13, 63, Controller.SingletonType.FINAL);
         Shape shape = controller.createShape(pointA, pointB, ShapeType.LINE, Controller.SingletonType.FINAL);
         assertEquals(0, shape.calculateShapeArea(), "Should return 0");
     }

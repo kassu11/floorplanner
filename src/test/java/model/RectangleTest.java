@@ -3,7 +3,6 @@ package model;
 import controller.Controller;
 import org.junit.jupiter.api.*;
 import view.GUI;
-import view.SettingsSingleton;
 import view.ShapeType;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +35,7 @@ class RectangleTest {
         Point pointA = controller.createAbsolutePoint(20, 50, Controller.SingletonType.FINAL);
         Point pointB = controller.createAbsolutePoint(23, 67, Controller.SingletonType.FINAL);
         Shape shape = controller.createShape(pointA, pointB, ShapeType.RECTANGLE, Controller.SingletonType.FINAL);
-        assertEquals(51, shape.calculateShapeArea(), "Should be something ? ");
+        assertEquals(51, shape.calculateShapeArea(), "Should be 51 ");
     }
 
     @Disabled
