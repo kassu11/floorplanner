@@ -136,7 +136,7 @@ public class GUI extends Application {
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
                 controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
-                if(!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
+                if(!event.isShiftDown()) SelectUtilities.moveSelectedArea(mouseX, mouseY);
 
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
