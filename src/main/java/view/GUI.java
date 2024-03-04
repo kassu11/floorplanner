@@ -25,6 +25,8 @@ public class GUI extends Application {
     private int canvasHeight = 750;
     private double middleX, middleY, selectedX, selectedY;
 
+    private double initialMouseX, initialMouseY;
+
     @Override
     public void init() {
         canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
@@ -141,6 +143,7 @@ public class GUI extends Application {
                         System.out.println("No selected shape");
                         selectedShape = hoveredShape;
                         SettingsSingleton.setSelectedShape(selectedShape);
+                        selectedShape.calculateCentroid();
                         selectedX = mouseX;
                         selectedY = mouseY;
                         controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
@@ -161,18 +164,23 @@ public class GUI extends Application {
                         if (!selectedShape.getClass().equals(Point.class)) {
                             double centroidX = selectedShape.getCentroidX();
                             double centroidY = selectedShape.getCentroidY();
-                            System.out.println("Centroid X: " + centroidX + " Centroid Y: " + centroidY);
+                            double vectorX1 = selectedX - centroidX;
+                            double vectorY1 = selectedY - centroidY;
+                            double vectorX2 = mouseX - centroidX;
+                            double vectorY2 = mouseY - centroidY;
+                            double dotProduct = vectorX1 * vectorX2 + vectorY1 * vectorY2;
+                            double determinant = vectorX1 * vectorY2 - vectorY1 * vectorX2;
+                            double angle = Math.atan2(determinant, dotProduct);
 
                             for (Point point : selectedShape.getPoints()) {
                                 double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
-                                if (centroidX == mouseX) {
+                                if (centroidX == point.getX()) {
                                     if (point.getY() - centroidY < 0) point.setCoordinates(centroidX, centroidY - radians);
                                     else point.setCoordinates(centroidX, centroidY + radians);
                                 } else {
-                                    double slope = (mouseY - centroidY) / (mouseX - centroidX);
-                                    double angle = Math.atan(slope);
-                                    if (point.getX() - centroidX < 0) angle += Math.PI;
-                                    point.setCoordinates(centroidX + radians * Math.cos(angle), centroidY + radians * Math.sin(angle));
+                                    double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
+                                    double newAngle = (pointAngle + angle) % (2 * Math.PI);
+                                    point.setCoordinates(centroidX + radians * Math.cos(newAngle), centroidY + radians * Math.sin(newAngle));
                                 }
                             }
                         }
@@ -252,16 +260,25 @@ public class GUI extends Application {
                 if (selectedShape != null && !selectedShape.getClass().equals(Point.class)) {
                     double centroidX = selectedShape.getCentroidX();
                     double centroidY = selectedShape.getCentroidY();
+                    double vectorX1 = selectedX - centroidX;
+                    double vectorY1 = selectedY - centroidY;
+                    double vectorX2 = mouseX - centroidX;
+                    double vectorY2 = mouseY - centroidY;
+                    double dotProduct = vectorX1 * vectorX2 + vectorY1 * vectorY2;
+                    double determinant = vectorX1 * vectorY2 - vectorY1 * vectorX2;
+                    double angle = Math.atan2(determinant, dotProduct);
+                    System.out.println("Angle: " + angle);
                     for (Point point : selectedShape.getPoints()) {
                         double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
-                        if (centroidX == mouseX) {
+                        if (centroidX == point.getX()) {
                             if (point.getY() - centroidY < 0) point.setCoordinates(centroidX, centroidY - radians);
                             else point.setCoordinates(centroidX, centroidY + radians);
                         } else {
-                            double slope = (mouseY - centroidY) / (mouseX - centroidX);
-                            double angle = Math.atan(slope);
-                            if (point.getX() - centroidX < 0) angle += Math.PI;
-                            point.setCoordinates(centroidX + radians * Math.cos(angle), centroidY + radians * Math.sin(angle));
+                            double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
+                            System.out.println("Point angle: " + pointAngle);
+                            double newAngle = (pointAngle + angle) % (2 * Math.PI);
+                            System.out.println("New angle: " + newAngle);
+                            point.setCoordinates(centroidX + radians * Math.cos(newAngle), centroidY + radians * Math.sin(newAngle));
                         }
                     }
                     selectedX = mouseX;
@@ -276,6 +293,7 @@ public class GUI extends Application {
             if (event.getButton() == MouseButton.MIDDLE) {
                 middleX = canvasContainer.getX() + event.getX();
                 middleY = canvasContainer.getY() + event.getY();
+                System.out.println("Middle X: " + middleX + " Middle Y: " + middleY);
             }
         });
 

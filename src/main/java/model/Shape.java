@@ -30,6 +30,8 @@ public interface Shape {
 
     double calculateShapeArea();
 
+    void calculateCentroid();
+
     int getPriority();
 
     double calculateDistanceFromMouse(double x, double y);
