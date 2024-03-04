@@ -3,6 +3,7 @@ package view.events;
 import controller.Controller;
 import model.Point;
 import model.Shape;
+import view.GUIElements.CustomCanvas;
 import view.SettingsSingleton;
 import view.ShapeType;
 
@@ -21,7 +22,7 @@ public class SelectUtilities {
 		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape);
 	}
 
-	public static void moveSelectedArea(Controller controller, double x, double y) {
+	public static void moveSelectedArea(double x, double y) {
 		Shape selectedShape = SettingsSingleton.getSelectedShape();
 		double deltaX = x - selectedX;
 		double deltaY = y - selectedY;
@@ -36,6 +37,32 @@ public class SelectUtilities {
 
 		selectedX = x;
 		selectedY = y;
+	}
+
+	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y) {
+		Shape selectedShape = SettingsSingleton.getSelectedShape();
+		Shape hoveredShape = SettingsSingleton.getHoveredShape();
+
+		if (hoveredShape != null && selectedShape.getType() == ShapeType.POINT && hoveredShape.getType() == ShapeType.POINT) {
+			for (int i = 0; i < selectedShape.getChildren().size(); i++) {
+				Shape childShape = selectedShape.getChildren().get(i);
+				if (childShape.getPoints().contains(hoveredShape)) {
+					controller.deleteShape(childShape, Controller.SingletonType.PREVIEW);
+					i--;
+				} else {
+					childShape.getPoints().remove(selectedShape);
+					childShape.getPoints().add((Point) hoveredShape);
+					hoveredShape.addChild(childShape);
+				}
+			}
+
+			controller.removeShape(selectedShape, Controller.SingletonType.PREVIEW);
+		} else
+			moveSelectedArea(x, y);
+
+		SettingsSingleton.setSelectedShape(null);
+		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
+		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 	}
 
 	private static void transferPoints(Controller controller, Shape point) {
