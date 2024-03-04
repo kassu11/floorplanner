@@ -22,19 +22,15 @@ public class SelectUtilities {
 		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape);
 	}
 
-	public static void moveSelectedArea(double x, double y) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
+	public static void moveSelectedArea(Controller controller, double x, double y) {
 		double deltaX = x - selectedX;
 		double deltaY = y - selectedY;
 
-		if (selectedShape.getType() == ShapeType.POINT)
-			selectedShape.setCoordinates(x, y);
-		else if (selectedShape.getType() == ShapeType.LINE) {
-			for (Point point : selectedShape.getPoints()) {
-				point.setCoordinates(point.getX() + deltaX, point.getY() + deltaY);
+		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+			if(shape.getType() == ShapeType.POINT){
+				shape.setCoordinates(shape.getX() + deltaX, shape.getY() + deltaY);
 			}
 		}
-
 		selectedX = x;
 		selectedY = y;
 	}
@@ -58,7 +54,7 @@ public class SelectUtilities {
 
 			controller.removeShape(selectedShape, Controller.SingletonType.PREVIEW);
 		} else
-			moveSelectedArea(x, y);
+			moveSelectedArea(controller, x, y);
 
 		SettingsSingleton.setSelectedShape(null);
 		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
