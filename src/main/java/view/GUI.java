@@ -70,10 +70,10 @@ public class GUI extends Application {
                     }
                 }
                 case SELECT -> {
-                    if (hoveredShape != null && selectedShape == null) {
+                    if (hoveredShape != null && selectedShape == null || event.isShiftDown()) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-                    } else if (selectedShape != null) {
+                    } else if (selectedShape != null && !event.isShiftDown()) {
                         if (selectedShape.getClass().equals(Point.class)) {
                             selectedShape.setCoordinates(mouseX, mouseY);
                             for (Shape shape : selectedShape.getChildren()) {
@@ -153,7 +153,7 @@ public class GUI extends Application {
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
                 controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
-                SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
+                if(!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             previewGc.stroke();
