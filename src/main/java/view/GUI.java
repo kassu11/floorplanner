@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.Line;
 import model.Point;
 import model.Shape;
 import view.GUIElements.CanvasContainer;
@@ -15,6 +14,7 @@ import view.GUIElements.OptionsToolbar;
 import view.GUIElements.DrawingToolbar;
 import view.events.DrawUtilities;
 import view.events.KeyboardEvents;
+import view.events.SelectUtilities;
 
 import static javafx.scene.paint.Color.*;
 
@@ -24,7 +24,7 @@ public class GUI extends Application {
     private CanvasContainer canvasContainer;
     private int canvasWidth = 750;
     private int canvasHeight = 750;
-    private double middleX, middleY, selectedX, selectedY;
+    private double middleX, middleY;
 
     @Override
     public void init() {
@@ -71,26 +71,7 @@ public class GUI extends Application {
                 }
                 case SELECT -> {
                     if (hoveredShape != null && selectedShape == null) {
-                        selectedShape = hoveredShape;
-                        SettingsSingleton.setSelectedShape(selectedShape);
-                        selectedX = mouseX;
-                        selectedY = mouseY;
-                        controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
-                        if (selectedShape.getClass().equals(Line.class)) {
-                            for (Point point : selectedShape.getPoints()) {
-                                if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(point))
-                                    controller.transferSingleShapeTo(point, Controller.SingletonType.PREVIEW);
-                                for (Shape shape : point.getChildren()) {
-                                    if (!controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape))
-                                        controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
-                                }
-                            }
-                        }
-                        if (selectedShape.getClass().equals(Point.class)) {
-                            for (Shape shape : selectedShape.getChildren()) {
-                                controller.transferSingleShapeTo(shape, Controller.SingletonType.PREVIEW);
-                            }
-                        }
+                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                     } else if (selectedShape != null) {
                         if (selectedShape.getClass().equals(Point.class)) {
@@ -168,28 +149,12 @@ public class GUI extends Application {
 
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
                 if (SettingsSingleton.getLastPoint() == null) return;
+                Shape lastpoint = SettingsSingleton.getLastPoint();
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
-                controller.createShape(point, SettingsSingleton.getLastPoint().getX(), SettingsSingleton.getLastPoint().getY(), SettingsSingleton.getCurrentShape(), null)
-                        .draw(previewGc);
-            }
-            if (SettingsSingleton.getCurrentMode() == ModeType.SELECT) {
-                if (selectedShape != null) {
-                    if (selectedShape.getClass().equals(Point.class)) {
-                        for (Shape previewShape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-                            if (previewShape.getClass().equals(Point.class)) previewShape.setCoordinates(mouseX, mouseY);
-                        }
-                    }
-                    if (selectedShape.getClass().equals(Line.class)) {
-                        double deltaX = mouseX - selectedX;
-                        double deltaY = mouseY - selectedY;
-                        for (Point point : selectedShape.getPoints()) {
-                            point.setCoordinates(point.getX() + deltaX, point.getY() + deltaY);
-                        }
-                    }
-                    selectedX = mouseX;
-                    selectedY = mouseY;
-                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-                }
+                controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
+            } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
+                SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
+                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             previewGc.stroke();
         });
