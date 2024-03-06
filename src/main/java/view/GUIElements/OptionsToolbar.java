@@ -47,7 +47,6 @@ public class OptionsToolbar extends CustomToolbar {
         Insets defaultInsets = new Insets(10, 10, 10, 10);
 
         HBox languageSettingsLayout = new HBox(new Label("Language"), languageSettings);
-        languageSettingsLayout.setPadding(defaultInsets);
         languageSettingsLayout.setSpacing(10);
 
         VBox shapeSettingsLayout = new VBox(shapeLabel ,showLengths, showAreas, saveButton);
