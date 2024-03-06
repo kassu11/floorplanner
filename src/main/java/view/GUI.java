@@ -201,7 +201,8 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
         drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
-        OptionsToolbar optionBar = new OptionsToolbar();
+        OptionsToolbar optionBar = new OptionsToolbar(stage);
+        optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
