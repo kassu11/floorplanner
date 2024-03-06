@@ -19,7 +19,7 @@ public class DrawUtilities {
         Point endPoint = SettingsSingleton.getHoveredPoint();
         if (endPoint == null) endPoint = controller.createAbsolutePoint(x, y, Controller.SingletonType.FINAL);
 
-        Shape shape = controller.createShape(startPoint, endPoint, shapeType, Controller.SingletonType.FINAL);
+        Shape shape = controller.createShape(endPoint, startPoint, shapeType, Controller.SingletonType.FINAL);
         SettingsSingleton.setLastPoint(shapeType == ShapeType.MULTILINE ? endPoint : null);
 
         return shape;
