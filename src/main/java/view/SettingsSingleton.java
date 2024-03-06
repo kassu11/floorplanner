@@ -9,6 +9,7 @@ public class SettingsSingleton {
     private static Point lastPoint, hoveredPoint;
     private static Shape selectedShape, hoveredShape;
     private static double middleX, middleY, selectedX, selectedY;
+    private static boolean drawLengths = true;
 
     private SettingsSingleton() {
     }
@@ -104,5 +105,13 @@ public class SettingsSingleton {
 
     public static void setSelectedY(double selectedY) {
         SettingsSingleton.selectedY = selectedY;
+    }
+
+    public static boolean isDrawLengths() {
+        return drawLengths;
+    }
+
+    public static void setDrawLengths(boolean drawLengths) {
+        SettingsSingleton.drawLengths = drawLengths;
     }
 }

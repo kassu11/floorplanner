@@ -47,4 +47,6 @@ public interface Shape {
     void delete(ShapeContainer shapeContainer);
 
     ShapeType getType();
+
+    void drawLength(CustomCanvas gc);
 }

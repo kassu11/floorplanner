@@ -9,22 +9,18 @@ import view.ShapeType;
 
 import java.util.HashMap;
 
-public class DrawingToolbar extends ToolBar {
+public class DrawingToolbar extends CustomToolbar {
     private final ContextMenu modeMenu = new ContextMenu();
-    private double cursorX, cursorY;
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
-    private Stage stage;
-    private HashMap<String, Button> buttons = new HashMap<>();
 
     public DrawingToolbar(Stage stage) {
-        super();
+        super(stage);
         this.setOrientation(Orientation.VERTICAL);
         addButton(new Button("Select"));
         addButton(new Button("Mode"));
         addButton(new Button("Delete"));
         addButton(new Button("Reset"));
         addButton(new Button("Rotate"));
-        this.stage = stage;
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
@@ -32,17 +28,6 @@ public class DrawingToolbar extends ToolBar {
         this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
         this.multilineMode = new CustomMenuItem("Multiline", ShapeType.MULTILINE);
         this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
-    }
-
-    public void addButton(Button button) {
-        this.getItems().add(button);
-        this.getItems().add(new Separator());
-        buttons.put(button.getText(), button);
-    }
-
-    public void setCursorCoordinates() {
-        this.cursorX = stage.getX() + this.getLayoutX();
-        this.cursorY = stage.getY() + this.getLayoutY();
     }
 
     public void changeMode(ModeType mode) {
@@ -54,19 +39,8 @@ public class DrawingToolbar extends ToolBar {
                 SettingsSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
                 System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
             });
-            modeMenu.show(this, cursorX + this.getWidth(), cursorY + buttons.get("Mode").getHeight());
+            modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("Mode").getHeight());
         }
     }
 
-    public void setCursorX(double cursorX) {
-        this.cursorX = cursorX;
-    }
-
-    public void setCursorY(double cursorY) {
-        this.cursorY = cursorY;
-    }
-
-    public HashMap<String, Button> getButtons() {
-        return buttons;
-    }
 }

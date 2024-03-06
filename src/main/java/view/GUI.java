@@ -146,7 +146,9 @@ public class GUI extends Application {
                 if (SettingsSingleton.getLastPoint() == null) return;
                 Shape lastpoint = SettingsSingleton.getLastPoint();
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
-                controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
+                Shape createdShape = controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null);
+                createdShape.draw(previewGc);
+                createdShape.drawLength(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
 
@@ -201,7 +203,9 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
         drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
-        OptionsToolbar optionBar = new OptionsToolbar();
+        System.out.println("CANVAS CONTAINER IS : "+canvasContainer.getLayer(0));
+        OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
+        optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
