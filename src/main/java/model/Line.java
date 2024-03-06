@@ -34,18 +34,6 @@ public class Line extends AbstractShape {
         gc.moveTo(pointA.getX(), pointA.getY());
         gc.lineTo(pointB.getX(), pointB.getY());
         gc.stroke();
-        String text = String.format("%.2f cm",  calculateShapeLength());
-
-        double textOffset = text.length() * 4.5 / 2.0;
-        Affine original = gc.getTransform();
-        double deltaX = pointA.getX() - pointB.getX();
-        double deltaY = pointA.getY() - pointB.getY();
-        double radians = Math.atan2(deltaY, deltaX);
-        calculateCentroid();
-
-        gc.setTransform(radians, this.getCentroidX(), this.getCentroidY());
-        gc.fillText(text, radians, this.getCentroidX() - textOffset, this.getCentroidY());
-        gc.setTransform(original);
     }
 
     public double calculateDistanceFromMouse(double x, double y) {
@@ -110,5 +98,22 @@ public class Line extends AbstractShape {
 //            point.removeChild(this);
 //            if (point.getChildren().isEmpty()) point.delete(shapeContainer);
 //        });
+    }
+    public void drawLength(CustomCanvas gc) {
+        Point pointA = this.getPoints().get(0);
+        Point pointB = this.getPoints().get(1);
+
+        String text = String.format("%.2f cm",  calculateShapeLength());
+
+        double textOffset = text.length() * 4.5 / 2.0;
+        Affine original = gc.getTransform();
+        double deltaX = pointA.getX() - pointB.getX();
+        double deltaY = pointA.getY() - pointB.getY();
+        double radians = Math.atan2(deltaY, deltaX);
+        calculateCentroid();
+
+        gc.setTransform(radians, this.getCentroidX(), this.getCentroidY());
+        gc.fillText(text, radians, this.getCentroidX() - textOffset, this.getCentroidY());
+        gc.setTransform(original);
     }
 }

@@ -4,6 +4,7 @@ import model.*;
 import view.GUI;
 import view.GUIElements.CanvasMath;
 import view.GUIElements.CustomCanvas;
+import view.SettingsSingleton;
 import view.ShapeType;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Controller {
     private CanvasMath canvasMath;
     private ShapeContainer finalShapes = FinalShapesSingleton.getInstance();
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
+    private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -79,6 +81,9 @@ public class Controller {
         customCanvas.clear();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
+            if(settingsSingleton.isDrawLengths()){
+                shape.drawLength(customCanvas);
+            }
         }
     }
 
