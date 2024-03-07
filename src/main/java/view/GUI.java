@@ -217,41 +217,15 @@ public class GUI extends Application {
         root.setCenter(canvasContainer);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
-        stage.setTitle("view.FPGUI");
+        stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
         stage.show();
 
         controller.getHistoryManager().addEvent(() -> System.out.println("value"), () -> System.out.println("value2"));
 
-        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, controller)::handle);
-
-        test(value -> System.out.println(value));
-        test2(previewGc, w -> {
-            w.clear();
-            System.out.println(w);
-        });
+        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, gc, controller)::handle);
     }
-
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }
-
-    public void test(CustomCallback callback) {
-        callback.set("Hello World");
-    }
-
-    public void test2(CustomCanvas canvas, CustomCallback2 callback) {
-        callback.set(canvas);
-    }
-
-}
-
-@FunctionalInterface
-interface CustomCallback {
-    void set(String value);
-}
-
-@FunctionalInterface
-interface CustomCallback2 {
-    void set(CustomCanvas value);
 }

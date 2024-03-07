@@ -8,11 +8,13 @@ import view.SettingsSingleton;
 import view.ShapeType;
 
 public class SelectUtilities {
-	private static double selectedX, selectedY;
+	private static double selectedX, selectedY, startX, startY;
 
 	public static void selectHoveredShape(Controller controller, double x, double y) {
 		Shape selectedShape = SettingsSingleton.getHoveredShape();
 		SettingsSingleton.setSelectedShape(selectedShape);
+		startX = x;
+		startY = y;
 		selectedX = x;
 		selectedY = y;
 
@@ -59,6 +61,7 @@ public class SelectUtilities {
 		SettingsSingleton.setSelectedShape(null);
 		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+		controller.getHistoryManager().moveShape(selectedShape, x, y, startX, startY);
 	}
 
 	public static void rotateSelectedShape(double x, double y) {

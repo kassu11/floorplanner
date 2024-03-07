@@ -64,6 +64,14 @@ public abstract class AbstractShape implements Shape {
         if (this.id == 0) this.id = idCounter++;
     }
 
+    public void assignId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
     public void calculateCentroid() {
         double sumX = 0;
         double sumY = 0;

@@ -1,5 +1,7 @@
 package model.history;
 
+import model.Shape;
+
 public class HistoryEvent {
     private final HistoryHandler redo, undo;
 
