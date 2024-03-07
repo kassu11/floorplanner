@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractShape implements Shape {
+    private static int idCounter = 1;
     private double x, y, width, height, centroidX, centroidY;
     private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
-    private int priority;
+    private int priority, id;
 
     public AbstractShape(double x, double y) {
         this.x = x;
@@ -43,6 +44,7 @@ public abstract class AbstractShape implements Shape {
         points.add(pointC);
         points.add(pointD);
         updateDimensions();
+        this.id = idCounter++;
     }
 
     private Point calculateDimensions(Point a, Point b) {
@@ -56,6 +58,10 @@ public abstract class AbstractShape implements Shape {
     protected void updateDimensions() {
         points.stream().reduce(this::calculateDimensions);
         calculateCentroid();
+    }
+
+    public void assignId() {
+        if (this.id == 0) this.id = idCounter++;
     }
 
     public void calculateCentroid() {
