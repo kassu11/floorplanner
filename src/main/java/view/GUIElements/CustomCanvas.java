@@ -58,4 +58,9 @@ public interface CustomCanvas {
 
   public void setTransform(Affine affine);
 
+  public double getCanvasWidth();
+
+  public double getCanvasHeight();
+
+  public CanvasGrid getGrid();
 }

@@ -10,6 +10,10 @@ public class SettingsSingleton {
     private static Shape selectedShape, hoveredShape;
     private static double middleX, middleY, selectedX, selectedY;
     private static boolean drawLengths = true;
+    private static boolean isDrawGrid = true;
+    private static double gridHeight = 750;
+    private static double gridWidth = 750;
+    private static int gridSize = 25;
 
     private SettingsSingleton() {
     }
@@ -113,5 +117,37 @@ public class SettingsSingleton {
 
     public static void setDrawLengths(boolean drawLengths) {
         SettingsSingleton.drawLengths = drawLengths;
+    }
+
+    public static boolean isGridEnabled() {
+        return isDrawGrid;
+    }
+
+    public static void setDrawGrid(boolean isDrawGrid) {
+        SettingsSingleton.isDrawGrid = isDrawGrid;
+    }
+
+    public static double getGridHeight() {
+        return gridHeight;
+    }
+
+    public static void setGridHeight(double gridHeight) {
+        SettingsSingleton.gridHeight = gridHeight;
+    }
+
+    public static double getGridWidth() {
+        return gridWidth;
+    }
+
+    public static void setGridWidth(double gridWidth) {
+        SettingsSingleton.gridWidth = gridWidth;
+    }
+
+    public static int getGridSize() {
+        return gridSize;
+    }
+
+    public static void setGridSize(int gridSize) {
+        SettingsSingleton.gridSize = gridSize;
     }
 }

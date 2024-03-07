@@ -24,6 +24,7 @@ public class Controller {
         GUI.launch(GUI.class);
     }
 
+
     public enum SingletonType {
         FINAL, PREVIEW
     }
@@ -85,8 +86,10 @@ public class Controller {
 
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
         customCanvas.clear();
+        if(SettingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
+
             if (settingsSingleton.isDrawLengths()) {
                 shape.drawLength(customCanvas);
             }
