@@ -88,6 +88,7 @@ public class GUI extends Application {
                     SettingsSingleton.setSelectedShape(null);
                     SettingsSingleton.setLastPoint(null);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                 }
             }
         });
