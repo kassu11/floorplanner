@@ -5,8 +5,6 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
-import java.awt.geom.AffineTransform;
-
 public interface CustomCanvas {
   public void resize(double width, double height);
 
@@ -50,7 +48,7 @@ public interface CustomCanvas {
 
   public void setZoom(double zoom);
 
-  public void fillText(String text, double radians, double x, double y);
+  public void fillText(String text, double radians, double x, double y, double textHalfWidth);
 
   public Affine getTransform();
 

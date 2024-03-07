@@ -7,8 +7,6 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 
-import java.awt.geom.AffineTransform;
-
 public class DrawingCanvas extends Canvas implements CustomCanvas {
     private double width, height;
     private double x, y, zoom;
@@ -23,7 +21,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.y = 0;
         this.zoom = 1;
         gc = getGraphicsContext2D();
-
     }
 
     public void resizeCanvas(double width, double height) {
@@ -114,11 +111,11 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     @Override
-    public void fillText(String text, double radians, double x, double y) {
+    public void fillText(String text, double radians, double x, double y, double textHalfWidth) {
         double flipMultiplier = flipMultiplier(radians);
         double xPadding = Math.sin(radians) * -25 * flipMultiplier;
         double yPadding = Math.cos(radians) * 25 * flipMultiplier;
-        gc.fillText(text, -this.x + x * zoom + xPadding, -this.y + y * zoom + yPadding);
+        gc.fillText(text, -this.x + x * zoom + xPadding - textHalfWidth, -this.y + y * zoom + yPadding);
     }
 
     @Override
