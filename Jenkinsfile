@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main-jenkinsfile', credentialsId: 'Nasse_jenkins', url: 'https://github.com/kassu11/floorplanner.git'
+        git branch: 'main', credentialsId: 'Nasse_jenkins', url: 'https://github.com/kassu11/floorplanner.git'
       }
     }
     stage('Build') {
