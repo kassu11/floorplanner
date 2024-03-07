@@ -50,7 +50,8 @@ public class GUI extends Application {
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
 
-            if (SettingsSingleton.getLastPoint() != null && SettingsSingleton.getLastPoint() == SettingsSingleton.getHoveredPoint()) return;
+            if (SettingsSingleton.getLastPoint() != null && SettingsSingleton.getLastPoint() == SettingsSingleton.getHoveredPoint())
+                return;
 
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
@@ -150,7 +151,8 @@ public class GUI extends Application {
                 if (SettingsSingleton.getLastPoint() == null) return;
                 Shape lastpoint = SettingsSingleton.getLastPoint();
                 Point point = controller.createAbsolutePoint(mouseX, mouseY);
-                if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
+                if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT)
+                    point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
                 Shape createdShape = controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null);
                 createdShape.draw(previewGc);
                 createdShape.drawLength(previewGc);
@@ -189,8 +191,7 @@ public class GUI extends Application {
             double zoomLevel = canvasContainer.getZoom();
             if (event.getDeltaY() < 0)
                 canvasContainer.setZoom(Math.max(Math.pow(canvasContainer.getZoom(), 0.9) - .1, minScale));
-            else
-                canvasContainer.setZoom(Math.min(Math.pow(canvasContainer.getZoom(), 1.15) + .1, maxScale));
+            else canvasContainer.setZoom(Math.min(Math.pow(canvasContainer.getZoom(), 1.15) + .1, maxScale));
 
             double scale = canvasContainer.getZoom() / zoomLevel;
             double deltaX = (event.getX() * scale) - event.getX();
@@ -211,6 +212,7 @@ public class GUI extends Application {
         System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
         OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
         optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
+        optionBar.getButtons().get("File").setOnAction(event -> optionBar.showFile());
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);

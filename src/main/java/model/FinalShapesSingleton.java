@@ -1,5 +1,6 @@
 package model;
 
+
 public class FinalShapesSingleton extends ShapeContainer {
 
     private FinalShapesSingleton() {
