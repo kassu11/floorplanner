@@ -13,6 +13,7 @@ public class SettingsSingleton {
     private static boolean isDrawGrid = true;
     private static double gridHeight = 750;
     private static double gridWidth = 750;
+    private static int gridSize = 25;
 
     private SettingsSingleton() {
     }
@@ -140,5 +141,13 @@ public class SettingsSingleton {
 
     public static void setGridWidth(double gridWidth) {
         SettingsSingleton.gridWidth = gridWidth;
+    }
+
+    public static int getGridSize() {
+        return gridSize;
+    }
+
+    public static void setGridSize(int gridSize) {
+        SettingsSingleton.gridSize = gridSize;
     }
 }

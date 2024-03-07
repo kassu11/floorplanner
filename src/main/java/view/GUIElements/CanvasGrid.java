@@ -7,8 +7,6 @@ import view.SettingsSingleton;
 public class CanvasGrid {
 
     private CustomCanvas canvas;
-    private int gridSize = 20;
-    private double width, height;
 
     public CanvasGrid(CustomCanvas canvas) {
         this.canvas = canvas;
@@ -18,6 +16,7 @@ public class CanvasGrid {
             canvas.beginPath();
             double width = SettingsSingleton.getGridWidth();
             double height = SettingsSingleton.getGridHeight();
+            int gridSize = SettingsSingleton.getGridSize();
             canvas.setFill(LIGHTGRAY);
             canvas.setStroke(LIGHTGRAY);
             canvas.setLineWidth(1);
@@ -38,13 +37,4 @@ public class CanvasGrid {
     public void setCanvas(CustomCanvas canvas) {
         this.canvas = canvas;
     }
-
-    public int getGridSize() {
-        return gridSize;
-    }
-
-    public void setGridSize(int gridSize) {
-        this.gridSize = gridSize;
-    }
-
 }
