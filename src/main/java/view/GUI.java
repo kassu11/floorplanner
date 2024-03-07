@@ -88,7 +88,22 @@ public class GUI extends Application {
                     SettingsSingleton.setSelectedShape(null);
                     SettingsSingleton.setLastPoint(null);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+
+
+                }
+                case ROTATE -> {
+                    if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
+                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
+                        controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    } else if (selectedShape != null) {
+                        SelectUtilities.finalizeSelectedRotation(controller, mouseX, mouseY);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        previewGc.clear();
+                    }
+
                     controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+
                 }
             }
         });
@@ -135,10 +150,16 @@ public class GUI extends Application {
                 if (SettingsSingleton.getLastPoint() == null) return;
                 Shape lastpoint = SettingsSingleton.getLastPoint();
                 Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
-                controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null).draw(previewGc);
+                Shape createdShape = controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null);
+                createdShape.draw(previewGc);
+                createdShape.drawLength(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
-                if(!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller ,mouseX, mouseY);
+                if (!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
 
+                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            }
+            if (SettingsSingleton.getCurrentMode() == ModeType.ROTATE) {
+                SelectUtilities.rotateSelectedShape(mouseX, mouseY);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             previewGc.stroke();
@@ -148,6 +169,7 @@ public class GUI extends Application {
             if (event.getButton() == MouseButton.MIDDLE) {
                 middleX = canvasContainer.getX() + event.getX();
                 middleY = canvasContainer.getY() + event.getY();
+                System.out.println("Middle X: " + middleX + " Middle Y: " + middleY);
             }
         });
 
@@ -184,7 +206,10 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
-        OptionsToolbar optionBar = new OptionsToolbar();
+        drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
+        System.out.println("CANVAS CONTAINER IS : "+canvasContainer.getLayer(0));
+        OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
+        optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);

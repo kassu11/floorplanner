@@ -16,6 +16,10 @@ public interface Shape {
 
     double getY();
 
+    double getCentroidX();
+
+    double getCentroidY();
+
     double getWidth();
 
     double getHeight();
@@ -25,6 +29,8 @@ public interface Shape {
     double calculateShapeLength();
 
     double calculateShapeArea();
+
+    void calculateCentroid();
 
     int getPriority();
 
@@ -41,4 +47,6 @@ public interface Shape {
     void delete(ShapeContainer shapeContainer);
 
     ShapeType getType();
+
+    void drawLength(CustomCanvas gc);
 }
