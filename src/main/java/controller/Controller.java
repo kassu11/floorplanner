@@ -16,12 +16,15 @@ public class Controller {
     private ShapeContainer finalShapes = FinalShapesSingleton.getInstance();
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
+    private List<Shape> customShapes = new ArrayList<>();
+
+    public static void main(String[] args) {
+        GUI.launch(GUI.class);
+    }
 
     public enum SingletonType {
         FINAL, PREVIEW
     }
-
-    private List<Shape> customShapes = new ArrayList<>();
 
     public Controller(GUI gui) {
         this.gui = gui;
@@ -81,7 +84,7 @@ public class Controller {
         customCanvas.clear();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
-            if(settingsSingleton.isDrawLengths()){
+            if (settingsSingleton.isDrawLengths()) {
                 shape.drawLength(customCanvas);
             }
         }
@@ -99,10 +102,18 @@ public class Controller {
         return getShapeContainer(type).getShapes();
     }
 
+    public Point createRelativePoint(double x, double y) {
+        return createRelativePoint(x, y, null);
+    }
+
     public Point createRelativePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(canvasMath.relativeXtoAbsoluteX(x), canvasMath.relativeYtoAbsoluteY(y));
         if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
+    }
+
+    public Point createAbsolutePoint(double x, double y) {
+        return createAbsolutePoint(x, y, null);
     }
 
     public Point createAbsolutePoint(double x, double y, SingletonType singletonType) {
@@ -156,10 +167,6 @@ public class Controller {
             case FINAL -> finalShapes;
             case PREVIEW -> previewShapes;
         };
-    }
-
-    public static void main(String[] args) {
-        GUI.launch(GUI.class);
     }
 
 }

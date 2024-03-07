@@ -15,11 +15,7 @@ public class CanvasMath {
         return (canvasContainer.getY() + relativeY) / canvasContainer.getZoom();
     }
 
-    public double zoomRelativeX(double relativeX) {
-        return relativeX * canvasContainer.getZoom();
-    }
-
-    public double zoomRelativeY(double relativeY) {
-        return relativeY * canvasContainer.getZoom();
+    public double relativeDistance(double distance) {
+        return distance / canvasContainer.getZoom();
     }
 }
