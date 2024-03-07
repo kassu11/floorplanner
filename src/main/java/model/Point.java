@@ -4,7 +4,7 @@ import view.GUIElements.CustomCanvas;
 import view.ShapeType;
 
 public class Point extends AbstractShape {
-    private double width = 25, height = 25;
+    private double width = 15, height = 15;
     private int priority = 1;
 
     public Point(double x, double y) {
@@ -22,7 +22,7 @@ public class Point extends AbstractShape {
     }
 
     public void draw(CustomCanvas gc) {
-        gc.fillOval(this.getX() - width / 2, this.getY() - height / 2, width, height);
+        gc.fillOvalWithOutScaling(this.getX(), this.getY(), width, height);
     }
 
     @Override
@@ -65,17 +65,17 @@ public class Point extends AbstractShape {
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
 
-        for(int i = 0; i < getChildren().size(); i++) {
+        for (int i = 0; i < getChildren().size(); i++) {
             Shape shape = getChildren().get(i);
             getChildren().remove(i);
             shape.removePoint(this);
             i--;
             shape.delete(shapeContainer);
         }
-//        getChildren().forEach(shape -> {
-//            shape.removePoint(this);
-//            shape.delete(shapeContainer);
-//        });
+        //        getChildren().forEach(shape -> {
+        //            shape.removePoint(this);
+        //            shape.delete(shapeContainer);
+        //        });
 
     }
 }

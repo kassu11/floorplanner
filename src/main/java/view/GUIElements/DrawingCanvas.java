@@ -53,6 +53,10 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc.fillOval(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom);
     }
 
+    public void fillOvalWithOutScaling(double x, double y, double width, double height) {
+        gc.fillOval(-this.x + x * zoom - width / 2, -this.y + y * zoom - height / 2, width, height);
+    }
+
     public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length) {
         gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
     }
@@ -109,7 +113,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.zoom = zoom;
     }
 
-
     @Override
     public void fillText(String text, double radians, double x, double y) {
         double flipMultiplier = flipMultiplier(radians);
@@ -144,8 +147,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     public int flipMultiplier(double radians) {
-        return (radians > Math.PI/2 || radians < -Math.PI/2 ? -1 : 1);
+        return (radians > Math.PI / 2 || radians < -Math.PI / 2 ? -1 : 1);
     }
-
 
 }

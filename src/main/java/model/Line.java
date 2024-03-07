@@ -4,8 +4,6 @@ import javafx.scene.transform.Affine;
 import view.GUIElements.CustomCanvas;
 import view.ShapeType;
 
-import java.awt.geom.AffineTransform;
-
 public class Line extends AbstractShape {
 
     public Line(Point pointA, Point pointB) {
@@ -86,7 +84,7 @@ public class Line extends AbstractShape {
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
 
-        for(int i = 0; i < getPoints().size(); i++) {
+        for (int i = 0; i < getPoints().size(); i++) {
             Shape point = getPoints().get(i);
             getPoints().remove(i);
             point.removeChild(this);
@@ -94,16 +92,17 @@ public class Line extends AbstractShape {
             i--;
         }
 
-//        getPoints().forEach(point -> {
-//            point.removeChild(this);
-//            if (point.getChildren().isEmpty()) point.delete(shapeContainer);
-//        });
+        //        getPoints().forEach(point -> {
+        //            point.removeChild(this);
+        //            if (point.getChildren().isEmpty()) point.delete(shapeContainer);
+        //        });
     }
+
     public void drawLength(CustomCanvas gc) {
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
 
-        String text = String.format("%.2f cm",  calculateShapeLength());
+        String text = String.format("%.2f cm", calculateShapeLength());
 
         double textOffset = text.length() * 4.5 / 2.0;
         Affine original = gc.getTransform();
