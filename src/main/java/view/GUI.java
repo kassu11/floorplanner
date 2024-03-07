@@ -89,6 +89,7 @@ public class GUI extends Application {
                     SettingsSingleton.setLastPoint(null);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
+
                 }
                 case ROTATE -> {
                     if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
@@ -100,6 +101,9 @@ public class GUI extends Application {
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         previewGc.clear();
                     }
+
+                    controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+
                 }
             }
         });

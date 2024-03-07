@@ -147,10 +147,20 @@ class ControllerTest {
         fail("Not yet implemented");
     }
 
-    @Disabled
     @Test
     void createAbsolutePoint() {
-        fail("Not yet implemented");
+        controller.createAbsolutePoint(0, 0, Controller.SingletonType.FINAL);
+        controller.createAbsolutePoint(5, 3, Controller.SingletonType.FINAL);
+        controller.createAbsolutePoint(-23, -67, Controller.SingletonType.FINAL);
+        controller.createAbsolutePoint(23, -67, null);
+        assertEquals(0, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(0).getX(), "Should return 0");
+        assertEquals(0, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(0).getY(), "Should return 0");
+        assertEquals(5, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(1).getX(), "Should return 5");
+        assertEquals(3, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(1).getY(), "Should return 3");
+        assertEquals(-23, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(2).getX(), "Should return -23");
+        assertEquals(-67, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().get(2).getY(), "Should return -67");
+        assertEquals(3, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().size(), "Should return 23");
+        assertEquals(3, controller.getShapeContainer(Controller.SingletonType.FINAL).getShapes().size(), "Should return -67");
     }
 
     @Disabled
