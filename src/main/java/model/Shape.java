@@ -49,4 +49,7 @@ public interface Shape {
     ShapeType getType();
 
     void drawLength(CustomCanvas gc);
+    public void assignId();
+    public void assignId(int id);
+    public int getId();
 }

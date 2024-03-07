@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import model.history.HistoryManager;
 import view.GUI;
 import view.GUIElements.CanvasMath;
 import view.GUIElements.CustomCanvas;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class Controller {
     private GUI gui;
+    private HistoryManager historyManager;
     private CanvasMath canvasMath;
     private ShapeContainer finalShapes = FinalShapesSingleton.getInstance();
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
@@ -29,6 +31,7 @@ public class Controller {
     public Controller(GUI gui) {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
+        this.historyManager = new HistoryManager(this);
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -159,6 +162,7 @@ public class Controller {
         finalShapes.clearShapes();
         previewShapes.clearShapes();
         gui.getCanvasContainer().clear();
+        historyManager.reset();
     }
 
     public ShapeContainer getShapeContainer(SingletonType type) {
@@ -167,6 +171,10 @@ public class Controller {
             case FINAL -> finalShapes;
             case PREVIEW -> previewShapes;
         };
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
 }

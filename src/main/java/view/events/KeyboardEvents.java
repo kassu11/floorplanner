@@ -1,6 +1,8 @@
 package view.events;
 
+import controller.Controller;
 import javafx.scene.input.KeyEvent;
+import model.history.HistoryHandler;
 import view.GUIElements.CustomCanvas;
 import view.ModeType;
 import view.SettingsSingleton;
@@ -11,9 +13,9 @@ public class KeyboardEvents {
         void handle(KeyEvent event);
     }
 
-    public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc) {
-        KeyboardEventHandler handleKeyboardShortCuts = (KeyEvent event) -> {
-            if(event.isShiftDown()) {
+    public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
+        return (KeyEvent event) -> {
+            if (event.isShiftDown()) {
                 SettingsSingleton.setCurrentMode(ModeType.SELECT);
             } else {
                 SettingsSingleton.setCurrentMode(ModeType.DRAW);
@@ -27,12 +29,19 @@ public class KeyboardEvents {
                     SettingsSingleton.setLastPoint(null);
                     previewGc.clear();
                 }
+                case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);
+                case Y -> handleHistoryShortCuts(event, controller.getHistoryManager()::redo, previewGc, gc, controller);
                 default -> {
                 }
             }
         };
-
-        return handleKeyboardShortCuts;
     }
 
+    private static void handleHistoryShortCuts(KeyEvent keyEvent, HistoryHandler historyEvent, CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
+        if (keyEvent.isControlDown()) {
+            historyEvent.handle();
+            controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+        }
+    }
 }
