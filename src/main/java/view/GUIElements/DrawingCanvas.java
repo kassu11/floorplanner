@@ -25,7 +25,8 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc = getGraphicsContext2D();
         grid = new CanvasGrid(this);
         grid.drawGrid();
-        System.out.println("Drawing canvas created");
+
+
     }
 
     public void resizeCanvas(double width, double height) {
@@ -53,6 +54,10 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
     public void fillOval(double x, double y, double width, double height) {
         gc.fillOval(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom);
+    }
+
+    public void fillOvalWithOutScaling(double x, double y, double width, double height) {
+        gc.fillOval(-this.x + x * zoom - width / 2, -this.y + y * zoom - height / 2, width, height);
     }
 
     public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length) {
@@ -111,13 +116,12 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.zoom = zoom;
     }
 
-
     @Override
-    public void fillText(String text, double radians, double x, double y) {
+    public void fillText(String text, double radians, double x, double y, double textHalfWidth) {
         double flipMultiplier = flipMultiplier(radians);
         double xPadding = Math.sin(radians) * -25 * flipMultiplier;
         double yPadding = Math.cos(radians) * 25 * flipMultiplier;
-        gc.fillText(text, -this.x + x * zoom + xPadding, -this.y + y * zoom + yPadding);
+        gc.fillText(text, -this.x + x * zoom + xPadding - textHalfWidth, -this.y + y * zoom + yPadding);
     }
 
     @Override
@@ -146,7 +150,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     public int flipMultiplier(double radians) {
-        return (radians > Math.PI/2 || radians < -Math.PI/2 ? -1 : 1);
+        return (radians > Math.PI / 2 || radians < -Math.PI / 2 ? -1 : 1);
     }
 
     public double getCanvasWidth() {
@@ -160,4 +164,5 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     public CanvasGrid getGrid() {
         return grid;
     }
+
 }

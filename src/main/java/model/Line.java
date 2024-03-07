@@ -1,10 +1,9 @@
 package model;
 
+import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import view.GUIElements.CustomCanvas;
 import view.ShapeType;
-
-import java.awt.geom.AffineTransform;
 
 public class Line extends AbstractShape {
 
@@ -86,34 +85,31 @@ public class Line extends AbstractShape {
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
 
-        for(int i = 0; i < getPoints().size(); i++) {
+        for (int i = 0; i < getPoints().size(); i++) {
             Shape point = getPoints().get(i);
             getPoints().remove(i);
             point.removeChild(this);
             if (point.getChildren().isEmpty() && shapeContainer != null) shapeContainer.getShapes().remove(point);
             i--;
         }
-
-//        getPoints().forEach(point -> {
-//            point.removeChild(this);
-//            if (point.getChildren().isEmpty()) point.delete(shapeContainer);
-//        });
     }
+
     public void drawLength(CustomCanvas gc) {
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
 
-        String text = String.format("%.2f cm",  calculateShapeLength());
+        String text = String.format("%.2f cm", calculateShapeLength());
+        final Text textElement = new Text(text);
 
-        double textOffset = text.length() * 4.5 / 2.0;
+        double textOffset = textElement.getLayoutBounds().getWidth() / 2;
         Affine original = gc.getTransform();
         double deltaX = pointA.getX() - pointB.getX();
         double deltaY = pointA.getY() - pointB.getY();
         double radians = Math.atan2(deltaY, deltaX);
-        calculateCentroid();
+        this.calculateCentroid();
 
         gc.setTransform(radians, this.getCentroidX(), this.getCentroidY());
-        gc.fillText(text, radians, this.getCentroidX() - textOffset, this.getCentroidY());
+        gc.fillText(text, radians, this.getCentroidX(), this.getCentroidY(), textOffset);
         gc.setTransform(original);
     }
 }

@@ -7,8 +7,6 @@ import view.ModeType;
 import view.SettingsSingleton;
 import view.ShapeType;
 
-import java.util.HashMap;
-
 public class DrawingToolbar extends CustomToolbar {
     private final ContextMenu modeMenu = new ContextMenu();
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;

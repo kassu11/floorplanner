@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import model.history.HistoryManager;
 import view.GUI;
 import view.GUIElements.CanvasMath;
 import view.GUIElements.CustomCanvas;
@@ -12,19 +13,26 @@ import java.util.List;
 
 public class Controller {
     private GUI gui;
+    private HistoryManager historyManager;
     private CanvasMath canvasMath;
     private ShapeContainer finalShapes = FinalShapesSingleton.getInstance();
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
+    private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
+    private List<Shape> customShapes = new ArrayList<>();
+
+    public static void main(String[] args) {
+        GUI.launch(GUI.class);
+    }
+
 
     public enum SingletonType {
         FINAL, PREVIEW
     }
 
-    private List<Shape> customShapes = new ArrayList<>();
-
     public Controller(GUI gui) {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
+        this.historyManager = new HistoryManager(this);
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -81,7 +89,8 @@ public class Controller {
         if(SettingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
-            if(SettingsSingleton.isDrawLengths()){
+
+            if (settingsSingleton.isDrawLengths()) {
                 shape.drawLength(customCanvas);
             }
         }
@@ -99,10 +108,18 @@ public class Controller {
         return getShapeContainer(type).getShapes();
     }
 
+    public Point createRelativePoint(double x, double y) {
+        return createRelativePoint(x, y, null);
+    }
+
     public Point createRelativePoint(double x, double y, SingletonType singletonType) {
         Point point = new Point(canvasMath.relativeXtoAbsoluteX(x), canvasMath.relativeYtoAbsoluteY(y));
         if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
+    }
+
+    public Point createAbsolutePoint(double x, double y) {
+        return createAbsolutePoint(x, y, null);
     }
 
     public Point createAbsolutePoint(double x, double y, SingletonType singletonType) {
@@ -148,6 +165,7 @@ public class Controller {
         finalShapes.clearShapes();
         previewShapes.clearShapes();
         gui.getCanvasContainer().clear();
+        historyManager.reset();
     }
 
     public ShapeContainer getShapeContainer(SingletonType type) {
@@ -158,8 +176,8 @@ public class Controller {
         };
     }
 
-    public static void main(String[] args) {
-        GUI.launch(GUI.class);
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
 }

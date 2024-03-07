@@ -86,7 +86,6 @@ public class GUI extends Application {
                     SettingsSingleton.setLastPoint(null);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
 
-
                 }
                 case ROTATE -> {
                     if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
@@ -111,7 +110,8 @@ public class GUI extends Application {
             SettingsSingleton.setHoveredShape(null);
             previewGc.clear();
             SettingsSingleton.setHoveredPoint(null);
-            double distanceCutOff = 15;
+            double distanceCutOff = controller.getCanvasMath().relativeDistance(15);
+            ;
             double lowestDistance = distanceCutOff;
 
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
@@ -146,7 +146,8 @@ public class GUI extends Application {
             if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
                 if (SettingsSingleton.getLastPoint() == null) return;
                 Shape lastpoint = SettingsSingleton.getLastPoint();
-                Point point = controller.createAbsolutePoint(mouseX, mouseY, null);
+                Point point = controller.createAbsolutePoint(mouseX, mouseY);
+                if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
                 Shape createdShape = controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null);
                 createdShape.draw(previewGc);
                 createdShape.drawLength(previewGc);
@@ -204,7 +205,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
         drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
-        System.out.println("CANVAS CONTAINER IS : "+canvasContainer.getLayer(0));
+        System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
         OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
         optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
 
@@ -213,39 +214,14 @@ public class GUI extends Application {
         root.setCenter(canvasContainer);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
-        stage.setTitle("view.FPGUI");
+        stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
         stage.show();
 
-        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc)::handle);
-
-        test(value -> System.out.println(value));
-        test2(previewGc, w -> {
-            w.clear();
-            System.out.println(w);
-        });
+        view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, gc, controller)::handle);
     }
 
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }
-
-    public void test(CustomCallback callback) {
-        callback.set("Hello World");
-    }
-
-    public void test2(CustomCanvas canvas, CustomCallback2 callback) {
-        callback.set(canvas);
-    }
-
-}
-
-@FunctionalInterface
-interface CustomCallback {
-    void set(String value);
-}
-
-@FunctionalInterface
-interface CustomCallback2 {
-    void set(CustomCanvas value);
 }
