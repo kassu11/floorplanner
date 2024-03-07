@@ -2,11 +2,13 @@ package view.GUIElements;
 
 import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.LIGHTGRAY;
+import view.SettingsSingleton;
 
 public class CanvasGrid {
 
     private CustomCanvas canvas;
     private int gridSize = 20;
+    private double width, height;
 
     public CanvasGrid(CustomCanvas canvas) {
         this.canvas = canvas;
@@ -14,8 +16,8 @@ public class CanvasGrid {
 
     public void drawGrid() {
             canvas.beginPath();
-            double width = canvas.getCanvasWidth();
-            double height = canvas.getCanvasHeight();
+            double width = SettingsSingleton.getGridWidth();
+            double height = SettingsSingleton.getGridHeight();
             canvas.setFill(LIGHTGRAY);
             canvas.setStroke(LIGHTGRAY);
             canvas.setLineWidth(1);

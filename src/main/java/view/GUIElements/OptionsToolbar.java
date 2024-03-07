@@ -22,6 +22,25 @@ public class OptionsToolbar extends CustomToolbar {
         this.setOrientation(Orientation.HORIZONTAL);
         addButton(new Button("File"));
         addButton(new Button("Settings"));
+        TextField gridWidth = new TextField();
+        gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
+        TextField gridHeight = new TextField();
+        gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
+        Button setGridSize = new Button("Set grid size");
+        this.getItems().add(new Separator());
+        this.getItems().add(gridWidth);
+        this.getItems().add(new Separator());
+        this.getItems().add(gridHeight);
+        this.getItems().add(new Separator());
+        this.getItems().add(setGridSize);
+        setGridSize.setOnAction(e -> {
+            SettingsSingleton.setGridWidth(Double.parseDouble(gridWidth.getText()));
+            SettingsSingleton.setGridHeight(Double.parseDouble(gridHeight.getText()));
+            gc.clear();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            System.out.println("Grid size set to " + SettingsSingleton.getGridWidth() + "x" + SettingsSingleton.getGridHeight());
+        });
+
     }
 
     public void showSettings() {
