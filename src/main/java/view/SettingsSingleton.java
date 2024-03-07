@@ -10,6 +10,7 @@ public class SettingsSingleton {
     private static Shape selectedShape, hoveredShape;
     private static double middleX, middleY, selectedX, selectedY;
     private static boolean drawLengths = true;
+    private static boolean isDrawGrid = true;
 
     private SettingsSingleton() {
     }
@@ -113,5 +114,13 @@ public class SettingsSingleton {
 
     public static void setDrawLengths(boolean drawLengths) {
         SettingsSingleton.drawLengths = drawLengths;
+    }
+
+    public static boolean isGridEnabled() {
+        return isDrawGrid;
+    }
+
+    public static void setDrawGrid(boolean isDrawGrid) {
+        SettingsSingleton.isDrawGrid = isDrawGrid;
     }
 }

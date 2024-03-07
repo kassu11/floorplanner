@@ -6,14 +6,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
-
-import java.awt.geom.AffineTransform;
+import view.SettingsSingleton;
 
 public class DrawingCanvas extends Canvas implements CustomCanvas {
     private double width, height;
     private double x, y, zoom;
     private GraphicsContext gc;
     private Font font = new Font("Arial", 12);
+    private CanvasGrid grid;
 
     public DrawingCanvas(double width, double height) {
         super(width, height);
@@ -23,7 +23,9 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.y = 0;
         this.zoom = 1;
         gc = getGraphicsContext2D();
-
+        grid = new CanvasGrid(this);
+        grid.drawGrid();
+        System.out.println("Drawing canvas created");
     }
 
     public void resizeCanvas(double width, double height) {
@@ -147,5 +149,15 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         return (radians > Math.PI/2 || radians < -Math.PI/2 ? -1 : 1);
     }
 
+    public double getCanvasWidth() {
+        return width;
+    }
 
+    public double getCanvasHeight() {
+        return height;
+    }
+
+    public CanvasGrid getGrid() {
+        return grid;
+    }
 }
