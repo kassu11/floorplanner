@@ -83,7 +83,7 @@ public class SelectUtilities {
 		SettingsSingleton.setSelectedShape(null);
 		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-		if(history) controller.getHistoryManager().finalizeSelection(selectedShape, x, y, canvas);
+		if(history) controller.getHistoryManager().finalizeSelection(selectedShape, x, y, startX, startY, canvas);
 	}
 
 	public static void rotateSelectedShape(double x, double y) {

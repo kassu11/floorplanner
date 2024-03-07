@@ -63,22 +63,22 @@ public class HistoryManager {
         };
     }
 
-    public void selectShape(Shape shape, double x, double y) {
+    public void selectShape(Shape shape, double x1, double y1) {
         HistoryHandler redo = () -> {
             SettingsSingleton.setHoveredShape(shape);
             SettingsSingleton.setCurrentMode(ModeType.SELECT);
-            SelectUtilities.selectHoveredShape(controller, x, y, false);
+            SelectUtilities.selectHoveredShape(controller, x1, y1, false);
         };
         HistoryHandler undo = () -> {
             SettingsSingleton.setHoveredShape(null);
             SettingsSingleton.setCurrentMode(ModeType.SELECT);
             SelectUtilities.unselectHoveredShape(controller);
-            shape.setCoordinates(x, y);
+            SelectUtilities.moveSelectedArea(controller, x1, y1);
         };
         addEvent(redo, undo);
     }
 
-    public void finalizeSelection(Shape shape, double x1, double y1, CustomCanvas canvas) {
+    public void finalizeSelection(Shape shape, double x1, double y1, double x2, double y2, CustomCanvas canvas) {
         HistoryHandler redo = () -> {
             SettingsSingleton.setCurrentMode(ModeType.SELECT);
             SettingsSingleton.setSelectedShape(shape);
@@ -89,6 +89,7 @@ public class HistoryManager {
             SettingsSingleton.setHoveredShape(shape);
             SettingsSingleton.setCurrentMode(ModeType.SELECT);
             SelectUtilities.selectHoveredShape(controller, x1, y1, false);
+            SelectUtilities.moveSelectedArea(controller, x2, y2);
         };
         addEvent(redo, undo);
     }
