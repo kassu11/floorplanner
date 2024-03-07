@@ -221,10 +221,9 @@ public class GUI extends Application {
         stage.setScene(view);
         stage.show();
 
-        controller.getHistoryManager().addEvent(() -> System.out.println("value"), () -> System.out.println("value2"));
-
         view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, gc, controller)::handle);
     }
+
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }

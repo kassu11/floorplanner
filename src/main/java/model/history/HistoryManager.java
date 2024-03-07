@@ -2,6 +2,10 @@ package model.history;
 
 import controller.Controller;
 import model.Shape;
+import view.GUIElements.CustomCanvas;
+import view.ModeType;
+import view.SettingsSingleton;
+import view.events.SelectUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +53,7 @@ public class HistoryManager {
         List<HistoryEvent> createEvents = new ArrayList<>();
         assignShape(shape);
         shape.getPoints().forEach(point -> {
-            if(!shapeReferences.containsKey(point.getId())) {
+            if (!shapeReferences.containsKey(point.getId())) {
                 assignShape(point);
             }
         });
@@ -59,9 +63,33 @@ public class HistoryManager {
         };
     }
 
-    public void moveShape(Shape shape, double x1, double y1, double x2, double y2) {
-        HistoryHandler redo = () -> shape.setCoordinates(x1, y1);
-        HistoryHandler undo = () -> shape.setCoordinates(x2, y2);
+    public void selectShape(Shape shape, double x, double y) {
+        HistoryHandler redo = () -> {
+            SettingsSingleton.setHoveredShape(shape);
+            SettingsSingleton.setCurrentMode(ModeType.SELECT);
+            SelectUtilities.selectHoveredShape(controller, x, y, false);
+        };
+        HistoryHandler undo = () -> {
+            SettingsSingleton.setHoveredShape(null);
+            SettingsSingleton.setCurrentMode(ModeType.SELECT);
+            SelectUtilities.unselectHoveredShape(controller);
+            shape.setCoordinates(x, y);
+        };
+        addEvent(redo, undo);
+    }
+
+    public void finalizeSelection(Shape shape, double x1, double y1, CustomCanvas canvas) {
+        HistoryHandler redo = () -> {
+            SettingsSingleton.setCurrentMode(ModeType.SELECT);
+            SettingsSingleton.setSelectedShape(shape);
+            SettingsSingleton.setHoveredShape(null);
+            SelectUtilities.finalizeSelectedShapes(controller, canvas, x1, y1, false);
+        };
+        HistoryHandler undo = () -> {
+            SettingsSingleton.setHoveredShape(shape);
+            SettingsSingleton.setCurrentMode(ModeType.SELECT);
+            SelectUtilities.selectHoveredShape(controller, x1, y1, false);
+        };
         addEvent(redo, undo);
     }
 
@@ -79,4 +107,3 @@ public class HistoryManager {
         addEvent(redo, undo);
     }
 }
-

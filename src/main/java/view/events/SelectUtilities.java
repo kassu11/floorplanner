@@ -11,6 +11,10 @@ public class SelectUtilities {
 	private static double selectedX, selectedY, startX, startY;
 
 	public static void selectHoveredShape(Controller controller, double x, double y) {
+		selectHoveredShape(controller, x, y, true);
+	}
+
+	public static void selectHoveredShape(Controller controller, double x, double y, boolean history) {
 		Shape selectedShape = SettingsSingleton.getHoveredShape();
 		SettingsSingleton.setSelectedShape(selectedShape);
 		startX = x;
@@ -18,10 +22,25 @@ public class SelectUtilities {
 		selectedX = x;
 		selectedY = y;
 
+		if (history) controller.getHistoryManager().selectShape(selectedShape, x, y);
+
 		if (selectedShape.getType() == ShapeType.LINE) {
 			controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
-			selectedShape.getPoints().forEach(point -> transferPoints(controller, point));
-		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape);
+			selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.PREVIEW));
+		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape, Controller.SingletonType.PREVIEW);
+	}
+
+	public static void unselectHoveredShape(Controller controller) {
+		Shape selectedShape = SettingsSingleton.getSelectedShape();
+		if (selectedShape != null) {
+			if (selectedShape.getType() == ShapeType.POINT)
+				transferPoints(controller, selectedShape, Controller.SingletonType.FINAL);
+			else if (selectedShape.getType() == ShapeType.LINE) {
+				controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.FINAL);
+				selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.FINAL));
+			}
+			SettingsSingleton.setSelectedShape(null);
+		}
 	}
 
 	public static void moveSelectedArea(Controller controller, double x, double y) {
@@ -38,6 +57,9 @@ public class SelectUtilities {
 	}
 
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y) {
+		finalizeSelectedShapes(controller, canvas, x, y, true);
+	}
+	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y, boolean history) {
 		Shape selectedShape = SettingsSingleton.getSelectedShape();
 		Shape hoveredShape = SettingsSingleton.getHoveredShape();
 
@@ -61,7 +83,7 @@ public class SelectUtilities {
 		SettingsSingleton.setSelectedShape(null);
 		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-		controller.getHistoryManager().moveShape(selectedShape, x, y, startX, startY);
+		if(history) controller.getHistoryManager().finalizeSelection(selectedShape, x, y, canvas);
 	}
 
 	public static void rotateSelectedShape(double x, double y) {
@@ -103,14 +125,14 @@ public class SelectUtilities {
 
 	}
 
-	private static void transferPoints(Controller controller, Shape point) {
-		if (canTransferShape(controller, point)) controller.transferSingleShapeTo(point, Controller.SingletonType.PREVIEW);
+	private static void transferPoints(Controller controller, Shape point, Controller.SingletonType type) {
+		if (canTransferShape(controller, point, type)) controller.transferSingleShapeTo(point, type);
 		for (Shape childShape : point.getChildren()) {
-			if (canTransferShape(controller, childShape)) controller.transferSingleShapeTo(childShape, Controller.SingletonType.PREVIEW);
+			if (canTransferShape(controller, childShape, type)) controller.transferSingleShapeTo(childShape, type);
 		}
 	}
 
-	private static boolean canTransferShape(Controller controller, Shape shape) {
-		return !controller.getShapeContainer(Controller.SingletonType.PREVIEW).getShapes().contains(shape);
+	private static boolean canTransferShape(Controller controller, Shape shape, Controller.SingletonType type) {
+		return !controller.getShapeContainer(type).getShapes().contains(shape);
 	}
 }
