@@ -162,6 +162,7 @@ public class Controller {
         finalShapes.clearShapes();
         previewShapes.clearShapes();
         gui.getCanvasContainer().clear();
+        historyManager.reset();
     }
 
     public ShapeContainer getShapeContainer(SingletonType type) {

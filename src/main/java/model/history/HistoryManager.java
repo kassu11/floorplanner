@@ -30,6 +30,11 @@ public class HistoryManager {
         index++;
     }
 
+    public void reset() {
+        events.clear();
+        index = 0;
+    }
+
     public void undo() {
         if (index > 0) {
             index--;
