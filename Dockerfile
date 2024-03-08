@@ -8,7 +8,7 @@ WORKDIR /app
 COPY pom.xml /app/
 
 # Copy the entire project to the container
-COPY . /app/
+COPY ../../.. /app/
 
 # Package your application
 RUN mvn package

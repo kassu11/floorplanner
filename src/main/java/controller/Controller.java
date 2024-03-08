@@ -20,10 +20,6 @@ public class Controller {
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
 
-    public static void main(String[] args) {
-        GUI.launch(GUI.class);
-    }
-
 
     public enum SingletonType {
         FINAL, PREVIEW
