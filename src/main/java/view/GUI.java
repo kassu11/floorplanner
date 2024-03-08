@@ -204,7 +204,13 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
-        drawToolbar.getButtons().get("Reset").setOnAction(event -> controller.removeAllShapes());
+        drawToolbar.getButtons().get("Reset").setOnAction(event ->
+                {
+                    controller.removeAllShapes();
+                    gc.getGrid().drawGrid();
+                }
+        );
+
         drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
         System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
         OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
