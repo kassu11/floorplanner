@@ -3,9 +3,10 @@ package model;
 import view.ShapeType;
 import view.GUIElements.CustomCanvas;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Shape {
+public interface Shape extends Serializable {
     void addChild(Shape shape);
 
     List<Shape> getChildren();

@@ -8,12 +8,22 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.FileManager;
 import view.SettingsSingleton;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.File;
+
+import static javafx.geometry.Pos.CENTER;
 
 public class OptionsToolbar extends CustomToolbar {
 
     private final Controller controller;
     private CustomCanvas gc;
+
+    private FileManager fileManager = FileManager.getInstance();
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
@@ -48,6 +58,53 @@ public class OptionsToolbar extends CustomToolbar {
 
     }
 
+    public void showFile() {
+        Stage fileWindow = new Stage();
+
+        fileWindow.setTitle("File");
+        Button exportButton = new Button("Save Floorplan");
+        Button importButton = new Button("Load Floorplan");
+
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Filter all ser files", "ser");
+        fileChooser.setDialogTitle("File Explorer");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setCurrentDirectory(new File("./src/main/resources/"));
+
+        exportButton.setOnAction(e -> {
+            int response = fileChooser.showSaveDialog(null);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                fileManager.setCurrentFile(selectedFile);
+                fileManager.exportFloorPlan();
+            }
+            fileWindow.close();
+        });
+
+        importButton.setOnAction(e -> {
+            int response = fileChooser.showOpenDialog(null);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                fileManager.setCurrentFile(selectedFile);
+                fileManager.importFloorPlan();
+            }
+            fileWindow.close();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+        });
+
+        Insets defaultInsets = new Insets(10, 10, 10, 10);
+
+        VBox fileLayout = new VBox(exportButton, importButton);
+        fileLayout.setPadding(defaultInsets);
+        fileLayout.setSpacing(10);
+        fileLayout.setAlignment(CENTER);
+
+        Scene fileScene = new Scene(fileLayout, 200, 100);
+
+        fileWindow.setScene(fileScene);
+        fileWindow.show();
+    }
+
     public void showSettings() {
         Stage settingsWindow = new Stage();
 
@@ -73,11 +130,11 @@ public class OptionsToolbar extends CustomToolbar {
         HBox languageSettingsLayout = new HBox(new Label("Language"), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
-        VBox shapeSettingsLayout = new VBox(shapeLabel ,showLengths, showAreas, saveButton);
+        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 
-        VBox otherSettingsLayout = new VBox(otherSettingsLabel ,languageSettingsLayout);
+        VBox otherSettingsLayout = new VBox(otherSettingsLabel, languageSettingsLayout);
         otherSettingsLayout.setPadding(defaultInsets);
         otherSettingsLayout.setSpacing(10);
 
