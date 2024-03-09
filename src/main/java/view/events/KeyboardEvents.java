@@ -15,11 +15,6 @@ public class KeyboardEvents {
 
     public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         return (KeyEvent event) -> {
-            if (event.isShiftDown()) {
-                SettingsSingleton.setCurrentMode(ModeType.SELECT);
-            } else {
-                SettingsSingleton.setCurrentMode(ModeType.DRAW);
-            }
             switch (event.getCode()) {
                 case DIGIT1 -> SettingsSingleton.setCurrentShape(ShapeType.LINE);
                 case DIGIT2 -> SettingsSingleton.setCurrentShape(ShapeType.RECTANGLE);

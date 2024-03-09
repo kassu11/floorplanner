@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
-import view.SettingsSingleton;
 
 public class DrawingCanvas extends Canvas implements CustomCanvas {
     private double width, height;
@@ -25,7 +24,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc = getGraphicsContext2D();
         grid = new CanvasGrid(this);
         grid.drawGrid();
-
 
     }
 

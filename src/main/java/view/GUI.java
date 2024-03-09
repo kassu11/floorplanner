@@ -112,7 +112,6 @@ public class GUI extends Application {
             previewGc.clear();
             SettingsSingleton.setHoveredPoint(null);
             double distanceCutOff = controller.getCanvasMath().relativeDistance(15);
-            ;
             double lowestDistance = distanceCutOff;
 
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
@@ -155,11 +154,13 @@ public class GUI extends Application {
                 createdShape.drawLength(previewGc);
             } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
+                else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
 
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             if (SettingsSingleton.getCurrentMode() == ModeType.ROTATE) {
-                SelectUtilities.rotateSelectedShape(mouseX, mouseY);
+                if (!event.isShiftDown()) SelectUtilities.rotateSelectedShape(controller, mouseX, mouseY);
+                else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
             previewGc.stroke();
@@ -204,11 +205,10 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
-        drawToolbar.getButtons().get("Reset").setOnAction(event ->
-                {
-                    controller.removeAllShapes();
-                    gc.getGrid().drawGrid();
-                }
+        drawToolbar.getButtons().get("Reset").setOnAction(event -> {
+                controller.removeAllShapes();
+                gc.getGrid().drawGrid();
+            }
         );
 
         drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
