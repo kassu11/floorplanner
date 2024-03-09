@@ -1,10 +1,12 @@
 package model.history;
 
 import controller.Controller;
+import model.Point;
 import model.Shape;
 import view.GUIElements.CustomCanvas;
 import view.ModeType;
 import view.SettingsSingleton;
+import view.events.DrawUtilities;
 import view.events.SelectUtilities;
 
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class HistoryManager {
 
     private void assignShape(Shape shape) {
         shape.assignId();
-        shapeReferences.put(shape.getId(), shape);
+        this.shapeReferences.put(shape.getId(), shape);
     }
 
     public void createShape(Shape shape) {
@@ -66,6 +68,23 @@ public class HistoryManager {
         HistoryHandler redo = () -> {
             controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
         };
+    }
+
+    public void addFirstPoint(Point point) {
+        boolean isNewPoint = !shapeReferences.containsKey(point.getId());
+        this.assignShape(point);
+        HistoryHandler redo = () -> {
+            if(isNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
+            SettingsSingleton.setLastPoint(point);
+            SettingsSingleton.setCurrentMode(ModeType.DRAW);
+        };
+
+        HistoryHandler undo = () -> {
+            if (isNewPoint) controller.removeShape(point, Controller.SingletonType.FINAL);
+            SettingsSingleton.setLastPoint(null);
+        };
+
+        addEvent(redo, undo);
     }
 
     public void selectShape(Shape shape, double x1, double y1) {

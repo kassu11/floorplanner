@@ -37,6 +37,7 @@ public class KeyboardEvents {
             historyEvent.handle();
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            if (SettingsSingleton.getLastPoint() != null) DrawUtilities.renderDrawingPreview(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY(), previewGc);
         }
     }
 }

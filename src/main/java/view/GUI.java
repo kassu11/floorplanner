@@ -107,6 +107,7 @@ public class GUI extends Application {
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             Shape selectedShape = SettingsSingleton.getSelectedShape();
+            SettingsSingleton.setMousePosition(event.getX(), event.getY());
             Shape hoveredShape = null;
             SettingsSingleton.setHoveredShape(null);
             previewGc.clear();
@@ -143,16 +144,8 @@ public class GUI extends Application {
 
             previewGc.beginPath();
 
-            if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) {
-                if (SettingsSingleton.getLastPoint() == null) return;
-                Shape lastpoint = SettingsSingleton.getLastPoint();
-                Point point = controller.createAbsolutePoint(mouseX, mouseY);
-                if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT)
-                    point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
-                Shape createdShape = controller.createShape(point, lastpoint.getX(), lastpoint.getY(), SettingsSingleton.getCurrentShape(), null);
-                createdShape.draw(previewGc);
-                createdShape.drawLength(previewGc);
-            } else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
+            if (SettingsSingleton.getCurrentMode() == ModeType.DRAW) DrawUtilities.renderDrawingPreview(controller, mouseX, mouseY, previewGc);
+            else if (SettingsSingleton.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
 
