@@ -13,9 +13,10 @@ import view.events.SelectUtilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HistoryManager {
-    private HashMap<Integer, Shape> shapeReferences = new HashMap<>();
+    private Map<Integer, Shape> shapeReferences = new HashMap<>();
     private List<HistoryEvent> events = new ArrayList<>();
     private int index = 0;
     private Controller controller;
@@ -52,48 +53,72 @@ public class HistoryManager {
         }
     }
 
-    private void assignShape(Shape shape) {
+    private boolean assignShape(Shape shape) {
+        if (this.shapeReferences.containsKey(shape.getId())) return false;
         shape.assignId();
         this.shapeReferences.put(shape.getId(), shape);
+        return true;
     }
 
     public void addShape(Shape shape) {
         Point[] points = shape.getPoints().toArray(new Point[0]);
+        Shape[] shapes = shape.getChildren().toArray(new Shape[0]);
         Boolean[] isNewPoint = new Boolean[points.length];
+        Map<Point, List<Shape>> pointToShape = new HashMap<>();
         Point lastPoint = SettingsSingleton.getLastPoint();
-        for (int i = 0; i < points.length; i++) {
-            isNewPoint[i] = !shapeReferences.containsKey(points[i].getId());
-            assignShape(points[i]);
-        }
+
+        for (int i = 0; i < points.length; i++) isNewPoint[i] = this.assignShape(points[i]);
+        for (Shape value : shapes) this.assignShape(value);
 
         HistoryHandler redo = () -> {
             controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
             SettingsSingleton.setLastPoint(lastPoint);
             for (int i = 0; i < points.length; i++) {
                 if(isNewPoint[i]) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
-                points[i].addChild(shape);
+                else if(pointToShape.containsKey(points[i])) {
+                    for(Shape childShape : pointToShape.get(points[i])) points[i].addChild(childShape);
+                    pointToShape.remove(points[i]);
+                }
+                if(shape.getType() != ShapeType.LINE) points[i].addChild(shape);
                 shape.getPoints().add(points[i]);
+            }
+            for (Shape value : shapes) {
+                controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(value);
+                shape.getChildren().add(value);
             }
         };
 
         HistoryHandler undo = () -> {
             controller.removeShape(shape, Controller.SingletonType.FINAL);
             shape.getPoints().clear();
+            shape.getChildren().clear();
             for (int i = 0; i < points.length; i++) {
                 if(isNewPoint[i]) controller.removeShape(points[i], Controller.SingletonType.FINAL);
+                else {
+                    List<Shape> containsShapes = new ArrayList<>();
+                    for(Shape childShape : shapes) {
+                        if (!points[i].getChildren().contains(childShape)) continue;
+                        points[i].removeChild(childShape);
+                        containsShapes.add(childShape);
+                    }
+                    if(!containsShapes.isEmpty()) pointToShape.put(points[i], containsShapes);
+                }
                 points[i].removeChild(shape);
-                this.undo(); // Render the line draw mode
-                this.redo();
             }
+
+            for (Shape value : shapes) controller.removeShape(value, Controller.SingletonType.FINAL);
+
+            this.undo(); // Render the line draw mode
+            this.redo();
         };
 
         addEvent(redo, undo);
     }
 
     public void addFirstPoint(Point point) {
-        boolean isNewPoint = !shapeReferences.containsKey(point.getId());
+        boolean isNewPoint = this.assignShape(point);
         ShapeType mode = SettingsSingleton.getCurrentShape();
-        this.assignShape(point);
+
         HistoryHandler redo = () -> {
             if(isNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
             SettingsSingleton.setLastPoint(point);
