@@ -78,7 +78,10 @@ public class HistoryManager {
             SettingsSingleton.setHoveredShape(null);
             SettingsSingleton.setCurrentMode(ModeType.SELECT);
             SelectUtilities.unselectHoveredShape(controller);
-            SelectUtilities.moveSelectedArea(controller, x1, y1);
+            System.out.println("Unselecting shape");
+            System.out.println("x1: " + x1 + " y1: " + y1);
+//            SelectUtilities.moveSelectedArea(controller, x1, y1);
+            shape.setCoordinates(x1, y1);
         };
         addEvent(redo, undo);
     }

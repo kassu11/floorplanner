@@ -53,4 +53,11 @@ public interface Shape extends Serializable {
     public void assignId();
     public void assignId(int id);
     public int getId();
+    public double getSelectedX();
+
+    public void setSelectedCoordinates(double x, double y);
+
+    public void updateSelectedCoordinates();
+
+    public double getSelectedY();
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class AbstractShape implements Shape {
     private static int idCounter = 1;
-    private double x, y, width, height, centroidX, centroidY;
+    private double x, y, width, height, centroidX, centroidY, selectedX, selectedY;
     private List<Point> points = new ArrayList<>();
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
@@ -58,6 +58,24 @@ public abstract class AbstractShape implements Shape {
     protected void updateDimensions() {
         points.stream().reduce(this::calculateDimensions);
         calculateCentroid();
+    }
+
+    public double getSelectedX() {
+        return selectedX;
+    }
+
+    public void setSelectedCoordinates(double x, double y) {
+        this.selectedX = x;
+        this.selectedY = y;
+    }
+
+    public void updateSelectedCoordinates() {
+        this.selectedX = this.x;
+        this.selectedY = this.y;
+    }
+
+    public double getSelectedY() {
+        return selectedY;
     }
 
     public void assignId() {

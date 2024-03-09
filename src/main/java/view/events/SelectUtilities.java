@@ -7,6 +7,8 @@ import view.GUIElements.CustomCanvas;
 import view.SettingsSingleton;
 import view.ShapeType;
 
+import java.util.function.Consumer;
+
 public class SelectUtilities {
 	private static double selectedX, selectedY, startX, startY;
 
@@ -23,11 +25,15 @@ public class SelectUtilities {
 		selectedY = y;
 
 		if (history) controller.getHistoryManager().selectShape(selectedShape, x, y);
+		Consumer<Shape> transferPoint = point -> {
+			transferPoints(controller, point, Controller.SingletonType.PREVIEW);
+			point.setSelectedCoordinates(point.getX() - x, point.getY() - y);
+		};
 
 		if (selectedShape.getType() == ShapeType.LINE) {
 			controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
-			selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.PREVIEW));
-		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape, Controller.SingletonType.PREVIEW);
+			selectedShape.getPoints().forEach(transferPoint);
+		} else if (selectedShape.getType() == ShapeType.POINT) transferPoint.accept(selectedShape);
 	}
 
 	public static void unselectHoveredShape(Controller controller) {
@@ -44,16 +50,10 @@ public class SelectUtilities {
 	}
 
 	public static void moveSelectedArea(Controller controller, double x, double y) {
-		double deltaX = x - selectedX;
-		double deltaY = y - selectedY;
-
 		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-			if (shape.getType() == ShapeType.POINT) {
-				shape.setCoordinates(shape.getX() + deltaX, shape.getY() + deltaY);
-			}
+			if (shape.getType() != ShapeType.POINT) continue;
+			shape.setCoordinates(shape.getSelectedX() + x, shape.getSelectedY() + y);
 		}
-		selectedX = x;
-		selectedY = y;
 	}
 
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y) {
