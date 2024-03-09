@@ -52,8 +52,7 @@ public class GUI extends Application {
 
             switch (SettingsSingleton.getCurrentMode()) {
                 case DRAW -> {
-                    if (SettingsSingleton.getLastPoint() == null)
-                        DrawUtilities.addShapesFirstPoint(controller, mouseX, mouseY);
+                    if (SettingsSingleton.getLastPoint() == null) DrawUtilities.addShapesFirstPoint(controller, mouseX, mouseY);
                     else {
                         Shape newShape = DrawUtilities.addShapesLastPoint(controller, mouseX, mouseY, SettingsSingleton.getCurrentShape());
 

@@ -6,6 +6,7 @@ import model.Shape;
 import view.GUIElements.CustomCanvas;
 import view.ModeType;
 import view.SettingsSingleton;
+import view.ShapeType;
 import view.events.DrawUtilities;
 import view.events.SelectUtilities;
 
@@ -56,32 +57,54 @@ public class HistoryManager {
         this.shapeReferences.put(shape.getId(), shape);
     }
 
-    public void createShape(Shape shape) {
-        List<HistoryEvent> createEvents = new ArrayList<>();
-        assignShape(shape);
-        shape.getPoints().forEach(point -> {
-            if (!shapeReferences.containsKey(point.getId())) {
-                assignShape(point);
-            }
-        });
+    public void addShape(Shape shape) {
+        Point[] points = shape.getPoints().toArray(new Point[0]);
+        Boolean[] isNewPoint = new Boolean[points.length];
+        Point lastPoint = SettingsSingleton.getLastPoint();
+        for (int i = 0; i < points.length; i++) {
+            isNewPoint[i] = !shapeReferences.containsKey(points[i].getId());
+            assignShape(points[i]);
+        }
 
         HistoryHandler redo = () -> {
             controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
+            SettingsSingleton.setLastPoint(lastPoint);
+            for (int i = 0; i < points.length; i++) {
+                if(isNewPoint[i]) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
+                points[i].addChild(shape);
+                shape.getPoints().add(points[i]);
+            }
         };
+
+        HistoryHandler undo = () -> {
+            controller.removeShape(shape, Controller.SingletonType.FINAL);
+            shape.getPoints().clear();
+            for (int i = 0; i < points.length; i++) {
+                if(isNewPoint[i]) controller.removeShape(points[i], Controller.SingletonType.FINAL);
+                points[i].removeChild(shape);
+                this.undo(); // Render the line draw mode
+                this.redo();
+            }
+        };
+
+        addEvent(redo, undo);
     }
 
     public void addFirstPoint(Point point) {
         boolean isNewPoint = !shapeReferences.containsKey(point.getId());
+        ShapeType mode = SettingsSingleton.getCurrentShape();
         this.assignShape(point);
         HistoryHandler redo = () -> {
             if(isNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
             SettingsSingleton.setLastPoint(point);
             SettingsSingleton.setCurrentMode(ModeType.DRAW);
+            SettingsSingleton.setCurrentShape(mode);
         };
 
         HistoryHandler undo = () -> {
             if (isNewPoint) controller.removeShape(point, Controller.SingletonType.FINAL);
             SettingsSingleton.setLastPoint(null);
+            SettingsSingleton.setCurrentShape(mode);
         };
 
         addEvent(redo, undo);

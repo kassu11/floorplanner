@@ -1,11 +1,9 @@
 package view.events;
 
-import com.sun.nio.sctp.SctpSocketOption;
 import controller.Controller;
 import model.Point;
 import model.Shape;
 import view.GUIElements.CustomCanvas;
-import view.ModeType;
 import view.SettingsSingleton;
 import view.ShapeType;
 
@@ -27,6 +25,8 @@ public class DrawUtilities {
         Shape shape = controller.createShape(endPoint, startPoint, shapeType, Controller.SingletonType.FINAL);
         SettingsSingleton.setLastPoint(shapeType == ShapeType.MULTILINE ? endPoint : null);
 
+        controller.getHistoryManager().addShape(shape);
+
         return shape;
     }
 
@@ -34,7 +34,6 @@ public class DrawUtilities {
         Shape lastPoint = SettingsSingleton.getLastPoint();
         Shape hoveredShape = SettingsSingleton.getHoveredShape();
         if (lastPoint == null) return;
-        System.out.println("Rendering drawing preview: " + x + " " + y);
         Point point = controller.createAbsolutePoint(x, y);
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
         Shape createdShape = controller.createShape(point, lastPoint.getX(), lastPoint.getY(), SettingsSingleton.getCurrentShape(), null);
