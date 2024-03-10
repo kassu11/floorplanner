@@ -7,6 +7,7 @@ import view.GUIElements.CustomCanvas;
 import view.SettingsSingleton;
 import view.ShapeType;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SelectUtilities {
@@ -23,8 +24,10 @@ public class SelectUtilities {
 		startY = y;
 		selectedX = x;
 		selectedY = y;
+		Shape[] oldSelection = controller.getShapes(Controller.SingletonType.PREVIEW).toArray(new Shape[0]);
 
-		if (history) controller.getHistoryManager().selectShape(selectedShape, x, y);
+
+
 		Consumer<Shape> transferPoint = point -> {
 			transferPoints(controller, point, Controller.SingletonType.PREVIEW);
 			point.setSelectedCoordinates(point.getX() - x, point.getY() - y);
@@ -34,6 +37,8 @@ public class SelectUtilities {
 			controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
 			selectedShape.getPoints().forEach(transferPoint);
 		} else if (selectedShape.getType() == ShapeType.POINT) transferPoint.accept(selectedShape);
+
+		if (history) controller.getHistoryManager().selectShape(oldSelection, selectedShape);
 	}
 
 	public static void updateSelectionCoordinates(Controller controller, double x, double y) {
@@ -42,17 +47,12 @@ public class SelectUtilities {
 		}
 	}
 
-	public static void unselectHoveredShape(Controller controller) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
-		if (selectedShape != null) {
-			if (selectedShape.getType() == ShapeType.POINT)
-				transferPoints(controller, selectedShape, Controller.SingletonType.FINAL);
-			else if (selectedShape.getType() == ShapeType.LINE) {
-				controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.FINAL);
-				selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.FINAL));
-			}
-			SettingsSingleton.setSelectedShape(null);
+	public static void unselectMissingShape(Controller controller, Shape[] points) {
+		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+		for (Shape point : points) {
+			if (point.getType() == ShapeType.POINT) transferPoints(controller, point, Controller.SingletonType.PREVIEW);
 		}
+		if (controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty()) SettingsSingleton.setSelectedShape(null);
 	}
 
 	public static void moveSelectedArea(Controller controller, double x, double y) {
