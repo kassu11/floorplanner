@@ -13,6 +13,7 @@ public class Rectangle extends AbstractShape {
         addChild(new Line(pointD, pointB));
         addChild(new Line(pointB, pointC));
         addChild(new Line(pointC, pointA));
+        this.getPoints().forEach(point -> point.setParentShape(this));
     }
 
     @Override

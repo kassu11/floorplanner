@@ -4,7 +4,6 @@ import controller.Controller;
 import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
 import view.GUIElements.CustomCanvas;
-import view.ModeType;
 import view.SettingsSingleton;
 import view.ShapeType;
 
@@ -15,11 +14,6 @@ public class KeyboardEvents {
 
     public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         return (KeyEvent event) -> {
-            if (event.isShiftDown()) {
-                SettingsSingleton.setCurrentMode(ModeType.SELECT);
-            } else {
-                SettingsSingleton.setCurrentMode(ModeType.DRAW);
-            }
             switch (event.getCode()) {
                 case DIGIT1 -> SettingsSingleton.setCurrentShape(ShapeType.LINE);
                 case DIGIT2 -> SettingsSingleton.setCurrentShape(ShapeType.RECTANGLE);
@@ -42,6 +36,7 @@ public class KeyboardEvents {
             historyEvent.handle();
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            if (SettingsSingleton.getLastPoint() != null) DrawUtilities.renderDrawingPreview(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY(), previewGc);
         }
     }
 }

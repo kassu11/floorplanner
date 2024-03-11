@@ -8,7 +8,7 @@ public class SettingsSingleton {
     private static ModeType currentMode = ModeType.DRAW;
     private static Point lastPoint, hoveredPoint;
     private static Shape selectedShape, hoveredShape;
-    private static double middleX, middleY, selectedX, selectedY;
+    private static double middleX, middleY, selectedX, selectedY, mouseX, mouseY;
     private static boolean drawLengths = true;
     private static boolean isDrawGrid = true;
     private static double gridHeight = 750;
@@ -149,5 +149,18 @@ public class SettingsSingleton {
 
     public static void setGridSize(int gridSize) {
         SettingsSingleton.gridSize = gridSize;
+    }
+
+    public static double getMouseX() {
+        return mouseX;
+    }
+
+    public static double getMouseY() {
+        return mouseY;
+    }
+
+    public static void setMousePosition(double mouseX, double mouseY) {
+        SettingsSingleton.mouseX = mouseX;
+        SettingsSingleton.mouseY = mouseY;
     }
 }

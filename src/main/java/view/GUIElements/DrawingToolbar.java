@@ -17,8 +17,8 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(new Button("Select"));
         addButton(new Button("Mode"));
         addButton(new Button("Delete"));
-        addButton(new Button("Reset"));
         addButton(new Button("Rotate"));
+        addButton(new Button("Reset"));
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
