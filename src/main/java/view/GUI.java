@@ -60,10 +60,10 @@ public class GUI extends Application {
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         newShape.calculateShapeArea();
 
-                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)) {
-                            controller.addCustomShape(newShape);
-                            controller.checkIfConnected(newShape);
-                        }
+//                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)) {
+//                            controller.addCustomShape(newShape);
+//                            controller.checkIfConnected(newShape);
+//                        }
                     }
                 }
                 case SELECT -> {
