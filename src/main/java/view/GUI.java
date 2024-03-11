@@ -2,7 +2,12 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -38,6 +43,10 @@ public class GUI extends Application {
 
         gc.setLineWidth(5);
         previewGc.setLineWidth(5);
+
+        Ruler xRuler = new Ruler(false);
+        xRuler.setPadding(new Insets(0, 0, 0, 50));
+        Ruler yRuler = new Ruler(true);
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
@@ -196,6 +205,8 @@ public class GUI extends Application {
 
             canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
+            xRuler.updateRuler(zoomLevel);
+            yRuler.updateRuler(zoomLevel);
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
@@ -219,7 +230,14 @@ public class GUI extends Application {
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
-        root.setCenter(canvasContainer);
+
+        BorderPane canvasBorder = new BorderPane();
+
+        canvasBorder.setCenter(canvasContainer);
+        canvasBorder.setTop(xRuler);
+        canvasBorder.setLeft(yRuler);
+
+        root.setCenter(canvasBorder);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
         stage.setTitle("Floor Plan Creator");
