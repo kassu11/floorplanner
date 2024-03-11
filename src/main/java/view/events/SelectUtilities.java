@@ -91,31 +91,35 @@ public class SelectUtilities {
 		if (selectedShape != null && selectedShape.getType() != ShapeType.POINT) {
 			double centroidX = selectedShape.getCentroidX();
 			double centroidY = selectedShape.getCentroidY();
-			double vectorX1 = selectedX - centroidX;
-			double vectorY1 = selectedY - centroidY;
-			double vectorX2 = x - centroidX;
-			double vectorY2 = y - centroidY;
-			double dotProduct = vectorX1 * vectorX2 + vectorY1 * vectorY2;
-			double determinant = vectorX1 * vectorY2 - vectorY1 * vectorX2;
-			double angle = Math.atan2(determinant, dotProduct);
+			double angle = Math.atan2(y - centroidY, x - centroidX) - Math.atan2(selectedY - centroidY, selectedX - centroidX);
+
+			// Check for the wrap around
+			angle = angle < -Math.PI ? angle + 2 * Math.PI : angle > Math.PI ? angle - 2 * Math.PI : angle;
+
+			// Temporary snapping on/off
+			boolean snapping = true;
+			double snappingAngle = Math.PI / 12;
+			angle = snapping ? angle >= snappingAngle || angle <= -snappingAngle ? angle >= 0 ? snappingAngle : -snappingAngle : 0 : angle;
 
 			for (Point point : selectedShape.getPoints()) {
-				double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
-				if (centroidX == point.getX()) {
-					if (point.getY() - centroidY < 0)
-						point.setCoordinates(centroidX, centroidY - radians);
-					else
-						point.setCoordinates(centroidX, centroidY + radians);
-				} else {
-					double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
-					double newAngle = (pointAngle + angle) % (2 * Math.PI);
-					point.setCoordinates(centroidX + radians * Math.cos(newAngle), centroidY + radians * Math.sin(newAngle));
-				}
+				double radius = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
+				double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
+				pointAngle = snapping ? normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle;
+				double newAngle = (pointAngle + angle);
+				point.setCoordinates(centroidX + radius * Math.cos(newAngle), centroidY + radius * Math.sin(newAngle));
 			}
 
-			selectedX = x;
-			selectedY = y;
+			if (!snapping || angle != 0) {
+				selectedX = x;
+				selectedY = y;
+			}
 		}
+	}
+
+	public static double normalizeToSnappingAngle(double snappingAngle, double shapeAngle) {
+		if (shapeAngle < 0) shapeAngle += 2 * Math.PI;
+		double remainder = shapeAngle % snappingAngle;
+		return remainder < snappingAngle / 2 ? shapeAngle - remainder : shapeAngle + snappingAngle - remainder;
 	}
 
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
