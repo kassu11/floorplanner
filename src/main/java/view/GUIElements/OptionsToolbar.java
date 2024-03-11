@@ -75,21 +75,25 @@ public class OptionsToolbar extends CustomToolbar {
             int response = fileChooser.showSaveDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                fileManager.setCurrentFile(selectedFile);
-                fileManager.exportFloorPlan();
+                if (fileManager.checkFileFormat(selectedFile.getName())) {
+                    fileManager.setCurrentFile(selectedFile);
+                    fileManager.exportFloorPlan();
+                    fileWindow.close();
+                }
             }
-            fileWindow.close();
         });
 
         importButton.setOnAction(e -> {
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                fileManager.setCurrentFile(selectedFile);
-                fileManager.importFloorPlan();
+                if (fileManager.checkFileFormat(selectedFile.getName())) {
+                    fileManager.setCurrentFile(selectedFile);
+                    fileManager.importFloorPlan();
+                    fileWindow.close();
+                    controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                }
             }
-            fileWindow.close();
-            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
         });
 
         Insets defaultInsets = new Insets(10, 10, 10, 10);
