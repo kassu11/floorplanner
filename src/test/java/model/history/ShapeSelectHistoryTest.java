@@ -205,5 +205,7 @@ public class ShapeSelectHistoryTest {
         assertEquals(2, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 2 selected shapes");
         assertEquals(1, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 1 unselected shape");
 
+        controller.getHistoryManager().redo();
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 total shapes");
     }
 }
