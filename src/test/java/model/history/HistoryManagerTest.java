@@ -18,6 +18,8 @@ class HistoryManagerTest {
     @BeforeEach
     void clearShapes() {
         controller.getShapeContainer(Controller.SingletonType.FINAL).clearShapes();
+        controller.getShapeContainer(Controller.SingletonType.PREVIEW).clearShapes();
+        controller.getHistoryManager().reset();
     }
 
     @BeforeAll
@@ -83,6 +85,20 @@ class HistoryManagerTest {
         assertEquals(2, line.getPoints().size(), "Should have 2 points");
         assertEquals(1, pointA.getChildren().size(), "Should have 1 shape");
         assertEquals(1, pointB.getChildren().size(), "Should have 1 shape");
+    }
+
+    @Test
+    void longMultilineAndMultipleUndo() {
+        DrawUtilities.addShapesFirstPoint(controller, -10, -10);
+        DrawUtilities.addShapesLastPoint(controller, -20, -20, ShapeType.MULTILINE);
+        DrawUtilities.addShapesLastPoint(controller, -30, -30, ShapeType.MULTILINE);
+        DrawUtilities.addShapesLastPoint(controller, -40, -40, ShapeType.MULTILINE);
+
+        assertEquals(7, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 7 shapes at the beginning");
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shapes after undo");
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().redo();
+        assertEquals(7, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 7 shapes");
     }
 
     @Test

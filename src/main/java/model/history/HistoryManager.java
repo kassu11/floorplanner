@@ -131,8 +131,8 @@ public class HistoryManager {
             for(Point point : points) {
                 shape.getPoints().add(point);
                 point.addChild(shape);
-                if(point != finalNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
             }
+            if(finalNewPoint != null) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(finalNewPoint);
             controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
             SettingsSingleton.setLastPoint(lastPoint);
         };
@@ -141,12 +141,10 @@ public class HistoryManager {
         HistoryHandler undo = () -> {
             controller.removeShape(shape, Controller.SingletonType.FINAL);
             shape.getPoints().clear();
-            for(Point point : points) point.getChildren().remove(shape);
+            for(Point point : points) point.removeChild(shape);
 
-            if(finalNewPoint != null) {
-                controller.removeShape(finalNewPoint, Controller.SingletonType.FINAL);
-                finalNewPoint.removeChild(shape);
-            }
+            if(finalNewPoint != null) controller.removeShape(finalNewPoint, Controller.SingletonType.FINAL);
+
             this.undo(); // Render the line draw mode
             this.redo();
         };
