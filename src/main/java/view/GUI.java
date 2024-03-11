@@ -70,7 +70,6 @@ public class GUI extends Application {
                     if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-
                     } else if (selectedShape != null) {
                         SelectUtilities.finalizeSelectedShapes(controller, gc, mouseX, mouseY);
                         previewGc.clear();

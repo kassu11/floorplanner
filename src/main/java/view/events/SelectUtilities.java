@@ -24,9 +24,7 @@ public class SelectUtilities {
 		startY = y;
 		selectedX = x;
 		selectedY = y;
-		Shape[] oldSelection = controller.getShapes(Controller.SingletonType.PREVIEW).toArray(new Shape[0]);
-
-
+		boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
 
 		Consumer<Shape> transferPoint = point -> {
 			transferPoints(controller, point, Controller.SingletonType.PREVIEW);
@@ -38,7 +36,10 @@ public class SelectUtilities {
 			selectedShape.getPoints().forEach(transferPoint);
 		} else if (selectedShape.getType() == ShapeType.POINT) transferPoint.accept(selectedShape);
 
-		if (history) controller.getHistoryManager().selectShape(oldSelection, selectedShape);
+		if (history) {
+			if(isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+			else System.out.println("New selection");
+		}
 	}
 
 	public static void updateSelectionCoordinates(Controller controller, double x, double y) {
