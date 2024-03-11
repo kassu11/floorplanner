@@ -84,6 +84,7 @@ public class SelectUtilities {
 			}
 
 			controller.removeShape(selectedShape, Controller.SingletonType.PREVIEW);
+			if(hoveredShape.getChildren().isEmpty()) controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
 		} else {
 			moveSelectedArea(controller, x, y);
 			if (history) controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));

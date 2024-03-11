@@ -256,6 +256,8 @@ public class HistoryManager {
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
         Shape[] selectedShapes = selectedPoint.getChildren().toArray(new Shape[0]);
         Shape[] hoveredShapes = hoveredPoint.getChildren().toArray(new Shape[0]);
+        Point[] selectedShapePoints = new Point[selectedShapes.length * 2];
+        Point[] hoveredShapePoints = new Point[selectedShapes.length * 2];
         Double[] originalCoordinates = new Double[copyShapes.length * 2];
         Double[] selectionCoordinates = new Double[copyShapes.length * 2];
         for(int i = 0; i < copyShapes.length; i++) {
@@ -263,6 +265,16 @@ public class HistoryManager {
             originalCoordinates[i * 2 + 1] = copyShapes[i].getY();
             selectionCoordinates[i * 2] = copyShapes[i].getSelectedX();
             selectionCoordinates[i * 2 + 1] = copyShapes[i].getSelectedY();
+        }
+
+        for(int i = 0; i < selectedShapes.length; i++) {
+            selectedShapePoints[i * 2] = selectedShapes[i].getPoints().get(0);
+            selectedShapePoints[i * 2 + 1] = selectedShapes[i].getPoints().get(1);
+        }
+
+        for(int i = 0; i < hoveredShapes.length; i++) {
+            hoveredShapePoints[i * 2] = hoveredShapes[i].getPoints().get(0);
+            hoveredShapePoints[i * 2 + 1] = hoveredShapes[i].getPoints().get(1);
         }
 
         HistoryHandler redo = () -> {
@@ -290,17 +302,28 @@ public class HistoryManager {
             SettingsSingleton.setSelectedShape(selectedPoint);
             SettingsSingleton.setHoveredShape(null);
             selectedPoint.getChildren().clear();
+            hoveredPoint.getChildren().clear();
             controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-            System.out.println("finalize " + copyShapes.length);
+            if(!controller.getShapes(Controller.SingletonType.FINAL).contains(hoveredPoint)) controller.getShapes(Controller.SingletonType.FINAL).add(hoveredPoint);
             for(int i = 0; i < copyShapes.length; i++) {
                 copyShapes[i].setCoordinates(originalCoordinates[i * 2], originalCoordinates[i * 2 + 1]);
-                controller.transferSingleShapeTo(copyShapes[i], Controller.SingletonType.PREVIEW);
+                if (!controller.getShapes(Controller.SingletonType.FINAL).contains(copyShapes[i])) {
+                    controller.getShapes(Controller.SingletonType.PREVIEW).add(copyShapes[i]);
+                } else controller.transferSingleShapeTo(copyShapes[i], Controller.SingletonType.PREVIEW);
             }
-            for(Shape shape : selectedShapes) {
-                shape.getPoints().add(selectedPoint);
-                shape.getPoints().remove(hoveredPoint);
-                selectedPoint.getChildren().add(shape);
-                hoveredPoint.removeChild(shape);
+
+            for(int i = 0; i < selectedShapes.length; i++) {
+                selectedShapes[i].getPoints().clear();
+                selectedShapes[i].getPoints().add(selectedShapePoints[i * 2]);
+                selectedShapes[i].getPoints().add(selectedShapePoints[i * 2 + 1]);
+                selectedPoint.addChild(selectedShapes[i]);
+            }
+
+            for(int i = 0; i < hoveredShapes.length; i++) {
+                hoveredShapes[i].getPoints().clear();
+                hoveredShapes[i].getPoints().add(hoveredShapePoints[i * 2]);
+                hoveredShapes[i].getPoints().add(hoveredShapePoints[i * 2 + 1]);
+                hoveredPoint.addChild(hoveredShapes[i]);
             }
 
             this.undoAndRedo();

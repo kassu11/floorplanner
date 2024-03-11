@@ -187,4 +187,23 @@ public class ShapeSelectHistoryTest {
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
         assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
     }
+
+    @Test
+    void mergeToOwnPoint() {
+        DrawUtilities.addShapesFirstPoint(controller, -5, -5);
+        Shape line = DrawUtilities.addShapesLastPoint(controller, 0, 0, ShapeType.LINE);
+        Point pointA = line.getPoints().get(0);
+        Point pointB = line.getPoints().get(1);
+
+        SettingsSingleton.setHoveredShape(pointA);
+        SelectUtilities.selectHoveredShape(controller, 0, 0);
+        SettingsSingleton.setHoveredShape(pointB);
+        SelectUtilities.finalizeSelectedShapes(controller, null, 0, 0);
+
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 total shapes");
+        controller.getHistoryManager().undo();
+        assertEquals(2, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 2 selected shapes");
+        assertEquals(1, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 1 unselected shape");
+
+    }
 }
