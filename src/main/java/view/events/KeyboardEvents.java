@@ -4,7 +4,6 @@ import controller.Controller;
 import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
 import view.GUIElements.CustomCanvas;
-import view.ModeType;
 import view.SettingsSingleton;
 import view.ShapeType;
 

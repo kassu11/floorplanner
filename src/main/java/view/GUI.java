@@ -125,7 +125,7 @@ public class GUI extends Application {
                     lowestDistance = distance;
                     hoveredShape = shape;
                     SettingsSingleton.setHoveredShape(hoveredShape);
-                    if (shape.getClass().equals(Point.class)) SettingsSingleton.setHoveredPoint((Point) shape);
+                    if (shape.getType() == ShapeType.POINT) SettingsSingleton.setHoveredPoint((Point) shape);
                 }
             }
 

@@ -6,8 +6,6 @@ import model.Shape;
 import view.GUIElements.CustomCanvas;
 import view.SettingsSingleton;
 import view.ShapeType;
-
-import java.util.List;
 import java.util.function.Consumer;
 
 public class SelectUtilities {
@@ -37,7 +35,7 @@ public class SelectUtilities {
 		} else if (selectedShape.getType() == ShapeType.POINT) transferPoint.accept(selectedShape);
 
 		if (history) {
-			if(isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+			if (isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 			else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		}
 	}
@@ -72,6 +70,7 @@ public class SelectUtilities {
 		Shape hoveredShape = SettingsSingleton.getHoveredShape();
 
 		if (hoveredShape != null && selectedShape.getType() == ShapeType.POINT && hoveredShape.getType() == ShapeType.POINT) {
+			if (history) controller.getHistoryManager().finalizeSelectionMerge(controller.getShapes(Controller.SingletonType.PREVIEW), (Point) selectedShape, (Point) hoveredShape);
 			for (int i = 0; i < selectedShape.getChildren().size(); i++) {
 				Shape childShape = selectedShape.getChildren().get(i);
 				if (childShape.getPoints().contains(hoveredShape)) {
@@ -85,13 +84,14 @@ public class SelectUtilities {
 			}
 
 			controller.removeShape(selectedShape, Controller.SingletonType.PREVIEW);
-		} else
+		} else {
 			moveSelectedArea(controller, x, y);
+			if (history) controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+		}
 
 		SettingsSingleton.setSelectedShape(null);
-		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
+		if(canvas != null) controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-		if (history) controller.getHistoryManager().finalizeSelection(selectedShape, x, y, startX, startY, canvas);
 	}
 
 	public static void rotateSelectedShape(Controller controller, double x, double y) {
