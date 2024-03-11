@@ -19,6 +19,7 @@ public class HistoryManager {
     private List<HistoryEvent> events = new ArrayList<>();
     private int index = 0;
     private Controller controller;
+    private boolean undoRedo = false;
 
     public HistoryManager(Controller controller) {
         this.controller = controller;
@@ -50,6 +51,14 @@ public class HistoryManager {
             events.get(index).redo();
             index++;
         }
+    }
+
+    private void undoAndRedo() {
+        if(undoRedo) return;
+        undoRedo = true;
+        this.undo();
+        this.redo();
+        undoRedo = false;
     }
 
     private boolean assignShape(Shape shape) {
@@ -108,9 +117,7 @@ public class HistoryManager {
             for(Point point : points) point.removeChild(shape);
 
             if(finalNewPoint != null) controller.removeShape(finalNewPoint, Controller.SingletonType.FINAL);
-
-            this.undo(); // Render the line draw mode
-            this.redo();
+            this.undoAndRedo();// Render the line draw mode
         };
 
         addEvent(redo, undo);
@@ -164,8 +171,7 @@ public class HistoryManager {
                 points[i].setParentShape(null);
             }
 
-            this.undo(); // Render the line draw mode
-            this.redo();
+            this.undoAndRedo(); // Render the line draw mode
         };
 
         addEvent(redo, undo);
@@ -207,56 +213,43 @@ public class HistoryManager {
         addEvent(redo, undo);
     }
 
-    public void selectShape(Shape[] oldSelections, Shape shape) {
-//        Shape selectedShape = SettingsSingleton.getSelectedShape();
-//        List<Shape> newSelections = new ArrayList<>();
-//
-//        for(Shape oldShape : oldSelections) {
-//            if (controller.getShapes(Controller.SingletonType.PREVIEW).contains(oldShape)) {
-//                newSelections.add(oldShape);
-//            }
-//        }
-//
-//        Double[] selectedCoords = new Double[oldSelections.length * 2];
-//        Double[] originCoords = new Double[oldSelections.length * 2];
-//        double selectedX = shape.getSelectedX();
-//        double selectedY = shape.getSelectedY();
-//
-//        for (int i = 0; i < oldSelections.length; i++) {
-//            selectedCoords[i * 2] = oldSelections[i].getSelectedX();
-//            selectedCoords[i * 2 + 1] = oldSelections[i].getSelectedY();
-//            originCoords[i * 2] = oldSelections[i].getX();
-//            originCoords[i * 2 + 1] = oldSelections[i].getY();
-//        }
-//
-//        HistoryHandler redo = () -> {
-//            SettingsSingleton.setHoveredShape(shape);
-//            SettingsSingleton.setCurrentMode(ModeType.SELECT);
-//            for (int i = 0; i < oldSelections.length; i++) {
-//                System.out.println("Setting selected coordinates");
-//                System.out.println(selectedCoords[i * 2] + "  " + selectedCoords[i * 2 + 1]);
-//                oldSelections[i].setSelectedCoordinates(selectedCoords[i * 2], selectedCoords[i * 2 + 1]);
-//            }
-//            SelectUtilities.selectHoveredShape(controller, 0, 0, false);
-//            shape.setSelectedCoordinates(selectedX, selectedY);
-//            SelectUtilities.moveSelectedArea(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY());
-//        };
-//        HistoryHandler undo = () -> {
-//            SettingsSingleton.setHoveredShape(null);
-//            SettingsSingleton.setCurrentMode(ModeType.SELECT);
-//            SettingsSingleton.setSelectedShape(selectedShape);
-//            controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-//            for (int i = 0; i < oldSelections.length; i++) {
-//                oldSelections[i].setSelectedCoordinates(selectedCoords[i * 2], selectedCoords[i * 2 + 1]);
-//                controller.transferSingleShapeTo(oldSelections[i], Controller.SingletonType.PREVIEW);
-//            }
-//            for(Shape selection : newSelections) {
-//                SelectUtilities.selectHoveredShape(controller, 0, 0, false);
-//            }
-//            SelectUtilities.moveSelectedArea(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY());
-//            System.out.println(controller.getShapes(Controller.SingletonType.PREVIEW).size() + " " + oldSelections.length + " " + oldSelections.length);
-//        };
-//        addEvent(redo, undo);
+    public void addToSelection(List<Shape> shapes) {
+        Shape selectedShape = SettingsSingleton.getSelectedShape();
+        Shape[] copyShapes = shapes.toArray(new Shape[0]);
+        Double[] originalCoordinates = new Double[copyShapes.length * 2];
+        Double[] selectionCoordinates = new Double[copyShapes.length * 2];
+        for(int i = 0; i < copyShapes.length; i++) {
+            originalCoordinates[i * 2] = copyShapes[i].getX();
+            originalCoordinates[i * 2 + 1] = copyShapes[i].getY();
+            selectionCoordinates[i * 2] = copyShapes[i].getSelectedX();
+            selectionCoordinates[i * 2 + 1] = copyShapes[i].getSelectedY();
+        }
+
+        HistoryHandler redo = () -> {
+            SettingsSingleton.setCurrentMode(ModeType.SELECT);
+            SettingsSingleton.setLastPoint(null);
+            SettingsSingleton.setSelectedShape(selectedShape);
+            controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+            for(int i = 0; i < copyShapes.length; i++) {
+                copyShapes[i].setSelectedCoordinates(selectionCoordinates[i * 2], selectionCoordinates[i * 2 + 1]);
+                controller.transferSingleShapeTo(copyShapes[i], Controller.SingletonType.PREVIEW);
+            }
+            SelectUtilities.moveSelectedArea(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY());
+        };
+
+        HistoryHandler undo = () -> {
+            SettingsSingleton.setHoveredShape(null);
+            SettingsSingleton.setSelectedShape(null);
+            controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+
+            for(int i = 0; i < copyShapes.length; i++) {
+                copyShapes[i].setCoordinates(originalCoordinates[i * 2], originalCoordinates[i * 2 + 1]);
+            }
+            this.undoAndRedo();
+        };
+
+        addEvent(redo, undo);
+
     }
 
     public void finalizeSelection(Shape shape, double x1, double y1, double x2, double y2, CustomCanvas canvas) {

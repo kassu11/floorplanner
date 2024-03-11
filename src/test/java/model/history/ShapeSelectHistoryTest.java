@@ -42,4 +42,54 @@ public class ShapeSelectHistoryTest {
         assertEquals(3, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 3 shaped selected");
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
     }
+
+    @Test
+    void clearSelectedShapeHistoryProperly1() {
+        DrawUtilities.addShapesFirstPoint(controller, 10, 10);
+        Shape line = DrawUtilities.addShapesLastPoint(controller, 20, 20, ShapeType.MULTILINE);
+        DrawUtilities.addShapesLastPoint(controller, 10, -23, ShapeType.MULTILINE);
+        SettingsSingleton.setHoveredShape(line);
+        SelectUtilities.selectHoveredShape(controller, 5, 5);
+        assertEquals(4, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 4 shaped selected");
+
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+        assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
+
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().redo();
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+
+        assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
+
+    }
+
+    @Test
+    void clearSelectedShapeHistoryProperly2() {
+        DrawUtilities.addShapesFirstPoint(controller, 10, 10);
+        Shape line = DrawUtilities.addShapesLastPoint(controller, 20, 20, ShapeType.MULTILINE);
+        DrawUtilities.addShapesLastPoint(controller, 10, -23, ShapeType.MULTILINE);
+        Shape line2 = DrawUtilities.addShapesLastPoint(controller, 30, -33, ShapeType.MULTILINE);
+        SettingsSingleton.setHoveredShape(line);
+        SelectUtilities.selectHoveredShape(controller, 5, 5);
+        SettingsSingleton.setHoveredShape(line2);
+        SelectUtilities.selectHoveredShape(controller, 5, 5);
+        assertEquals(7, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 7 shaped selected");
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
+
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+
+        assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
+
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().redo();
+
+        assertEquals(7, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 7 shaped selected");
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
+
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+
+        assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
+
+    }
 }

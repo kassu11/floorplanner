@@ -38,7 +38,7 @@ public class SelectUtilities {
 
 		if (history) {
 			if(isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
-			else System.out.println("New selection");
+			else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		}
 	}
 

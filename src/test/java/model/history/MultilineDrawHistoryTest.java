@@ -39,5 +39,7 @@ public class MultilineDrawHistoryTest {
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shapes after undo");
         for(int i = 0; i < 10; i++) controller.getHistoryManager().redo();
         assertEquals(7, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 7 shapes");
+        for(int i = 0; i < 10; i++) controller.getHistoryManager().undo();
+        assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shapes after undo");
     }
 }
