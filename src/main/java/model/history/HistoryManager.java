@@ -154,7 +154,59 @@ public class HistoryManager {
     }
 
     private void addComplexShape(Shape shape) {
+        ShapeType currentShape = SettingsSingleton.getCurrentShape();
+        Point[] points = shape.getPoints().toArray(new Point[0]);
+        Shape[] shapes = shape.getChildren().toArray(new Shape[0]);
+        Point[] childShapePoints = new Point[shapes.length * 2];
+        Boolean[] isNewPoint = new Boolean[points.length];
+        Map<Point, List<Shape>> pointToShape = new HashMap<>();
+        Point lastPoint = SettingsSingleton.getLastPoint();
 
+        for (int i = 0; i < points.length; i++) isNewPoint[i] = this.assignShape(points[i]);
+        for (int i = 0; i < shapes.length; i++) {
+            this.assignShape(shapes[i]);
+            childShapePoints[i * 2] = shapes[i].getPoints().get(0);
+            childShapePoints[i * 2 + 1] = shapes[i].getPoints().get(1);
+        }
+
+        HistoryHandler redo = () -> {
+            SettingsSingleton.setLastPoint(lastPoint);
+            for(int i = 0; i < points.length; i++) {
+                points[i].setParentShape(shape);
+                if (isNewPoint[i]) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
+                shape.getPoints().add(points[i]);
+            }
+
+            for(int i = 0; i < shapes.length; i++) {
+                shapes[i].getPoints().add(childShapePoints[i * 2]);
+                childShapePoints[i * 2].addChild(shapes[i]);
+                shapes[i].getPoints().add(childShapePoints[i * 2 + 1]);
+                childShapePoints[i * 2 + 1].addChild(shapes[i]);
+                controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shapes[i]);
+                shape.addChild(shapes[i]);
+            }
+        };
+
+        HistoryHandler undo = () -> {
+            shape.getPoints().clear();
+            shape.getChildren().clear();
+            for(Shape child : shapes) {
+                for(Point point : child.getPoints()) point.removeChild(child);
+                child.getPoints().clear();
+                controller.removeShape(child, Controller.SingletonType.FINAL);
+            }
+
+            for(int i = 0; i < points.length; i++) {
+                if(isNewPoint[i]) controller.removeShape(points[i], Controller.SingletonType.FINAL);
+                points[i].removeChild(shape);
+                points[i].setParentShape(null);
+            }
+
+            this.undo(); // Render the line draw mode
+            this.redo();
+        };
+
+        addEvent(redo, undo);
     }
 
     public void addFirstPoint(Point point) {
