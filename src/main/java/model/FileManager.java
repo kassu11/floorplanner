@@ -24,7 +24,18 @@ public class FileManager {
     }
 
     public void setCurrentFile(File currentFile) {
+        if (currentFile == null) throw new RuntimeException("File is null");
         this.currentFile = currentFile;
+    }
+
+    public boolean checkFileFormat(String file) {
+        String lastFour = file.substring(file.length() - 4);
+        if (lastFour.equals(".ser")){
+            System.out.println("Correct file format");
+            return true;
+        }
+        System.out.println("Wrong file format");
+        return false;
     }
 
     public void exportFloorPlan() {
