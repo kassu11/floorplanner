@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  sql_server:
+    image: mcr.microsoft.com/mssql/server:latest
+    restart: always
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Pa1@w0rd
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_server_data:/var/opt/mssql
+
+volumes:
+  sql_server_data:

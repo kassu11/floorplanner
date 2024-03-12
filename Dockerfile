@@ -13,6 +13,7 @@ COPY . /app/
 # Package your application
 RUN mvn package
 
+# Install OpenJFX
 RUN apt-get update && apt-get install -y openjfx
 
 # Run the main class (assuming your application has a main class)
