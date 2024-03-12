@@ -1,6 +1,7 @@
-package model;
+package model.shapes;
 
-import view.GUIElements.CustomCanvas;
+import model.shapeContainers.ShapeContainer;
+import view.GUIElements.canvas.CustomCanvas;
 
 import java.util.ArrayList;
 import java.util.List;

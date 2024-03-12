@@ -1,4 +1,4 @@
-package model;
+package model.shapeContainers;
 
 
 public class FinalShapesSingleton extends ShapeContainer {

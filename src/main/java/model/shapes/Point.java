@@ -1,7 +1,8 @@
-package model;
+package model.shapes;
 
-import view.GUIElements.CustomCanvas;
-import view.ShapeType;
+import model.shapeContainers.ShapeContainer;
+import view.GUIElements.canvas.CustomCanvas;
+import view.types.ShapeType;
 
 public class Point extends AbstractShape {
     private double width = 15, height = 15;

@@ -1,4 +1,4 @@
-package view.GUIElements;
+package view.GUIElements.canvas;
 
 import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.LIGHTGRAY;

@@ -3,9 +3,9 @@ package view.events;
 import controller.Controller;
 import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
-import view.GUIElements.CustomCanvas;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 
 public class KeyboardEvents {
     public interface KeyboardEventHandler {

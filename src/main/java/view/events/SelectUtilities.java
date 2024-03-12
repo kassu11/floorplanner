@@ -1,11 +1,11 @@
 package view.events;
 
 import controller.Controller;
-import model.Point;
-import model.Shape;
-import view.GUIElements.CustomCanvas;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 import java.util.function.Consumer;
 
 public class SelectUtilities {

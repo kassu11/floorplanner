@@ -6,12 +6,17 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.Point;
-import model.Shape;
-import view.GUIElements.*;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.GUIElements.canvas.CanvasContainer;
+import view.GUIElements.canvas.CustomCanvas;
+import view.GUIElements.toolbars.DrawingToolbar;
+import view.GUIElements.toolbars.OptionsToolbar;
 import view.events.DrawUtilities;
 import view.events.KeyboardEvents;
 import view.events.SelectUtilities;
+import view.types.ModeType;
+import view.types.ShapeType;
 
 import static javafx.scene.paint.Color.*;
 

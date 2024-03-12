@@ -1,7 +1,10 @@
 package view;
 
-import model.Point;
-import model.Shape;
+import entity.Settings;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.types.ModeType;
+import view.types.ShapeType;
 
 public class SettingsSingleton {
     private static boolean drawLengths = true;
@@ -58,5 +61,17 @@ public class SettingsSingleton {
 
     public static void setGridSize(int gridSize) {
         SettingsSingleton.gridSize = gridSize;
+    }
+
+    public void setSettings(Settings settings) {
+        setDrawLengths(settings.isDrawLengths());
+        setDrawGrid(settings.isDrawGrid());
+        setGridHeight(settings.getGridHeight());
+        setGridWidth(settings.getGridWidth());
+        setGridSize(settings.getGridSize());
+    }
+
+    public Settings getSettings() {
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize);
     }
 }

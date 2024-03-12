@@ -1,12 +1,14 @@
 package model;
 
 import controller.Controller;
+import model.shapes.Point;
+import model.shapes.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import view.GUI;
-import view.ShapeType;
+import view.types.ShapeType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package view.GUIElements;
+package view.GUIElements.toolbars;
 
 import controller.Controller;
 import javafx.geometry.Insets;
@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.FileManager;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 
 import javax.swing.*;
@@ -127,6 +128,7 @@ public class OptionsToolbar extends CustomToolbar {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            controller.saveSettings();
             settingsWindow.close();
         });
 

@@ -1,12 +1,12 @@
-package view.GUIElements;
+package view.GUIElements.toolbars;
 
 import controller.Controller;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import view.ModeType;
+import view.types.ModeType;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 
 public class DrawingToolbar extends CustomToolbar {
     private final ContextMenu modeMenu = new ContextMenu();

@@ -1,13 +1,17 @@
 package controller;
 
-import model.*;
+import dao.SettingsDao;
+import entity.Settings;
 import model.history.HistoryManager;
+import model.shapeContainers.FinalShapesSingleton;
+import model.shapeContainers.PreviewShapesSingleton;
+import model.shapeContainers.ShapeContainer;
+import model.shapes.*;
 import view.GUI;
-import view.GUIElements.CanvasMath;
-import view.GUIElements.CustomCanvas;
-import view.ModeType;
+import view.GUIElements.canvas.CanvasMath;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,7 @@ public class Controller {
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
+    private SettingsDao settingsDao = new SettingsDao();
 
     private boolean ctrlIsDown = false;
     private ShapeType currentShape = ShapeType.LINE;
@@ -132,6 +137,16 @@ public class Controller {
         Point point = new Point(x, y);
         if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
+    }
+
+    public void saveSettings() {
+        if(settingsDao.find(1) == null) {
+            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
+            settingsDao.persist(settings);
+        } else {
+            Settings settings = SettingsSingleton.getInstance().getSettings();
+            settingsDao.update(settings);
+        }
     }
 
     public CanvasMath getCanvasMath() {

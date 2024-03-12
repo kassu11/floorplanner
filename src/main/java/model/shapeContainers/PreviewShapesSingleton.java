@@ -1,4 +1,4 @@
-package model;
+package model.shapeContainers;
 
 public class PreviewShapesSingleton extends ShapeContainer {
     private PreviewShapesSingleton() {

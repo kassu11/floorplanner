@@ -1,11 +1,11 @@
 package model.history;
 
 import controller.Controller;
-import model.Point;
-import model.Shape;
-import view.ModeType;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.types.ModeType;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 import view.events.SelectUtilities;
 
 import java.util.ArrayList;
