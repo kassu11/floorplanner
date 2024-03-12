@@ -157,6 +157,10 @@ public class Controller {
         if(settings != null) {
             SettingsSingleton.getInstance().setSettings(settings);
         }
+        else {
+            settings = SettingsSingleton.getInstance().getSettings();
+            settingsDao.persist(settings);
+        }
     }
 
     public CanvasMath getCanvasMath() {
