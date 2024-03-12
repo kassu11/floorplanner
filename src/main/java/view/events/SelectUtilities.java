@@ -46,14 +46,6 @@ public class SelectUtilities {
 		}
 	}
 
-	public static void unselectMissingShape(Controller controller, Shape[] points) {
-		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-		for (Shape point : points) {
-			if (point.getType() == ShapeType.POINT) transferPoints(controller, point, Controller.SingletonType.PREVIEW);
-		}
-		if (controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty()) SettingsSingleton.setSelectedShape(null);
-	}
-
 	public static void moveSelectedArea(Controller controller, double x, double y) {
 		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
 			if (shape.getType() != ShapeType.POINT) continue;
@@ -145,8 +137,13 @@ public class SelectUtilities {
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
 		rotateSelectedShape(controller, x, y);
 		SettingsSingleton.setSelectedShape(null);
+		controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+	}
 
+	public static void deleteShape(Controller controller, Shape shape) {
+		controller.getHistoryManager().deleteShape(shape);
+		controller.deleteShape(shape, Controller.SingletonType.FINAL);
 	}
 
 	private static void transferPoints(Controller controller, Shape point, Controller.SingletonType type) {
