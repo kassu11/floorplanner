@@ -42,6 +42,7 @@ public class Controller {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
         this.historyManager = new HistoryManager(this);
+        loadSettings();
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -146,7 +147,15 @@ public class Controller {
             settingsDao.persist(settings);
         } else {
             Settings settings = SettingsSingleton.getInstance().getSettings();
-            settingsDao.update(settings);
+            settingsDao.find(1).setSettings(settings);
+            settingsDao.update(settingsDao.find(1));
+        }
+    }
+
+    public void loadSettings() {
+        Settings settings = settingsDao.find(1);
+        if(settings != null) {
+            SettingsSingleton.getInstance().setSettings(settings);
         }
     }
 

@@ -23,7 +23,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.zoom = 1;
         gc = getGraphicsContext2D();
         grid = new CanvasGrid(this);
-        grid.drawGrid();
 
     }
 

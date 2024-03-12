@@ -78,4 +78,12 @@ public class Settings {
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
     }
+
+    public void setSettings(Settings settings) {
+        this.isDrawLengths = settings.isDrawLengths;
+        this.isDrawGrid = settings.isDrawGrid;
+        this.gridHeight = settings.gridHeight;
+        this.gridWidth = settings.gridWidth;
+        this.gridSize = settings.gridSize;
+    }
 }

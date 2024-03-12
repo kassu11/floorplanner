@@ -11,7 +11,7 @@ public class MariaDbJpaConnection {
     public static EntityManager getInstance() {
         if (em==null) {
             if (emf==null) {
-                emf = Persistence.createEntityManagerFactory("datasource");
+                emf = Persistence.createEntityManagerFactory("floorplannerDatasource");
             }
             em = emf.createEntityManager();
         }
