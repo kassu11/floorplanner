@@ -116,11 +116,8 @@ public class SelectUtilities {
 				if(point.getType() != ShapeType.POINT) continue;
 				double radius = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
 				double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
-//				pointAngle = snapping ? normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle;
-//				double newAngle = snapping ? pointAngle + normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle + angle;
 				double newAngle = (pointAngle + angle);
 				point.setCoordinates(centroidX + radius * Math.cos(newAngle), centroidY + radius * Math.sin(newAngle));
-				System.out.println(point.getSelectedX());
 			}
 
 			if (!snapping || angle != 0) {
@@ -128,12 +125,6 @@ public class SelectUtilities {
 				selectedY = y;
 			}
 		}
-	}
-
-	public static double normalizeToSnappingAngle(double snappingAngle, double shapeAngle) {
-		if (shapeAngle < 0) shapeAngle += 2 * Math.PI;
-		double remainder = shapeAngle % snappingAngle;
-		return remainder < snappingAngle / 2 ? shapeAngle - remainder : shapeAngle + snappingAngle - remainder;
 	}
 
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
