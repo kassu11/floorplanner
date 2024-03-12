@@ -129,12 +129,6 @@ public class GUI extends Application {
                 }
             }
 
-            if (hoveredShape != null) {
-                previewGc.setFillColor(controller.getHoverColor());
-                previewGc.setStrokeColor(controller.getHoverColor());
-                hoveredShape.draw(previewGc);
-            }
-
             previewGc.setFillColor(controller.getSelectedColor());
             previewGc.setStrokeColor(controller.getSelectedColor());
 
@@ -149,6 +143,13 @@ public class GUI extends Application {
                 if (!event.isShiftDown()) SelectUtilities.rotateSelectedShape(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            }
+
+            if (hoveredShape != null) {
+                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.DRAW) return;
+                previewGc.setFillColor(controller.getHoverColor());
+                previewGc.setStrokeColor(controller.getHoverColor());
+                hoveredShape.draw(previewGc);
             }
         });
 

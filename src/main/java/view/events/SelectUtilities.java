@@ -47,9 +47,17 @@ public class SelectUtilities {
 	}
 
 	public static void moveSelectedArea(Controller controller, double x, double y) {
-		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-			if (shape.getType() != ShapeType.POINT) continue;
-			shape.setCoordinates(shape.getSelectedX() + x, shape.getSelectedY() + y);
+		Point hoveredShape = controller.getHoveredPoint();
+		if(hoveredShape == null) {
+			for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+				if (shape.getType() != ShapeType.POINT) continue;
+				shape.setCoordinates(shape.getSelectedX() + x, shape.getSelectedY() + y);
+			}
+		} else {
+			for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+				if (shape.getType() != ShapeType.POINT) continue;
+				shape.setCoordinates(hoveredShape.getX(), hoveredShape.getY());
+			}
 		}
 	}
 
