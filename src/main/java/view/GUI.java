@@ -118,7 +118,6 @@ public class GUI extends Application {
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
 
             for (Shape shape : controller.getShapes(Controller.SingletonType.FINAL)) {
-
                 double distance = shape.calculateDistanceFromMouse(mouseX, mouseY);
                 int bestPriority = hoveredShape != null ? hoveredShape.getPriority() : 0;
                 if ((distance < lowestDistance && shape.getPriority() >= bestPriority) || (distance < distanceCutOff && bestPriority < shape.getPriority())) {
@@ -131,31 +130,26 @@ public class GUI extends Application {
             }
 
             if (hoveredShape != null) {
-                previewGc.setFill(RED);
-                previewGc.setStroke(RED);
+                previewGc.setFillColor(controller.getHoverColor());
+                previewGc.setStrokeColor(controller.getHoverColor());
                 hoveredShape.draw(previewGc);
             }
 
-            if (selectedShape != null) {
-                previewGc.setFill(BLUE);
-                previewGc.setStroke(BLUE);
-            }
+            previewGc.setFillColor(controller.getSelectedColor());
+            previewGc.setStrokeColor(controller.getSelectedColor());
 
-            previewGc.beginPath();
-
-            if (controller.getCurrentMode() == ModeType.DRAW) DrawUtilities.renderDrawingPreview(controller, mouseX, mouseY, previewGc);
-            else if (controller.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
+            if (controller.getCurrentMode() == ModeType.DRAW) {
+                DrawUtilities.renderDrawingPreview(controller, mouseX, mouseY, previewGc);
+            } else if (controller.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.moveSelectedArea(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
 
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-            }
-            if (controller.getCurrentMode() == ModeType.ROTATE) {
+            } else if (controller.getCurrentMode() == ModeType.ROTATE && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.rotateSelectedShape(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
-            previewGc.stroke();
         });
 
         canvasContainer.setOnMousePressed(event -> {

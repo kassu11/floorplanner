@@ -34,6 +34,8 @@ public class Controller {
     private Shape selectedShape, hoveredShape;
     private double mouseX, mouseY;
 
+    private String hoverColor, selectedColor;
+
     public enum SingletonType {
         FINAL, PREVIEW
     }
@@ -42,6 +44,7 @@ public class Controller {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
         this.historyManager = new HistoryManager(this);
+        setCurrentMode(ModeType.DRAW);
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -212,7 +215,6 @@ public class Controller {
 
     public void setCurrentShape(ShapeType shape) {
         currentShape = shape;
-        System.out.println("Current shape: " + currentShape);
     }
 
     public ModeType getCurrentMode() {
@@ -220,6 +222,16 @@ public class Controller {
     }
 
     public void setCurrentMode(ModeType currentMode) {
+        if(currentMode == ModeType.DRAW) {
+            this.selectedColor = "#13fc03";
+            this.hoverColor = "#13fc03";
+        } else if(currentMode == ModeType.SELECT || currentMode == ModeType.ROTATE) {
+            this.selectedColor = "#036ffc";
+            this.hoverColor = "#78b0fa";
+        } else if(currentMode == ModeType.DELETE) {
+            this.selectedColor = "#000000";
+            this.hoverColor = "#ff0000";
+        }
         this.currentMode = currentMode;
     }
     public void setLastPoint(Point lastPoint) {
@@ -275,4 +287,12 @@ public class Controller {
         this.ctrlIsDown = shiftIsDown;
     }
 
+
+    public String getHoverColor() {
+        return hoverColor;
+    }
+
+    public String getSelectedColor() {
+        return selectedColor;
+    }
 }

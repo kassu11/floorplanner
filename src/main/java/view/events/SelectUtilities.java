@@ -120,7 +120,6 @@ public class SelectUtilities {
 //				double newAngle = snapping ? pointAngle + normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle + angle;
 				double newAngle = (pointAngle + angle);
 				point.setCoordinates(centroidX + radius * Math.cos(newAngle), centroidY + radius * Math.sin(newAngle));
-				System.out.println(point.getSelectedX());
 			}
 
 			if (!snapping || angle != 0) {
