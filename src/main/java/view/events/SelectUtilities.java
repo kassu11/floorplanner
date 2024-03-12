@@ -137,6 +137,7 @@ public class SelectUtilities {
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
 		rotateSelectedShape(controller, x, y);
 		SettingsSingleton.setSelectedShape(null);
+		controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 	}
 
