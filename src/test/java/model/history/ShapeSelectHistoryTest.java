@@ -208,4 +208,23 @@ public class ShapeSelectHistoryTest {
         controller.getHistoryManager().redo();
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 total shapes");
     }
+
+    @Test
+    void undoLinesWithoutMergingThem() {
+        DrawUtilities.addShapesFirstPoint(controller, 10, 10);
+        Shape line = DrawUtilities.addShapesLastPoint(controller, 20, 20, ShapeType.LINE);
+
+        controller.setHoveredShape(line);
+
+        SelectUtilities.selectHoveredShape(controller, 10, 10);
+        SelectUtilities.moveSelectedArea(controller, 5, 5);
+        SelectUtilities.finalizeSelectedShapes(controller, null, 5, 5);
+
+        assertEquals(3, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 3 shapes");
+
+        controller.getHistoryManager().undo();
+        controller.getHistoryManager().redo();
+
+        assertEquals(3, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 3 shapes");
+    }
 }
