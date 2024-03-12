@@ -16,8 +16,8 @@ public class SelectUtilities {
 	}
 
 	public static void selectHoveredShape(Controller controller, double x, double y, boolean history) {
-		Shape selectedShape = SettingsSingleton.getHoveredShape();
-		SettingsSingleton.setSelectedShape(selectedShape);
+		Shape selectedShape = controller.getHoveredShape();
+		controller.setSelectedShape(selectedShape);
 		startX = x;
 		startY = y;
 		selectedX = x;
@@ -58,8 +58,8 @@ public class SelectUtilities {
 	}
 
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y, boolean history) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
-		Shape hoveredShape = SettingsSingleton.getHoveredShape();
+		Shape selectedShape = controller.getSelectedShape();
+		Shape hoveredShape = controller.getHoveredShape();
 
 		if (hoveredShape != null && selectedShape.getType() == ShapeType.POINT && hoveredShape.getType() == ShapeType.POINT) {
 			if (history) controller.getHistoryManager().finalizeSelectionMerge(controller.getShapes(Controller.SingletonType.PREVIEW), (Point) selectedShape, (Point) hoveredShape);
@@ -82,7 +82,7 @@ public class SelectUtilities {
 			if (history) controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		}
 
-		SettingsSingleton.setSelectedShape(null);
+		controller.setSelectedShape(null);
 		if(canvas != null) controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 	}
@@ -100,7 +100,7 @@ public class SelectUtilities {
 
 		double centroidX = sumX / totalPoints;
 		double centroidY = sumY / totalPoints;
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
+		Shape selectedShape = controller.getSelectedShape();
 		if (totalPoints > 1) {
 			double angle = Math.atan2(y - centroidY, x - centroidX) - Math.atan2(selectedY - centroidY, selectedX - centroidX);
 
@@ -108,7 +108,7 @@ public class SelectUtilities {
 			angle = angle < -Math.PI ? angle + 2 * Math.PI : angle > Math.PI ? angle - 2 * Math.PI : angle;
 
 			// Temporary snapping on/off
-			boolean snapping = SettingsSingleton.isCtrlDown();
+			boolean snapping = controller.isCtrlDown();
 			double snappingAngle = Math.PI / 12;
 			angle = snapping ? angle >= snappingAngle || angle <= -snappingAngle ? angle >= 0 ? snappingAngle : -snappingAngle : 0 : angle;
 
@@ -138,7 +138,7 @@ public class SelectUtilities {
 
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
 		rotateSelectedShape(controller, x, y);
-		SettingsSingleton.setSelectedShape(null);
+		controller.setSelectedShape(null);
 		controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 	}

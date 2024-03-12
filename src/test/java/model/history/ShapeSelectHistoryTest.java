@@ -34,7 +34,7 @@ public class ShapeSelectHistoryTest {
     void testSelectionStart() {
         DrawUtilities.addShapesFirstPoint(controller, 5, 5);
         Shape line = DrawUtilities.addShapesLastPoint(controller, 10, -23, ShapeType.LINE);
-        SettingsSingleton.setHoveredShape(line);
+        controller.setHoveredShape(line);
         SelectUtilities.selectHoveredShape(controller, 5, 5);
         controller.getHistoryManager().undo();
         assertEquals(0, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 0 shaped selected");
@@ -49,7 +49,7 @@ public class ShapeSelectHistoryTest {
         DrawUtilities.addShapesFirstPoint(controller, 10, 10);
         Shape line = DrawUtilities.addShapesLastPoint(controller, 20, 20, ShapeType.MULTILINE);
         DrawUtilities.addShapesLastPoint(controller, 10, -23, ShapeType.MULTILINE);
-        SettingsSingleton.setHoveredShape(line);
+        controller.setHoveredShape(line);
         SelectUtilities.selectHoveredShape(controller, 5, 5);
         assertEquals(4, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 4 shaped selected");
 
@@ -70,9 +70,9 @@ public class ShapeSelectHistoryTest {
         Shape line = DrawUtilities.addShapesLastPoint(controller, 20, 20, ShapeType.MULTILINE);
         DrawUtilities.addShapesLastPoint(controller, 10, -23, ShapeType.MULTILINE);
         Shape line2 = DrawUtilities.addShapesLastPoint(controller, 30, -33, ShapeType.MULTILINE);
-        SettingsSingleton.setHoveredShape(line);
+        controller.setHoveredShape(line);
         SelectUtilities.selectHoveredShape(controller, 5, 5);
-        SettingsSingleton.setHoveredShape(line2);
+        controller.setHoveredShape(line2);
         SelectUtilities.selectHoveredShape(controller, 5, 5);
         assertEquals(7, controller.getShapes(Controller.SingletonType.PREVIEW).size(), "Should have 7 shaped selected");
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 shaped unselected");
@@ -101,9 +101,9 @@ public class ShapeSelectHistoryTest {
         Shape line2 = DrawUtilities.addShapesLastPoint(controller, 30, -33, ShapeType.LINE);
         Point pointA= line1.getPoints().get(0);
         Point pointB = line2.getPoints().get(0);
-        SettingsSingleton.setHoveredShape(pointA);
+        controller.setHoveredShape(pointA);
         SelectUtilities.selectHoveredShape(controller, 5, 5);
-        SettingsSingleton.setHoveredShape(pointB);
+        controller.setHoveredShape(pointB);
         SelectUtilities.finalizeSelectedShapes(controller, null, 5, 5);
 
         assertEquals(5, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 5 shaped unselected");
@@ -136,9 +136,9 @@ public class ShapeSelectHistoryTest {
         Point pointA = lineA.getPoints().get(0);
         Point pointB = lineB.getPoints().get(1);
 
-        SettingsSingleton.setHoveredShape(pointA);
+        controller.setHoveredShape(pointA);
         SelectUtilities.selectHoveredShape(controller, 25, 25);
-        SettingsSingleton.setHoveredShape(pointB);
+        controller.setHoveredShape(pointB);
         SelectUtilities.finalizeSelectedShapes(controller, null, 5, 5);
 
         assertEquals(7, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 7 shaped unselected");
@@ -164,9 +164,9 @@ public class ShapeSelectHistoryTest {
         Point pointA = lineA.getPoints().get(0);
         Point pointB = lineB.getPoints().get(1);
 
-        SettingsSingleton.setHoveredShape(pointA);
+        controller.setHoveredShape(pointA);
         SelectUtilities.selectHoveredShape(controller, 25, 25);
-        SettingsSingleton.setHoveredShape(pointB);
+        controller.setHoveredShape(pointB);
         SelectUtilities.finalizeSelectedShapes(controller, null, 5, 5);
 
         assertEquals(7, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 7 shaped unselected");
@@ -195,9 +195,9 @@ public class ShapeSelectHistoryTest {
         Point pointA = line.getPoints().get(0);
         Point pointB = line.getPoints().get(1);
 
-        SettingsSingleton.setHoveredShape(pointA);
+        controller.setHoveredShape(pointA);
         SelectUtilities.selectHoveredShape(controller, 0, 0);
-        SettingsSingleton.setHoveredShape(pointB);
+        controller.setHoveredShape(pointB);
         SelectUtilities.finalizeSelectedShapes(controller, null, 0, 0);
 
         assertEquals(0, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 0 total shapes");

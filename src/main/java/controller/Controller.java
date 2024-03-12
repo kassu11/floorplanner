@@ -5,6 +5,7 @@ import model.history.HistoryManager;
 import view.GUI;
 import view.GUIElements.CanvasMath;
 import view.GUIElements.CustomCanvas;
+import view.ModeType;
 import view.SettingsSingleton;
 import view.ShapeType;
 
@@ -20,6 +21,12 @@ public class Controller {
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
 
+    private boolean ctrlIsDown = false;
+    private ShapeType currentShape = ShapeType.LINE;
+    private ModeType currentMode = ModeType.DRAW;
+    private Point lastPoint, hoveredPoint;
+    private Shape selectedShape, hoveredShape;
+    private double mouseX, mouseY;
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -82,7 +89,7 @@ public class Controller {
 
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
         customCanvas.clear();
-        if(SettingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
+        if(settingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
@@ -98,9 +105,9 @@ public class Controller {
 
     public void deleteShape(Shape shape, SingletonType type) {
         shape.delete(getShapeContainer(type));
-        SettingsSingleton.setHoveredShape(null);
-        SettingsSingleton.setSelectedShape(null);
-        SettingsSingleton.setLastPoint(null);
+        this.setHoveredShape(null);
+        this.setSelectedShape(null);
+        this.setLastPoint(null);
     }
 
     public List<Shape> getShapes(SingletonType type) {
@@ -177,6 +184,79 @@ public class Controller {
 
     public HistoryManager getHistoryManager() {
         return historyManager;
+    }
+
+
+
+
+
+    public ShapeType getCurrentShape() {
+        return currentShape;
+    }
+
+    public void setCurrentShape(ShapeType shape) {
+        currentShape = shape;
+        System.out.println("Current shape: " + currentShape);
+    }
+
+    public ModeType getCurrentMode() {
+        return currentMode;
+    }
+
+    public void setCurrentMode(ModeType currentMode) {
+        this.currentMode = currentMode;
+    }
+    public void setLastPoint(Point lastPoint) {
+        this.lastPoint = lastPoint;
+    }
+
+    public Point getLastPoint() {
+        return lastPoint;
+    }
+
+    public Point getHoveredPoint() {
+        return hoveredPoint;
+    }
+
+    public void setHoveredPoint(Point hoveredPoint) {
+        this.hoveredPoint = hoveredPoint;
+    }
+
+    public Shape getSelectedShape() {
+        return selectedShape;
+    }
+
+    public void setSelectedShape(Shape selectedShape) {
+        this.selectedShape = selectedShape;
+    }
+
+    public Shape getHoveredShape() {
+        return hoveredShape;
+    }
+
+    public void setHoveredShape(Shape hoveredShape) {
+        this.hoveredShape = hoveredShape;
+    }
+
+    public double getMouseX() {
+        return mouseX;
+    }
+
+    public double getMouseY() {
+        return mouseY;
+    }
+
+    public void setMousePosition(double mouseX, double mouseY) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+    }
+
+    public boolean isCtrlDown() {
+        return ctrlIsDown;
+    }
+
+    public void setCtrlDown(boolean shiftIsDown) {
+        this.ctrlIsDown = shiftIsDown;
     }
 
 }

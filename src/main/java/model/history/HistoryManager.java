@@ -69,19 +69,19 @@ public class HistoryManager {
 
     public void addFirstPoint(Point point) {
         boolean isNewPoint = this.assignShape(point);
-        ShapeType mode = SettingsSingleton.getCurrentShape();
+        ShapeType mode = controller.getCurrentShape();
 
         HistoryHandler redo = () -> {
             if (isNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
-            SettingsSingleton.setLastPoint(point);
-            SettingsSingleton.setCurrentMode(ModeType.DRAW);
-            SettingsSingleton.setCurrentShape(mode);
+            controller.setLastPoint(point);
+            controller.setCurrentMode(ModeType.DRAW);
+            controller.setCurrentShape(mode);
         };
 
         HistoryHandler undo = () -> {
             if (isNewPoint) controller.removeShape(point, Controller.SingletonType.FINAL);
-            SettingsSingleton.setLastPoint(null);
-            SettingsSingleton.setCurrentShape(mode);
+            controller.setLastPoint(null);
+            controller.setCurrentShape(mode);
         };
 
         addEvent(redo, undo);
@@ -94,7 +94,7 @@ public class HistoryManager {
 
     private void addLine(Shape shape) {
         Point[] points = shape.getPoints().toArray(new Point[0]);
-        Point lastPoint = SettingsSingleton.getLastPoint();
+        Point lastPoint = controller.getLastPoint();
         Point newPoint = null;
         for (Point point : points) if(this.assignShape(point)) newPoint = point;
         Point finalNewPoint = newPoint;
@@ -106,7 +106,7 @@ public class HistoryManager {
             }
             if(finalNewPoint != null) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(finalNewPoint);
             controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
-            SettingsSingleton.setLastPoint(lastPoint);
+            controller.setLastPoint(lastPoint);
         };
 
 
@@ -128,7 +128,7 @@ public class HistoryManager {
         Shape[] shapes = shape.getChildren().toArray(new Shape[0]);
         Point[] childShapePoints = new Point[shapes.length * 2];
         Boolean[] isNewPoint = new Boolean[points.length];
-        Point lastPoint = SettingsSingleton.getLastPoint();
+        Point lastPoint = controller.getLastPoint();
 
         for (int i = 0; i < points.length; i++) isNewPoint[i] = this.assignShape(points[i]);
         for (int i = 0; i < shapes.length; i++) {
@@ -138,7 +138,7 @@ public class HistoryManager {
         }
 
         HistoryHandler redo = () -> {
-            SettingsSingleton.setLastPoint(lastPoint);
+            controller.setLastPoint(lastPoint);
             for(int i = 0; i < points.length; i++) {
                 points[i].setParentShape(shape);
                 if (isNewPoint[i]) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
@@ -177,8 +177,8 @@ public class HistoryManager {
     }
 
     public void startSelection(List<Shape> shapes) {
-        ModeType currentMode = SettingsSingleton.getCurrentMode();
-        Shape selectedShape = SettingsSingleton.getSelectedShape();
+        ModeType currentMode = controller.getCurrentMode();
+        Shape selectedShape = controller.getSelectedShape();
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
         Double[] originalCoordinates = new Double[copyShapes.length * 2];
         Double[] selectionCoordinates = new Double[copyShapes.length * 2];
@@ -196,21 +196,21 @@ public class HistoryManager {
     }
 
     private void copySelectionCoordinates(Shape[] shapes, Double[] selectionCoordinates, Shape selectedShape, ModeType currentMode) {
-        SettingsSingleton.setCurrentMode(currentMode);
-        SettingsSingleton.setLastPoint(null);
-        SettingsSingleton.setSelectedShape(selectedShape);
+        controller.setCurrentMode(currentMode);
+        controller.setLastPoint(null);
+        controller.setSelectedShape(selectedShape);
         controller.transferAllShapesTo(Controller.SingletonType.FINAL);
         for (int i = 0; i < shapes.length; i++) {
             shapes[i].setSelectedCoordinates(selectionCoordinates[i * 2], selectionCoordinates[i * 2 + 1]);
             controller.transferSingleShapeTo(shapes[i], Controller.SingletonType.PREVIEW);
         }
-        if (currentMode == ModeType.SELECT) SelectUtilities.moveSelectedArea(controller, SettingsSingleton.getMouseX(), SettingsSingleton.getMouseY());
+        if (currentMode == ModeType.SELECT) SelectUtilities.moveSelectedArea(controller, controller.getMouseX(), controller.getMouseY());
     }
 
     private void setSelectedShapesToCoordinates(Shape[] shapes, Double[] originalCoordinates, ModeType currentMode) {
-        SettingsSingleton.setHoveredShape(null);
-        SettingsSingleton.setSelectedShape(null);
-        SettingsSingleton.setCurrentMode(currentMode);
+        controller.setHoveredShape(null);
+        controller.setSelectedShape(null);
+        controller.setCurrentMode(currentMode);
         controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 
         for(int i = 0; i < shapes.length; i++) {
@@ -219,8 +219,8 @@ public class HistoryManager {
     }
 
     public void addToSelection(List<Shape> shapes) {
-        ModeType currentMode = SettingsSingleton.getCurrentMode();
-        Shape selectedShape = SettingsSingleton.getSelectedShape();
+        ModeType currentMode = controller.getCurrentMode();
+        Shape selectedShape = controller.getSelectedShape();
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
         Double[] originalCoordinates = new Double[copyShapes.length * 2];
         Double[] selectionCoordinates = new Double[copyShapes.length * 2];
@@ -264,8 +264,8 @@ public class HistoryManager {
 
         HistoryHandler redo = () -> {
             controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-            SettingsSingleton.setSelectedShape(selectedPoint);
-            SettingsSingleton.setHoveredShape(hoveredPoint);
+            controller.setSelectedShape(selectedPoint);
+            controller.setHoveredShape(hoveredPoint);
             for (Shape copyShape : copyShapes) controller.transferSingleShapeTo(copyShape, Controller.SingletonType.PREVIEW);
             SelectUtilities.finalizeSelectedShapes(controller, null, 0, 0, false);
             for(int i = 0; i < copyShapes.length; i++) {
@@ -274,8 +274,8 @@ public class HistoryManager {
         };
 
         HistoryHandler undo = () -> {
-            SettingsSingleton.setSelectedShape(selectedPoint);
-            SettingsSingleton.setHoveredShape(null);
+            controller.setSelectedShape(selectedPoint);
+            controller.setHoveredShape(null);
             selectedPoint.getChildren().clear();
             hoveredPoint.getChildren().clear();
             controller.transferAllShapesTo(Controller.SingletonType.FINAL);
@@ -306,7 +306,7 @@ public class HistoryManager {
     }
 
     public void finalizeSelection(List<Shape> shapes) {
-        Shape selectedShape = SettingsSingleton.getSelectedShape();
+        Shape selectedShape = controller.getSelectedShape();
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
         Double[] originalCoordinates = new Double[copyShapes.length * 2];
         for(int i = 0; i < copyShapes.length; i++) {
@@ -315,8 +315,8 @@ public class HistoryManager {
         }
 
         HistoryHandler redo = () -> {
-            SettingsSingleton.setSelectedShape(selectedShape);
-            SettingsSingleton.setHoveredShape(null);
+            controller.setSelectedShape(selectedShape);
+            controller.setHoveredShape(null);
             controller.transferAllShapesTo(Controller.SingletonType.FINAL);
             for(int i = 0; i < copyShapes.length; i++) {
                 copyShapes[i].setCoordinates(originalCoordinates[i * 2], originalCoordinates[i * 2 + 1]);

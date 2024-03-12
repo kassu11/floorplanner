@@ -104,7 +104,7 @@ public class LineDrawHistoryTest {
         controller.getHistoryManager().undo();
         controller.getHistoryManager().undo();
         assertEquals(4, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 4 shapes after undo");
-        SettingsSingleton.setHoveredPoint(pointA);
+        controller.setHoveredPoint(pointA);
         DrawUtilities.addShapesLastPoint(controller, 70, 70, ShapeType.LINE);
         controller.getHistoryManager().redo();
         controller.getHistoryManager().redo();
