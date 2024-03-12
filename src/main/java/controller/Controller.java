@@ -98,6 +98,9 @@ public class Controller {
 
     public void deleteShape(Shape shape, SingletonType type) {
         shape.delete(getShapeContainer(type));
+        SettingsSingleton.setHoveredShape(null);
+        SettingsSingleton.setSelectedShape(null);
+        SettingsSingleton.setLastPoint(null);
     }
 
     public List<Shape> getShapes(SingletonType type) {

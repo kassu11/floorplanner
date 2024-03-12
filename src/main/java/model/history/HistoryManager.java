@@ -323,4 +323,41 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
+
+    public void deleteShape(Shape shape) {
+        Point[] points = shape.getPoints().toArray(new Point[0]);
+        Shape[] children = shape.getChildren().toArray(new Shape[0]);
+        Point[] childrenOppositePoints = new Point[children.length * 2];
+        for(int i = 0; i < children.length; i++) {
+            Point oppositePoint = children[i].getPoints().getFirst();
+            if(oppositePoint == shape) oppositePoint = children[i].getPoints().getLast();
+            childrenOppositePoints[i] = oppositePoint;
+        }
+
+        HistoryHandler redo = () -> {
+            controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+            controller.deleteShape(shape, Controller.SingletonType.FINAL);
+        };
+
+        HistoryHandler undo = () -> {
+            for(int i = 0; i < children.length; i++) {
+                if(childrenOppositePoints[i].getChildren().isEmpty()) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(childrenOppositePoints[i]);
+                controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(children[i]);
+                children[i].getPoints().add((Point) shape);
+                children[i].getPoints().add(childrenOppositePoints[i]);
+                shape.addChild(children[i]);
+                childrenOppositePoints[i].addChild(children[i]);
+            }
+
+            for(Point point : points) {
+                if(point.getChildren().isEmpty()) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);
+                shape.getPoints().add(point);
+                point.addChild(shape);
+            }
+
+            controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(shape);
+        };
+
+        addEvent(redo, undo);
+    }
 }

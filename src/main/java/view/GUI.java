@@ -78,13 +78,9 @@ public class GUI extends Application {
                 }
                 case DELETE -> {
                     if (hoveredShape == null) return;
-                    controller.deleteShape(hoveredShape, Controller.SingletonType.FINAL);
-
-                    SettingsSingleton.setHoveredShape(null);
-                    SettingsSingleton.setSelectedShape(null);
-                    SettingsSingleton.setLastPoint(null);
+                    SelectUtilities.deleteShape(controller, hoveredShape);
                     controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-
+                    previewGc.clear();
                 }
                 case ROTATE -> {
                     if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
