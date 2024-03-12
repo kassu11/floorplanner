@@ -1,7 +1,8 @@
-package model;
+package model.shapes;
 
-import view.ShapeType;
-import view.GUIElements.CustomCanvas;
+import model.shapeContainers.ShapeContainer;
+import view.types.ShapeType;
+import view.GUIElements.canvas.CustomCanvas;
 
 import java.io.Serializable;
 import java.util.List;

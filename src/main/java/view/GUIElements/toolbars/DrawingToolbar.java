@@ -1,18 +1,21 @@
-package view.GUIElements;
+package view.GUIElements.toolbars;
 
+import controller.Controller;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import view.ModeType;
+import view.types.ModeType;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 
 public class DrawingToolbar extends CustomToolbar {
     private final ContextMenu modeMenu = new ContextMenu();
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
+    private Controller controller;
 
-    public DrawingToolbar(Stage stage) {
+    public DrawingToolbar(Controller controller, Stage stage) {
         super(stage);
+        this.controller = controller;
         this.setOrientation(Orientation.VERTICAL);
         addButton(new Button("Select"));
         addButton(new Button("Mode"));
@@ -30,11 +33,11 @@ public class DrawingToolbar extends CustomToolbar {
 
     public void changeMode(ModeType mode) {
         setCursorCoordinates();
-        SettingsSingleton.setCurrentMode(mode);
+        controller.setCurrentMode(mode);
         modeMenu.hide();
         if (mode == ModeType.DRAW) {
             modeMenu.setOnAction(event -> {
-                SettingsSingleton.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
+                controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
                 System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
             });
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("Mode").getHeight());

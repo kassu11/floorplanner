@@ -1,4 +1,6 @@
-package model;
+package model.shapeContainers;
+
+import model.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.List;

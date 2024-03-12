@@ -1,12 +1,14 @@
 package model;
 
 
+import model.shapes.Point;
+import model.shapes.Shape;
 import org.junit.jupiter.api.Test;
 
 import controller.Controller;
 import org.junit.jupiter.api.*;
 import view.GUI;
-import view.ShapeType;
+import view.types.ShapeType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

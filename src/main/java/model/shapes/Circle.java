@@ -1,8 +1,8 @@
-package model;
+package model.shapes;
 
 import javafx.scene.shape.ArcType;
-import view.GUIElements.CustomCanvas;
-import view.ShapeType;
+import view.GUIElements.canvas.CustomCanvas;
+import view.types.ShapeType;
 
 public class Circle extends AbstractShape {
 

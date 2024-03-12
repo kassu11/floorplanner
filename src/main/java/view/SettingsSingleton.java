@@ -1,20 +1,17 @@
 package view;
 
-import model.Point;
-import model.Shape;
+import entity.Settings;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.types.ModeType;
+import view.types.ShapeType;
 
 public class SettingsSingleton {
-    private static ShapeType currentShape = ShapeType.LINE;
-    private static ModeType currentMode = ModeType.DRAW;
-    private static Point lastPoint, hoveredPoint;
-    private static Shape selectedShape, hoveredShape;
-    private static double middleX, middleY, selectedX, selectedY, mouseX, mouseY;
     private static boolean drawLengths = true;
     private static boolean isDrawGrid = true;
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 25;
-    private static boolean ctrlIsDown = false;
 
     private SettingsSingleton() {
     }
@@ -26,92 +23,6 @@ public class SettingsSingleton {
     public static SettingsSingleton getInstance() {
         return SettingsSingletonHelper.INSTANCE;
     }
-
-    public static ShapeType getCurrentShape() {
-        return currentShape;
-    }
-
-    public static void setCurrentShape(ShapeType shape) {
-        currentShape = shape;
-        System.out.println("Current shape: " + currentShape);
-    }
-
-    public static ModeType getCurrentMode() {
-        return currentMode;
-    }
-
-    public static void setCurrentMode(ModeType currentMode) {
-        SettingsSingleton.currentMode = currentMode;
-    }
-
-    public static boolean isShapeType(ShapeType shape) {
-        return currentShape == shape;
-    }
-
-    public static void setLastPoint(Point lastPoint) {
-        SettingsSingleton.lastPoint = lastPoint;
-    }
-
-    public static Point getLastPoint() {
-        return lastPoint;
-    }
-
-    public static Point getHoveredPoint() {
-        return hoveredPoint;
-    }
-
-    public static void setHoveredPoint(Point hoveredPoint) {
-        SettingsSingleton.hoveredPoint = hoveredPoint;
-    }
-
-    public static Shape getSelectedShape() {
-        return selectedShape;
-    }
-
-    public static void setSelectedShape(Shape selectedShape) {
-        SettingsSingleton.selectedShape = selectedShape;
-    }
-
-    public static Shape getHoveredShape() {
-        return hoveredShape;
-    }
-
-    public static void setHoveredShape(Shape hoveredShape) {
-        SettingsSingleton.hoveredShape = hoveredShape;
-    }
-
-    public static double getMiddleX() {
-        return middleX;
-    }
-
-    public static void setMiddleX(double middleX) {
-        SettingsSingleton.middleX = middleX;
-    }
-
-    public static double getMiddleY() {
-        return SettingsSingleton.middleY;
-    }
-
-    public static void setMiddleY(double middleY) {
-        SettingsSingleton.middleY = middleY;
-    }
-
-    public static double getSelectedX() {
-        return SettingsSingleton.selectedX;
-    }
-
-    public static void setSelectedX(double selectedX) {
-        SettingsSingleton.selectedX = selectedX;
-    }
-
-    public static double getSelectedY() {
-        return SettingsSingleton.selectedY;
-    }
-
-    public static void setSelectedY(double selectedY) {
-        SettingsSingleton.selectedY = selectedY;
-    }
-
     public static boolean isDrawLengths() {
         return drawLengths;
     }
@@ -152,24 +63,15 @@ public class SettingsSingleton {
         SettingsSingleton.gridSize = gridSize;
     }
 
-    public static double getMouseX() {
-        return mouseX;
+    public void setSettings(Settings settings) {
+        setDrawLengths(settings.isDrawLengths());
+        setDrawGrid(settings.isDrawGrid());
+        setGridHeight(settings.getGridHeight());
+        setGridWidth(settings.getGridWidth());
+        setGridSize(settings.getGridSize());
     }
 
-    public static double getMouseY() {
-        return mouseY;
-    }
-
-    public static void setMousePosition(double mouseX, double mouseY) {
-        SettingsSingleton.mouseX = mouseX;
-        SettingsSingleton.mouseY = mouseY;
-    }
-
-    public static boolean isCtrlDown() {
-        return ctrlIsDown;
-    }
-
-    public static void setCtrlDown(boolean shiftIsDown) {
-        SettingsSingleton.ctrlIsDown = shiftIsDown;
+    public Settings getSettings() {
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize);
     }
 }

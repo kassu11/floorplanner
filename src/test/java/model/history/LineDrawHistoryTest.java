@@ -1,14 +1,14 @@
 package model.history;
 
 import controller.Controller;
-import model.Point;
-import model.Shape;
+import model.shapes.Point;
+import model.shapes.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.GUI;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ShapeType;
 import view.events.DrawUtilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -104,7 +104,7 @@ public class LineDrawHistoryTest {
         controller.getHistoryManager().undo();
         controller.getHistoryManager().undo();
         assertEquals(4, controller.getShapes(Controller.SingletonType.FINAL).size(), "Should have 4 shapes after undo");
-        SettingsSingleton.setHoveredPoint(pointA);
+        controller.setHoveredPoint(pointA);
         DrawUtilities.addShapesLastPoint(controller, 70, 70, ShapeType.LINE);
         controller.getHistoryManager().redo();
         controller.getHistoryManager().redo();

@@ -1,7 +1,7 @@
-package view.GUIElements;
+package view.GUIElements.toolbars;
 
 import javafx.scene.control.MenuItem;
-import view.ShapeType;
+import view.types.ShapeType;
 
 public class CustomMenuItem extends MenuItem {
 

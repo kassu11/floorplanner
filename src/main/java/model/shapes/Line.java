@@ -1,9 +1,10 @@
-package model;
+package model.shapes;
 
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
-import view.GUIElements.CustomCanvas;
-import view.ShapeType;
+import model.shapeContainers.ShapeContainer;
+import view.GUIElements.canvas.CustomCanvas;
+import view.types.ShapeType;
 
 public class Line extends AbstractShape {
 

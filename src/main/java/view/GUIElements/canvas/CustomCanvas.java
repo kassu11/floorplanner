@@ -1,4 +1,4 @@
-package view.GUIElements;
+package view.GUIElements.canvas;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.shape.ArcType;

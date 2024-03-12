@@ -1,4 +1,4 @@
-package view.GUIElements;
+package view.GUIElements.canvas;
 
 public class CanvasMath {
     private CanvasContainer canvasContainer;

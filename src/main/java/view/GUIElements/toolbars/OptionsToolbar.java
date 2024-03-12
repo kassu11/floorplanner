@@ -1,4 +1,4 @@
-package view.GUIElements;
+package view.GUIElements.toolbars;
 
 import controller.Controller;
 import javafx.geometry.Insets;
@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.FileManager;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 
 import javax.swing.*;
@@ -119,11 +120,15 @@ public class OptionsToolbar extends CustomToolbar {
         Label shapeLabel = new Label("Shape settings");
         ComboBox<String> languageSettings = new ComboBox<>();
         Label otherSettingsLabel = new Label("Other settings");
+        CheckBox showGrid = new CheckBox("Show grid");
+        showGrid.setSelected(SettingsSingleton.isGridEnabled());
         Button saveButton = new Button("Save");
 
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
+            SettingsSingleton.setDrawGrid(showGrid.isSelected());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            controller.saveSettings();
             settingsWindow.close();
         });
 
@@ -134,7 +139,7 @@ public class OptionsToolbar extends CustomToolbar {
         HBox languageSettingsLayout = new HBox(new Label("Language"), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
-        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, saveButton);
+        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 

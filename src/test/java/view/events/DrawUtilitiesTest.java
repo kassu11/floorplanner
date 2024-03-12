@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.GUI;
-import view.ShapeType;
+import view.types.ShapeType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
