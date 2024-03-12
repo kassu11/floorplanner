@@ -223,8 +223,8 @@ public class Controller {
 
     public void setCurrentMode(ModeType currentMode) {
         if(currentMode == ModeType.DRAW) {
-            this.selectedColor = "#13fc03";
-            this.hoverColor = "#13fc03";
+            this.selectedColor = "#00d415";
+            this.hoverColor = "#00d415";
         } else if(currentMode == ModeType.SELECT || currentMode == ModeType.ROTATE) {
             this.selectedColor = "#036ffc";
             this.hoverColor = "#78b0fa";
