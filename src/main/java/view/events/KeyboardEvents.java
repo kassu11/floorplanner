@@ -23,8 +23,19 @@ public class KeyboardEvents {
                     SettingsSingleton.setLastPoint(null);
                     previewGc.clear();
                 }
+                case CONTROL -> SettingsSingleton.setCtrlDown(true);
                 case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);
                 case Y -> handleHistoryShortCuts(event, controller.getHistoryManager()::redo, previewGc, gc, controller);
+                default -> {
+                }
+            }
+        };
+    }
+
+    public static KeyboardEventHandler onKeyReleased(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
+        return (KeyEvent event) -> {
+            switch (event.getCode()) {
+                case CONTROL -> SettingsSingleton.setCtrlDown(false);
                 default -> {
                 }
             }

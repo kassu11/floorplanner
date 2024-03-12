@@ -108,7 +108,7 @@ public class SelectUtilities {
 			angle = angle < -Math.PI ? angle + 2 * Math.PI : angle > Math.PI ? angle - 2 * Math.PI : angle;
 
 			// Temporary snapping on/off
-			boolean snapping = true;
+			boolean snapping = SettingsSingleton.isCtrlDown();
 			double snappingAngle = Math.PI / 12;
 			angle = snapping ? angle >= snappingAngle || angle <= -snappingAngle ? angle >= 0 ? snappingAngle : -snappingAngle : 0 : angle;
 
@@ -116,9 +116,11 @@ public class SelectUtilities {
 				if(point.getType() != ShapeType.POINT) continue;
 				double radius = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
 				double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
-				pointAngle = snapping ? normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle;
+//				pointAngle = snapping ? normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle;
+//				double newAngle = snapping ? pointAngle + normalizeToSnappingAngle(snappingAngle, pointAngle) : pointAngle + angle;
 				double newAngle = (pointAngle + angle);
 				point.setCoordinates(centroidX + radius * Math.cos(newAngle), centroidY + radius * Math.sin(newAngle));
+				System.out.println(point.getSelectedX());
 			}
 
 			if (!snapping || angle != 0) {

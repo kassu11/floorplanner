@@ -14,6 +14,7 @@ public class SettingsSingleton {
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 25;
+    private static boolean ctrlIsDown = false;
 
     private SettingsSingleton() {
     }
@@ -162,5 +163,13 @@ public class SettingsSingleton {
     public static void setMousePosition(double mouseX, double mouseY) {
         SettingsSingleton.mouseX = mouseX;
         SettingsSingleton.mouseY = mouseY;
+    }
+
+    public static boolean isCtrlDown() {
+        return ctrlIsDown;
+    }
+
+    public static void setCtrlDown(boolean shiftIsDown) {
+        SettingsSingleton.ctrlIsDown = shiftIsDown;
     }
 }

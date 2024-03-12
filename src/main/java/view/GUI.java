@@ -214,6 +214,7 @@ public class GUI extends Application {
         stage.show();
 
         view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, gc, controller)::handle);
+        view.setOnKeyReleased(KeyboardEvents.onKeyReleased(previewGc, gc, controller)::handle);
     }
 
     public CanvasContainer getCanvasContainer() {
