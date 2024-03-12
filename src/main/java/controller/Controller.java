@@ -11,6 +11,7 @@ import view.GUI;
 import view.GUIElements.canvas.CanvasMath;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
+import view.types.ModeType;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
