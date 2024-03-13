@@ -64,8 +64,12 @@ public class SelectUtilities {
 			}
 		}
 
+		if(hoveredPoint != null && selectedShape.getType() == ShapeType.POINT) {
+			fixedX = hoveredPoint.getX() - selectedShape.getSelectedX();
+			fixedY = hoveredPoint.getY() - selectedShape.getSelectedY();
+		}
+
 		moveAllSelectedShapesToCursor(controller, fixedX, fixedY);
-		snapSelectedPointToHoveredPoint(selectedShape, hoveredPoint);
 	}
 
 	private static void moveAllSelectedShapesToCursor(Controller controller, double x, double y) {
@@ -73,11 +77,6 @@ public class SelectUtilities {
 			if (shape.getType() != ShapeType.POINT) continue;
 			shape.setCoordinates(shape.getSelectedX() + x, shape.getSelectedY() + y);
 		}
-	}
-
-	private static void snapSelectedPointToHoveredPoint(Shape selectedShape, Point hoveredPoint) {
-		if(selectedShape == null || hoveredPoint == null) return;
-		if(selectedShape.getType() == ShapeType.POINT) selectedShape.setCoordinates(hoveredPoint.getX(), hoveredPoint.getY());
 	}
 
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y) {
