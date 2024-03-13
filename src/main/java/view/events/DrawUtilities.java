@@ -4,7 +4,6 @@ import controller.Controller;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
-import view.SettingsSingleton;
 import view.types.ShapeType;
 
 public class DrawUtilities {

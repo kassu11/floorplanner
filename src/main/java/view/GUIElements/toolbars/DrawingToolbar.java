@@ -5,7 +5,6 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import view.types.ModeType;
-import view.SettingsSingleton;
 import view.types.ShapeType;
 
 public class DrawingToolbar extends CustomToolbar {

@@ -4,12 +4,11 @@ import controller.Controller;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
-import view.SettingsSingleton;
 import view.types.ShapeType;
 import java.util.function.Consumer;
 
 public class SelectUtilities {
-	private static double selectedX, selectedY, startX, startY;
+	private static double selectedX, selectedY;
 
 	public static void selectHoveredShape(Controller controller, double x, double y) {
 		selectHoveredShape(controller, x, y, true);
@@ -18,8 +17,6 @@ public class SelectUtilities {
 	public static void selectHoveredShape(Controller controller, double x, double y, boolean history) {
 		Shape selectedShape = controller.getHoveredShape();
 		controller.setSelectedShape(selectedShape);
-		startX = x;
-		startY = y;
 		selectedX = x;
 		selectedY = y;
 		boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
@@ -126,7 +123,7 @@ public class SelectUtilities {
 
 		double centroidX = sumX / totalPoints;
 		double centroidY = sumY / totalPoints;
-		Shape selectedShape = controller.getSelectedShape();
+
 		if (totalPoints > 1) {
 			double angle = Math.atan2(y - centroidY, x - centroidX) - Math.atan2(selectedY - centroidY, selectedX - centroidX);
 
