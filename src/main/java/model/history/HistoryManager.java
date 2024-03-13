@@ -4,7 +4,6 @@ import controller.Controller;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.types.ModeType;
-import view.SettingsSingleton;
 import view.types.ShapeType;
 import view.events.SelectUtilities;
 

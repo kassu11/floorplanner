@@ -148,7 +148,9 @@ public class GUI extends Application {
             }
 
             if (hoveredShape != null) {
-                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.DRAW) return;
+//                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.DRAW) return;
+                if(hoveredShape.getType() == ShapeType.LINE &&
+                    (controller.getCurrentMode() == ModeType.DRAW || (controller.getCurrentMode() == ModeType.SELECT && !event.isShiftDown()))) return;
                 previewGc.setFillColor(controller.getHoverColor());
                 previewGc.setStrokeColor(controller.getHoverColor());
                 hoveredShape.draw(previewGc);

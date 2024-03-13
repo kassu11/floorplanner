@@ -1,10 +1,6 @@
 package view;
 
 import entity.Settings;
-import model.shapes.Point;
-import model.shapes.Shape;
-import view.types.ModeType;
-import view.types.ShapeType;
 
 public class SettingsSingleton {
     private static boolean drawLengths = true;
