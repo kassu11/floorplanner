@@ -42,7 +42,6 @@ public class Controller {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
         this.historyManager = new HistoryManager(this);
-        loadSettings();
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -145,10 +144,12 @@ public class Controller {
         if(settingsDao.find(1) == null) {
             Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
             settingsDao.persist(settings);
+            System.out.println("Settings saved!");
         } else {
             Settings settings = SettingsSingleton.getInstance().getSettings();
             settingsDao.find(1).setSettings(settings);
             settingsDao.update(settingsDao.find(1));
+            getShapeContainer(SingletonType.FINAL).clearShapes();
         }
     }
 

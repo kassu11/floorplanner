@@ -8,13 +8,16 @@
         <class>entity.Settings</class>
 
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=floorplanner"/>
-            <property name="jakarta.persistence.jdbc.user" value="sa"/>
-            <property name="jakarta.persistence.jdbc.password" value="Pa1@w0rd"/>
-            <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgressql://localhost:5432/floorplanner"/>
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="example"/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create" /> 
+            
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" /> 
         </properties>
     </persistence-unit>
 </persistence>

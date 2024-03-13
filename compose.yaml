@@ -1,16 +1,35 @@
-version: '3.8'
+# Use postgres/example user/password credentials
+version: '3.9'
 
 services:
-  sql_server:
-    image: mcr.microsoft.com/mssql/server:latest
-    restart: always
-    environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: Pa1@w0rd
-    ports:
-      - "1433:1433"
-    volumes:
-      - sql_server_data:/var/opt/mssql
 
-volumes:
-  sql_server_data:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: floorplanner
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 5432:5432
+
+  floorplanner:
+    image: floorplanner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+    depends_on:
+      - db
