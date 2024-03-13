@@ -44,6 +44,8 @@ public class GUI extends Application {
         gc.setLineWidth(5);
         previewGc.setLineWidth(5);
 
+        if(SettingsSingleton.isGridEnabled()) gc.getGrid().drawGrid();
+
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
             // Point endPoint = ;

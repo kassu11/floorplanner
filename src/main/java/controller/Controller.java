@@ -147,9 +147,23 @@ public class Controller {
         if(settingsDao.find(1) == null) {
             Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
             settingsDao.persist(settings);
+            System.out.println("Settings saved!");
         } else {
             Settings settings = SettingsSingleton.getInstance().getSettings();
-            settingsDao.update(settings);
+            settingsDao.find(1).setSettings(settings);
+            settingsDao.update(settingsDao.find(1));
+            getShapeContainer(SingletonType.FINAL).clearShapes();
+        }
+    }
+
+    public void loadSettings() {
+        Settings settings = settingsDao.find(1);
+        if(settings != null) {
+            SettingsSingleton.getInstance().setSettings(settings);
+        }
+        else {
+            settings = SettingsSingleton.getInstance().getSettings();
+            settingsDao.persist(settings);
         }
     }
 
