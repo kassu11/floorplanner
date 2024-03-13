@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class MariaDbJpaConnection {
+public class PostgresDBJpaConnection {
     private static EntityManagerFactory emf = null;
     private static EntityManager em = null;
 
