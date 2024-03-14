@@ -5,7 +5,7 @@ pipeline {
     // Define Docker Hub credentials ID
     DOCKERHUB_CREDENTIALS_ID = 'docker-auth'
     // Define Docker Hub repository name
-    DOCKERHUB_REPO = 'aabic/floorplanner'
+    DOCKERHUB_REPO = 'nasimxx/floorplanner'
     // Define Docker image tag
     DOCKER_IMAGE_TAG = 'latest'
   }
