@@ -8,12 +8,9 @@ import view.types.ShapeType;
 import view.events.SelectUtilities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HistoryManager {
-    private Map<Integer, Shape> shapeReferences = new HashMap<>();
     private List<HistoryEvent> events = new ArrayList<>();
     private int index = 0;
     private Controller controller;
@@ -60,9 +57,8 @@ public class HistoryManager {
     }
 
     private boolean assignShape(Shape shape) {
-        if (this.shapeReferences.containsKey(shape.getId())) return false;
+        if (shape.getId() != 0)  return false;
         shape.assignId();
-        this.shapeReferences.put(shape.getId(), shape);
         return true;
     }
 
