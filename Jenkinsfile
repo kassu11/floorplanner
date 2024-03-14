@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     // Define Docker Hub credentials ID
-    DOCKERHUB_CREDENTIALS_ID = 'docker-auth'
+    DOCKERHUB_CREDENTIALS_ID = 'nasimxx-docker'
     // Define Docker Hub repository name
     DOCKERHUB_REPO = 'nasimxx/floorplanner'
     // Define Docker image tag
@@ -44,19 +44,16 @@ pipeline {
         bat 'mvn verify'
       }
     }
-    stage('Build Docker Image') {
-      steps {
-        // Build Docker image
-        script {
-          docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-        }
-      }
+    stage('Build Docker Image') {  
+      steps{                     
+        sh 'docker-compose build'     
+        echo 'Docker-compose-build Build Image Completed'                
+      }           
     }
     stage('Login to Docker Hub') {          
       steps{                          
         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'                     
         echo 'Login Completed'      
-      }
     }
 
     stage('Push Image to Docker Hub') {         
@@ -65,6 +62,7 @@ pipeline {
         echo 'Push Image Completed'       
       }            
     }           
+  }
     stage('Push Docker Image to Docker Hub') {
       steps {
           // Push Docker image to Docker Hub
