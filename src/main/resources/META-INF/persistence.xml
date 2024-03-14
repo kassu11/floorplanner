@@ -9,9 +9,9 @@
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgressql://adminer:5432/floorplanner"/>
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="example"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432/floorplanner"/>
+            <property name="jakarta.persistence.jdbc.user" value='gigauser'/>
+            <property name="jakarta.persistence.jdbc.password" value='123ex#'/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create" /> 

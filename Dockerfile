@@ -1,6 +1,9 @@
 # Use an official Maven image as a parent image
 FROM maven:latest
 
+# Set the port number the container should expose
+EXPOSE 8080
+
 # Set the working directory in the container
 WORKDIR /app
 
