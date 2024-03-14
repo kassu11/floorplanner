@@ -44,28 +44,15 @@ pipeline {
         bat 'mvn verify'
       }
     }
-
     stage('Build Docker Image') {
       steps {
-        sh 'docker-compose build'
-        echo 'Docker-compose-build Build Image Completed'
+        // Build Docker image
+        script {
+          docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
+        }
       }
     }
-
-    stage('Login to Docker Hub') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-        echo 'Login Completed'
-      }
-    }
-
-    stage('Push Image to Docker Hub') {
-      steps {
-        sh 'sudo docker push <dockerhubusername>/<dockerhubreponame>:$BUILD_NUMBER'
-        echo 'Push Image Completed'
-      }
-    }
-    stage('Push Docker Image to Docker Hub') {
+        stage('Push Docker Image to Docker Hub') {
       steps {
         // Push Docker image to Docker Hub
         script {
