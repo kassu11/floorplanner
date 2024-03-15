@@ -152,7 +152,6 @@ public class Controller {
             Settings settings = SettingsSingleton.getInstance().getSettings();
             settingsDao.find(1).setSettings(settings);
             settingsDao.update(settingsDao.find(1));
-            getShapeContainer(SingletonType.FINAL).clearShapes();
         }
     }
 
