@@ -45,6 +45,7 @@ public class Controller {
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
         this.historyManager = new HistoryManager(this);
         setCurrentMode(ModeType.DRAW);
+        loadSettings();
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
