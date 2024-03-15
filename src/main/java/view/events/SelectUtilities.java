@@ -1,69 +1,91 @@
 package view.events;
 
 import controller.Controller;
-import model.Point;
-import model.Shape;
-import view.GUIElements.CustomCanvas;
-import view.SettingsSingleton;
-import view.ShapeType;
+import model.shapes.Point;
+import model.shapes.Shape;
+import view.GUIElements.canvas.CustomCanvas;
+import view.types.ShapeType;
+import java.util.function.Consumer;
 
 public class SelectUtilities {
-	private static double selectedX, selectedY, startX, startY;
+	private static double selectedX, selectedY;
 
 	public static void selectHoveredShape(Controller controller, double x, double y) {
 		selectHoveredShape(controller, x, y, true);
 	}
 
 	public static void selectHoveredShape(Controller controller, double x, double y, boolean history) {
-		Shape selectedShape = SettingsSingleton.getHoveredShape();
-		SettingsSingleton.setSelectedShape(selectedShape);
-		startX = x;
-		startY = y;
+		Shape selectedShape = controller.getHoveredShape();
+		controller.setSelectedShape(selectedShape);
 		selectedX = x;
 		selectedY = y;
+		boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
 
-		if (history) controller.getHistoryManager().selectShape(selectedShape, x, y);
+		Consumer<Shape> transferPoint = point -> {
+			transferPoints(controller, point, Controller.SingletonType.PREVIEW);
+			point.setSelectedCoordinates(point.getX() - x, point.getY() - y);
+		};
 
 		if (selectedShape.getType() == ShapeType.LINE) {
 			controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.PREVIEW);
-			selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.PREVIEW));
-		} else if (selectedShape.getType() == ShapeType.POINT) transferPoints(controller, selectedShape, Controller.SingletonType.PREVIEW);
+			selectedShape.getPoints().forEach(transferPoint);
+		} else if (selectedShape.getType() == ShapeType.POINT) transferPoint.accept(selectedShape);
+
+		if (history) {
+			if (isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+			else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+		}
 	}
 
-	public static void unselectHoveredShape(Controller controller) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
-		if (selectedShape != null) {
-			if (selectedShape.getType() == ShapeType.POINT)
-				transferPoints(controller, selectedShape, Controller.SingletonType.FINAL);
-			else if (selectedShape.getType() == ShapeType.LINE) {
-				controller.transferSingleShapeTo(selectedShape, Controller.SingletonType.FINAL);
-				selectedShape.getPoints().forEach(point -> transferPoints(controller, point, Controller.SingletonType.FINAL));
-			}
-			SettingsSingleton.setSelectedShape(null);
+	public static void updateSelectionCoordinates(Controller controller, double x, double y) {
+		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+			shape.setSelectedCoordinates(shape.getX() - x, shape.getY() - y);
 		}
 	}
 
 	public static void moveSelectedArea(Controller controller, double x, double y) {
-		double deltaX = x - selectedX;
-		double deltaY = y - selectedY;
+		Point hoveredPoint = controller.getHoveredPoint();
+		Shape selectedShape = controller.getSelectedShape();
 
-		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-			if (shape.getType() == ShapeType.POINT) {
-				shape.setCoordinates(shape.getX() + deltaX, shape.getY() + deltaY);
+		double fixedY = y;
+		double fixedX = x;
+		if(controller.isCtrlDown() && selectedShape.getType() == ShapeType.POINT && selectedShape.getChildren().size() == 1) {
+			Point oppositePoint = selectedShape.getChildren().get(0).getPoints().get(0);
+			if (oppositePoint == selectedShape) oppositePoint = selectedShape.getChildren().get(0).getPoints().get(1);
+
+			if(!controller.getShapes(Controller.SingletonType.PREVIEW).contains(oppositePoint)) {
+				double snappedAngle = ShapeMath.getSnapAngle(oppositePoint.getX(), oppositePoint.getY(), x, y);
+				double radius = ShapeMath.getRadius(oppositePoint.getX(), oppositePoint.getY(), x, y);
+				fixedX = ShapeMath.getSnapAngleX(oppositePoint.getX(), radius, snappedAngle) - selectedShape.getSelectedX();
+				fixedY = ShapeMath.getSnapAngleY(oppositePoint.getY(), radius, snappedAngle) - selectedShape.getSelectedY();
 			}
 		}
-		selectedX = x;
-		selectedY = y;
+
+		if(hoveredPoint != null && selectedShape.getType() == ShapeType.POINT) {
+			fixedX = hoveredPoint.getX() - selectedShape.getSelectedX();
+			fixedY = hoveredPoint.getY() - selectedShape.getSelectedY();
+		}
+
+		moveAllSelectedShapesToCursor(controller, fixedX, fixedY);
+	}
+
+	private static void moveAllSelectedShapesToCursor(Controller controller, double x, double y) {
+		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+			if (shape.getType() != ShapeType.POINT) continue;
+			shape.setCoordinates(shape.getSelectedX() + x, shape.getSelectedY() + y);
+		}
 	}
 
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y) {
 		finalizeSelectedShapes(controller, canvas, x, y, true);
 	}
+
 	public static void finalizeSelectedShapes(Controller controller, CustomCanvas canvas, double x, double y, boolean history) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
-		Shape hoveredShape = SettingsSingleton.getHoveredShape();
+		Shape selectedShape = controller.getSelectedShape();
+		Shape hoveredShape = controller.getHoveredShape();
 
 		if (hoveredShape != null && selectedShape.getType() == ShapeType.POINT && hoveredShape.getType() == ShapeType.POINT) {
+			if (history) controller.getHistoryManager().finalizeSelectionMerge(controller.getShapes(Controller.SingletonType.PREVIEW), (Point) selectedShape, (Point) hoveredShape);
 			for (int i = 0; i < selectedShape.getChildren().size(); i++) {
 				Shape childShape = selectedShape.getChildren().get(i);
 				if (childShape.getPoints().contains(hoveredShape)) {
@@ -77,52 +99,67 @@ public class SelectUtilities {
 			}
 
 			controller.removeShape(selectedShape, Controller.SingletonType.PREVIEW);
-		} else
+			if(hoveredShape.getChildren().isEmpty()) controller.removeShape(hoveredShape, Controller.SingletonType.FINAL);
+		} else {
 			moveSelectedArea(controller, x, y);
+			if (history) controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+		}
 
-		SettingsSingleton.setSelectedShape(null);
-		controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
+		controller.setSelectedShape(null);
+		if(canvas != null) controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-		if(history) controller.getHistoryManager().finalizeSelection(selectedShape, x, y, startX, startY, canvas);
 	}
 
-	public static void rotateSelectedShape(double x, double y) {
-		Shape selectedShape = SettingsSingleton.getSelectedShape();
-		if (selectedShape != null && selectedShape.getType() != ShapeType.POINT) {
-			double centroidX = selectedShape.getCentroidX();
-			double centroidY = selectedShape.getCentroidY();
-			double vectorX1 = selectedX - centroidX;
-			double vectorY1 = selectedY - centroidY;
-			double vectorX2 = x - centroidX;
-			double vectorY2 = y - centroidY;
-			double dotProduct = vectorX1 * vectorX2 + vectorY1 * vectorY2;
-			double determinant = vectorX1 * vectorY2 - vectorY1 * vectorX2;
-			double angle = Math.atan2(determinant, dotProduct);
+	public static void rotateSelectedShape(Controller controller, double x, double y) {
+		double sumX = 0, sumY = 0, totalPoints = 0;
 
-			for (Point point : selectedShape.getPoints()) {
-				double radians = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
-				if (centroidX == point.getX()) {
-					if (point.getY() - centroidY < 0)
-						point.setCoordinates(centroidX, centroidY - radians);
-					else
-						point.setCoordinates(centroidX, centroidY + radians);
-				} else {
-					double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
-					double newAngle = (pointAngle + angle) % (2 * Math.PI);
-					point.setCoordinates(centroidX + radians * Math.cos(newAngle), centroidY + radians * Math.sin(newAngle));
-				}
+		for (Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+			if (shape.getType() == ShapeType.POINT) {
+				sumX += shape.getX();
+				sumY += shape.getY();
+				totalPoints++;
+			}
+		}
+
+		double centroidX = sumX / totalPoints;
+		double centroidY = sumY / totalPoints;
+
+		if (totalPoints > 1) {
+			double angle = Math.atan2(y - centroidY, x - centroidX) - Math.atan2(selectedY - centroidY, selectedX - centroidX);
+
+			// Check for the wrap around
+			angle = angle < -Math.PI ? angle + 2 * Math.PI : angle > Math.PI ? angle - 2 * Math.PI : angle;
+
+			// Temporary snapping on/off
+			boolean snapping = controller.isCtrlDown();
+			double snappingAngle = Math.PI / 12;
+			angle = snapping ? angle >= snappingAngle || angle <= -snappingAngle ? angle >= 0 ? snappingAngle : -snappingAngle : 0 : angle;
+
+			for (Shape point : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+				if(point.getType() != ShapeType.POINT) continue;
+				double radius = Math.sqrt(Math.pow(point.getX() - centroidX, 2) + Math.pow(point.getY() - centroidY, 2));
+				double pointAngle = Math.atan2(point.getY() - centroidY, point.getX() - centroidX);
+				double newAngle = (pointAngle + angle);
+				point.setCoordinates(centroidX + radius * Math.cos(newAngle), centroidY + radius * Math.sin(newAngle));
 			}
 
-			selectedX = x;
-			selectedY = y;
+			if (!snapping || angle != 0) {
+				selectedX = x;
+				selectedY = y;
+			}
 		}
 	}
 
 	public static void finalizeSelectedRotation(Controller controller, double x, double y) {
-		rotateSelectedShape(x, y);
-		SettingsSingleton.setSelectedShape(null);
+		rotateSelectedShape(controller, x, y);
+		controller.setSelectedShape(null);
+		controller.getHistoryManager().finalizeSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+	}
 
+	public static void deleteShape(Controller controller, Shape shape) {
+		controller.getHistoryManager().deleteShape(shape);
+		controller.deleteShape(shape, Controller.SingletonType.FINAL);
 	}
 
 	private static void transferPoints(Controller controller, Shape point, Controller.SingletonType type) {

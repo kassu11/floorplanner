@@ -1,12 +1,18 @@
 package controller;
 
-import model.*;
+import dao.SettingsDao;
+import entity.Settings;
 import model.history.HistoryManager;
+import model.shapeContainers.FinalShapesSingleton;
+import model.shapeContainers.PreviewShapesSingleton;
+import model.shapeContainers.ShapeContainer;
+import model.shapes.*;
 import view.GUI;
-import view.GUIElements.CanvasMath;
-import view.GUIElements.CustomCanvas;
+import view.GUIElements.canvas.CanvasMath;
+import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
-import view.ShapeType;
+import view.types.ModeType;
+import view.types.ShapeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +25,16 @@ public class Controller {
     private ShapeContainer previewShapes = PreviewShapesSingleton.getInstance();
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
+    private SettingsDao settingsDao = new SettingsDao();
 
+    private boolean ctrlIsDown = false;
+    private ShapeType currentShape = ShapeType.LINE;
+    private ModeType currentMode = ModeType.DRAW;
+    private Point lastPoint, hoveredPoint;
+    private Shape selectedShape, hoveredShape;
+    private double mouseX, mouseY;
+
+    private String hoverColor, selectedColor;
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -29,6 +44,8 @@ public class Controller {
         this.gui = gui;
         this.canvasMath = new CanvasMath(this.gui.getCanvasContainer());
         this.historyManager = new HistoryManager(this);
+        setCurrentMode(ModeType.DRAW);
+        loadSettings();
     }
 
     public Shape createShape(double x, double y, double x1, double y1, ShapeType shapeType, SingletonType singletonType) {
@@ -82,7 +99,7 @@ public class Controller {
 
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
         customCanvas.clear();
-        if(SettingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
+        if(settingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
@@ -98,6 +115,9 @@ public class Controller {
 
     public void deleteShape(Shape shape, SingletonType type) {
         shape.delete(getShapeContainer(type));
+        this.setHoveredShape(null);
+        this.setSelectedShape(null);
+        this.setLastPoint(null);
     }
 
     public List<Shape> getShapes(SingletonType type) {
@@ -122,6 +142,29 @@ public class Controller {
         Point point = new Point(x, y);
         if (singletonType != null) getShapeContainer(singletonType).addShape(point);
         return point;
+    }
+
+    public void saveSettings() {
+        if(settingsDao.find(1) == null) {
+            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
+            settingsDao.persist(settings);
+            System.out.println("Settings saved!");
+        } else {
+            Settings settings = SettingsSingleton.getInstance().getSettings();
+            settingsDao.find(1).setSettings(settings);
+            settingsDao.update(settingsDao.find(1));
+        }
+    }
+
+    public void loadSettings() {
+        Settings settings = settingsDao.find(1);
+        if(settings != null) {
+            SettingsSingleton.getInstance().setSettings(settings);
+        }
+        else {
+            settings = SettingsSingleton.getInstance().getSettings();
+            settingsDao.persist(settings);
+        }
     }
 
     public CanvasMath getCanvasMath() {
@@ -176,4 +219,94 @@ public class Controller {
         return historyManager;
     }
 
+
+
+
+
+    public ShapeType getCurrentShape() {
+        return currentShape;
+    }
+
+    public void setCurrentShape(ShapeType shape) {
+        currentShape = shape;
+    }
+
+    public ModeType getCurrentMode() {
+        return currentMode;
+    }
+
+    public void setCurrentMode(ModeType currentMode) {
+        if(currentMode == ModeType.DRAW) {
+            this.selectedColor = "#00d415";
+            this.hoverColor = "#00d415";
+        } else if(currentMode == ModeType.SELECT || currentMode == ModeType.ROTATE) {
+            this.selectedColor = "#036ffc";
+            this.hoverColor = "#78b0fa";
+        } else if(currentMode == ModeType.DELETE) {
+            this.selectedColor = "#000000";
+            this.hoverColor = "#ff0000";
+        }
+        this.currentMode = currentMode;
+    }
+    public void setLastPoint(Point lastPoint) {
+        this.lastPoint = lastPoint;
+    }
+
+    public Point getLastPoint() {
+        return lastPoint;
+    }
+
+    public Point getHoveredPoint() {
+        return hoveredPoint;
+    }
+
+    public void setHoveredPoint(Point hoveredPoint) {
+        this.hoveredPoint = hoveredPoint;
+    }
+
+    public Shape getSelectedShape() {
+        return selectedShape;
+    }
+
+    public void setSelectedShape(Shape selectedShape) {
+        this.selectedShape = selectedShape;
+    }
+
+    public Shape getHoveredShape() {
+        return hoveredShape;
+    }
+
+    public void setHoveredShape(Shape hoveredShape) {
+        this.hoveredShape = hoveredShape;
+    }
+
+    public double getMouseX() {
+        return mouseX;
+    }
+
+    public double getMouseY() {
+        return mouseY;
+    }
+
+    public void setMousePosition(double mouseX, double mouseY) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+    }
+
+    public boolean isCtrlDown() {
+        return ctrlIsDown;
+    }
+
+    public void setCtrlDown(boolean shiftIsDown) {
+        this.ctrlIsDown = shiftIsDown;
+    }
+
+
+    public String getHoverColor() {
+        return hoverColor;
+    }
+
+    public String getSelectedColor() {
+        return selectedColor;
+    }
 }

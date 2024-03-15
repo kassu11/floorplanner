@@ -3,9 +3,9 @@ pipeline {
 
   environment {
     // Define Docker Hub credentials ID
-    DOCKERHUB_CREDENTIALS_ID = 'docker-auth'
+    DOCKERHUB_CREDENTIALS_ID = 'nasimxx-docker'
     // Define Docker Hub repository name
-    DOCKERHUB_REPO = 'aabic/floorplanner'
+    DOCKERHUB_REPO = 'nasimxx/floorplanner'
     // Define Docker image tag
     DOCKER_IMAGE_TAG = 'latest'
   }
@@ -52,9 +52,9 @@ pipeline {
         }
       }
     }
-    stage('Push Docker Image to Docker Hub') {
+        stage('Push Docker Image to Docker Hub') {
       steps {
-          // Push Docker image to Docker Hub
+        // Push Docker image to Docker Hub
         script {
           docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
             docker.image("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}").push()

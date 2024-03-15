@@ -1,6 +1,8 @@
 package model;
 
-import javax.swing.*;
+import model.shapeContainers.FinalShapesSingleton;
+import model.shapes.Shape;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
