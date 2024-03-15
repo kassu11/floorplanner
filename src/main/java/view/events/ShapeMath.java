@@ -1,5 +1,7 @@
 package view.events;
 
+import model.shapes.Point;
+
 public class ShapeMath {
     private ShapeMath() {
     }
@@ -8,6 +10,10 @@ public class ShapeMath {
         double originalAngle = Math.atan2(endY - startY, endX - startX);
         double snappingAngle = Math.PI / 12;
         return (originalAngle >= 0 ? Math.round(originalAngle / snappingAngle) : Math.ceil(originalAngle / snappingAngle - 0.5)) * snappingAngle;
+    }
+
+    public static double calculateAngle(Point pointA, Point pointB) {
+        return Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
     }
 
     public static double getRadius(double startX, double startY, double endX, double endY) {
