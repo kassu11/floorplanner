@@ -3,16 +3,13 @@ package view;
 import controller.Controller;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.shapes.Point;
 import model.shapes.Shape;
+import view.GUIElements.Ruler;
 import view.GUIElements.canvas.CanvasContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.GUIElements.toolbars.DrawingToolbar;
@@ -22,8 +19,6 @@ import view.events.KeyboardEvents;
 import view.events.SelectUtilities;
 import view.types.ModeType;
 import view.types.ShapeType;
-
-import static javafx.scene.paint.Color.*;
 
 public class GUI extends Application {
 
