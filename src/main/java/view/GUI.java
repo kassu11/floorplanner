@@ -149,6 +149,16 @@ public class GUI extends Application {
 
             if (hoveredShape != null) {
 //                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.DRAW) return;
+
+                // Point across a line
+                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.DRAW){
+                    double hoveredDistance = hoveredShape.calculateDistanceFromMouse(mouseX, mouseY);
+                    double distanceFromPointA = hoveredShape.getPoints().get(0).calculateDistanceFromMouse(mouseX, mouseY);
+                    double angle = Math.atan2(hoveredShape.getPoints().get(1).getY() - hoveredShape.getPoints().get(0).getY(), hoveredShape.getPoints().get(1).getX() - hoveredShape.getPoints().get(0).getX());
+                    double radius = Math.sqrt(Math.pow(distanceFromPointA, 2) - Math.pow(hoveredDistance, 2));
+                    DrawUtilities.renderDrawingPreview(controller, hoveredShape.getPoints().get(0).getX() + radius * Math.cos(angle), hoveredShape.getPoints().get(0).getY() + radius * Math.sin(angle), previewGc);
+                }
+
                 if(hoveredShape.getType() == ShapeType.LINE &&
                     (controller.getCurrentMode() == ModeType.DRAW || (controller.getCurrentMode() == ModeType.SELECT && !event.isShiftDown()))) return;
                 previewGc.setFillColor(controller.getHoverColor());

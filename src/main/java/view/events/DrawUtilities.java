@@ -40,6 +40,14 @@ public class DrawUtilities {
     public static void renderDrawingPreview(Controller controller, double x, double y, CustomCanvas gc) {
         Shape lastPoint = controller.getLastPoint();
         Shape hoveredShape = controller.getHoveredShape();
+        if (hoveredShape != null){
+            if (lastPoint == null && hoveredShape.getType() == ShapeType.LINE){
+                Shape point = controller.createAbsolutePoint(x, y);
+                point.draw(gc);
+                return;
+            }
+        }
+
         if (lastPoint == null) return;
         double fixedY = y;
         double fixedX = x;
