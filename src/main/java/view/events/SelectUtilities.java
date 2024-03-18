@@ -46,6 +46,7 @@ public class SelectUtilities {
 	public static void moveSelectedArea(Controller controller, double x, double y) {
 		Point hoveredPoint = controller.getHoveredPoint();
 		Shape selectedShape = controller.getSelectedShape();
+		Shape hoveredShape = controller.getHoveredShape();
 
 		double fixedY = y;
 		double fixedX = x;
@@ -56,14 +57,35 @@ public class SelectUtilities {
 			if(!controller.getShapes(Controller.SingletonType.PREVIEW).contains(oppositePoint)) {
 				double snappedAngle = ShapeMath.getSnapAngle(oppositePoint.getX(), oppositePoint.getY(), x, y);
 				double radius = ShapeMath.getRadius(oppositePoint.getX(), oppositePoint.getY(), x, y);
-				fixedX = ShapeMath.getSnapAngleX(oppositePoint.getX(), radius, snappedAngle) - selectedShape.getSelectedX();
-				fixedY = ShapeMath.getSnapAngleY(oppositePoint.getY(), radius, snappedAngle) - selectedShape.getSelectedY();
+				fixedX = ShapeMath.getSnapAngleX(oppositePoint.getX(), radius, snappedAngle);
+				fixedY = ShapeMath.getSnapAngleY(oppositePoint.getY(), radius, snappedAngle);
+
+				if(hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
+					Shape line = controller.createShape(fixedX, fixedY, oppositePoint.getX(), oppositePoint.getY(), ShapeType.LINE, null);
+					Point intersection = ShapeMath.createIntersectionPoint(controller, line, hoveredShape);
+					if (intersection != null) {
+						fixedX = intersection.getX();
+						fixedY = intersection.getY();
+					}
+				}
+				fixedX -= selectedShape.getSelectedX();
+				fixedY -= selectedShape.getSelectedY();
 			}
 		}
 
 		if(hoveredPoint != null && selectedShape.getType() == ShapeType.POINT) {
 			fixedX = hoveredPoint.getX() - selectedShape.getSelectedX();
 			fixedY = hoveredPoint.getY() - selectedShape.getSelectedY();
+		}
+		else if(!controller.isCtrlDown() && hoveredShape != null && hoveredShape.getType() == ShapeType.LINE && selectedShape.getType() == ShapeType.POINT) {
+			Point pointA = hoveredShape.getPoints().get(0);
+			double hoveredDistance = hoveredShape.calculateDistanceFromMouse(fixedX, fixedY);
+			double distanceFromPointA = pointA.calculateDistanceFromMouse(fixedX, fixedY);
+			double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
+			double radius = Math.hypot(distanceFromPointA, hoveredDistance);
+
+			fixedY = pointA.getY() + radius * Math.sin(angle) - selectedShape.getSelectedY();
+			fixedX = pointA.getX() + radius * Math.cos(angle) - selectedShape.getSelectedX();
 		}
 
 		moveAllSelectedShapesToCursor(controller, fixedX, fixedY);
