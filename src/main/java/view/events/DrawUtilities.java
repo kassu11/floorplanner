@@ -33,39 +33,25 @@ public class DrawUtilities {
         Point startPoint = controller.getLastPoint();
         Point endPoint = controller.getHoveredPoint();
         Shape hoveredShape = controller.getHoveredShape();
-        double fixedY = y;
-        double fixedX = x;
+        Point mousePoint = controller.createAbsolutePoint(x, y);
 
         if(controller.isCtrlDown()) {
-            double snappedAngle = ShapeMath.getSnapAngle(startPoint.getX(), startPoint.getY(), x, y);
-            double radius = ShapeMath.getRadius(startPoint.getX(), startPoint.getY(), x, y);
-            fixedX = ShapeMath.getSnapAngleX(startPoint.getX(), radius, snappedAngle);
-            fixedY = ShapeMath.getSnapAngleY(startPoint.getY(), radius, snappedAngle);
+            mousePoint.setCoordinates(ShapeMath.getSnapCoordinates(startPoint, x, y));
         }
 
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
             if(!controller.isCtrlDown()) {
-                Point pointA = hoveredShape.getPoints().get(0);
-                double hoveredDistance = hoveredShape.calculateDistanceFromMouse(fixedX, fixedY);
-                double distanceFromPointA = pointA.calculateDistanceFromMouse(fixedX, fixedY);
-                double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
-                double radius = Math.hypot(distanceFromPointA, hoveredDistance);
-
-                fixedY = pointA.getY() + radius * Math.sin(angle);
-                fixedX = pointA.getX() + radius * Math.cos(angle);
+                mousePoint.setCoordinates(ShapeMath.getPointOnLine(hoveredShape, x, y));
             } else {
-                Shape line = controller.createShape(fixedX, fixedY, startPoint.getX(), startPoint.getY(), ShapeType.LINE, null);
+                Shape line = controller.createShape(mousePoint.getX(), mousePoint.getY(), startPoint.getX(), startPoint.getY(), ShapeType.LINE, null);
                 Point intersection = ShapeMath.createIntersectionPoint(controller, line, hoveredShape);
-                if (intersection != null) {
-                    fixedX = intersection.getX();
-                    fixedY = intersection.getY();
-                }
+                if (intersection != null) mousePoint = intersection;
             }
         }
-        if (endPoint == null) endPoint = controller.createAbsolutePoint(fixedX, fixedY, Controller.SingletonType.FINAL);
+        if (endPoint == null) endPoint = controller.createAbsolutePoint(mousePoint.getX(), mousePoint.getY(), Controller.SingletonType.FINAL);
 
         Shape shape = controller.createShape(endPoint, startPoint, shapeType, Controller.SingletonType.FINAL);
-        controller.setLastPoint(shapeType == ShapeType.MULTILINE ? endPoint : null);
+        if(shapeType != ShapeType.MULTILINE) controller.setLastPoint(null);
 
         controller.getHistoryManager().addShape(shape);
 
@@ -76,27 +62,14 @@ public class DrawUtilities {
         Point lastPoint = controller.getLastPoint();
         Shape hoveredShape = controller.getHoveredShape();
         Point mousePoint = controller.createAbsolutePoint(x, y);
-        double fixedY = y;
-        double fixedX = x;
 
         if(lastPoint != null && controller.isCtrlDown()) {
             mousePoint.setCoordinates(ShapeMath.getSnapCoordinates(lastPoint, x, y));
-//            double snappedAngle = ShapeMath.getSnapAngle(lastPoint.getX(), lastPoint.getY(), x, y);
-//            double radius = ShapeMath.getRadius(lastPoint.getX(), lastPoint.getY(), x, y);
-//            fixedX = ShapeMath.getSnapAngleX(lastPoint.getX(), radius, snappedAngle);
-//            fixedY = ShapeMath.getSnapAngleY(lastPoint.getY(), radius, snappedAngle);
         }
 
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
             if (lastPoint == null || !controller.isCtrlDown()) {
-                Point pointA = hoveredShape.getPoints().get(0);
-                double hoveredDistance = hoveredShape.calculateDistanceFromMouse(mousePoint.getX(), mousePoint.getY());
-                double distanceFromPointA = pointA.calculateDistanceFromMouse(mousePoint.getX(), mousePoint.getY());
-                double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
-                double radius = Math.hypot(distanceFromPointA, hoveredDistance);
-                mousePoint.setCoordinates(pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle));
-//                fixedY = pointA.getY() + radius * Math.sin(angle);
-//                fixedX = pointA.getX() + radius * Math.cos(angle);
+                mousePoint.setCoordinates(ShapeMath.getPointOnLine(hoveredShape, mousePoint.getX(), mousePoint.getY()));
             } else {
                 Shape line = controller.createShape(mousePoint.getX(), mousePoint.getY(), lastPoint.getX(), lastPoint.getY(), ShapeType.LINE, null);
                 Point intersection = ShapeMath.createIntersectionPoint(controller, line, hoveredShape);

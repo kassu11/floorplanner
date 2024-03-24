@@ -20,6 +20,17 @@ public class ShapeMath {
         return new double[]{ShapeMath.getSnapAngleX(point.getX(), radius, snappedAngle), ShapeMath.getSnapAngleY(point.getY(), radius, snappedAngle)};
     }
 
+    public static double[] getPointOnLine(Shape hoveredShape, double x, double y) {
+        Point pointA = hoveredShape.getPoints().get(0);
+        double hoveredDistance = hoveredShape.calculateDistanceFromMouse(x, y);
+        double distanceFromPointA = pointA.calculateDistanceFromMouse(x, y);
+        double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
+        double radius = Math.hypot(distanceFromPointA, hoveredDistance);
+
+        return new double[]{pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle)};
+//        mousePoint.setCoordinates(pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle));
+    }
+
     public static double calculateAngle(Point pointA, Point pointB) {
         return Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
     }
@@ -75,6 +86,6 @@ public class ShapeMath {
         double y1 = line.getPoints().get(0).getY();
         double x2 = line.getPoints().get(1).getX();
         double y2 = line.getPoints().get(1).getY();
-        return (x >= Math.min(x1, x2) || x <= Math.max(x1, x2) && y >= Math.min(y1, y2) && y <= Math.max(y1, y2));
+        return !(x < Math.min(x1, x2) || x > Math.max(x1, x2) || y < Math.min(y1, y2) || y > Math.max(y1, y2));
     }
 }
