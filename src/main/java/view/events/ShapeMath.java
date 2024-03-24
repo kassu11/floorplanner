@@ -14,20 +14,24 @@ public class ShapeMath {
         return (originalAngle >= 0 ? Math.round(originalAngle / snappingAngle) : Math.ceil(originalAngle / snappingAngle - 0.5)) * snappingAngle;
     }
 
-    public static double calculateAngle(Point pointA, Point pointB) {
+    public static double[] getSnapCoordinates(Point point, double x, double y) {
+        double snappedAngle = ShapeMath.getSnapAngle(point.getX(), point.getY(), x, y);
+        double radius = Math.hypot(x - point.getX(), y - point.getY());
+        return new double[]{point.getX() + Math.cos(snappedAngle) * radius, point.getY() + Math.sin(snappedAngle) * radius};
+    }
+
+    public static double[] getPointOnLine(Shape hoveredShape, double x, double y) {
+        Point pointA = hoveredShape.getPoints().get(0);
+        double hoveredDistance = hoveredShape.calculateDistanceFromMouse(x, y);
+        double distanceFromPointA = pointA.calculateDistanceFromMouse(x, y);
+        double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
+        double radius = Math.hypot(distanceFromPointA, hoveredDistance);
+
+        return new double[]{pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle)};
+    }
+
+    private static double calculateAngle(Point pointA, Point pointB) {
         return Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
-    }
-
-    public static double getRadius(double startX, double startY, double endX, double endY) {
-        return Math.hypot(endX - startX, endY - startY);
-    }
-
-    public static double getSnapAngleX(double x, double radius, double angle) {
-        return x + Math.cos(angle) * radius;
-    }
-
-    public static double getSnapAngleY(double y, double radius, double angle) {
-        return y + Math.sin(angle) * radius;
     }
 
     public static Point createIntersectionPoint(Controller controller, Shape lineA, Shape lineB) {
@@ -69,6 +73,6 @@ public class ShapeMath {
         double y1 = line.getPoints().get(0).getY();
         double x2 = line.getPoints().get(1).getX();
         double y2 = line.getPoints().get(1).getY();
-        return (x >= Math.min(x1, x2) || x <= Math.max(x1, x2) && y >= Math.min(y1, y2) && y <= Math.max(y1, y2));
+        return !(x < Math.min(x1, x2) || x > Math.max(x1, x2) || y < Math.min(y1, y2) || y > Math.max(y1, y2));
     }
 }

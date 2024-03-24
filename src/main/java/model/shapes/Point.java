@@ -49,6 +49,11 @@ public class Point extends AbstractShape {
         this.setY(y);
     }
 
+    public void setCoordinates(double[] coordinates) {
+        this.setX(coordinates[0]);
+        this.setY(coordinates[1]);
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -73,10 +78,5 @@ public class Point extends AbstractShape {
             i--;
             shape.delete(shapeContainer);
         }
-        //        getChildren().forEach(shape -> {
-        //            shape.removePoint(this);
-        //            shape.delete(shapeContainer);
-        //        });
-
     }
 }

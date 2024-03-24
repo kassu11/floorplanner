@@ -46,27 +46,34 @@ public class SelectUtilities {
 	public static void moveSelectedArea(Controller controller, double x, double y) {
 		Point hoveredPoint = controller.getHoveredPoint();
 		Shape selectedShape = controller.getSelectedShape();
+		Shape hoveredShape = controller.getHoveredShape();
 
-		double fixedY = y;
-		double fixedX = x;
+		Point mousePoint = controller.createAbsolutePoint(x, y);
 		if(controller.isCtrlDown() && selectedShape.getType() == ShapeType.POINT && selectedShape.getChildren().size() == 1) {
 			Point oppositePoint = selectedShape.getChildren().get(0).getPoints().get(0);
 			if (oppositePoint == selectedShape) oppositePoint = selectedShape.getChildren().get(0).getPoints().get(1);
 
 			if(!controller.getShapes(Controller.SingletonType.PREVIEW).contains(oppositePoint)) {
-				double snappedAngle = ShapeMath.getSnapAngle(oppositePoint.getX(), oppositePoint.getY(), x, y);
-				double radius = ShapeMath.getRadius(oppositePoint.getX(), oppositePoint.getY(), x, y);
-				fixedX = ShapeMath.getSnapAngleX(oppositePoint.getX(), radius, snappedAngle) - selectedShape.getSelectedX();
-				fixedY = ShapeMath.getSnapAngleY(oppositePoint.getY(), radius, snappedAngle) - selectedShape.getSelectedY();
+				mousePoint.setCoordinates(ShapeMath.getSnapCoordinates(oppositePoint, x, y));
+
+				if(hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
+					Shape line = controller.createShape(mousePoint.getX(), mousePoint.getY(), oppositePoint.getX(), oppositePoint.getY(), ShapeType.LINE, null);
+					Point intersection = ShapeMath.createIntersectionPoint(controller, line, hoveredShape);
+					if (intersection != null) mousePoint = intersection;
+				}
+				mousePoint.setCoordinates(mousePoint.getX() - selectedShape.getSelectedX(), mousePoint.getY() - selectedShape.getSelectedY());
 			}
 		}
 
 		if(hoveredPoint != null && selectedShape.getType() == ShapeType.POINT) {
-			fixedX = hoveredPoint.getX() - selectedShape.getSelectedX();
-			fixedY = hoveredPoint.getY() - selectedShape.getSelectedY();
+			mousePoint.setCoordinates(hoveredPoint.getX() - selectedShape.getSelectedX(), hoveredPoint.getY() - selectedShape.getSelectedY());
+		}
+		else if(!controller.isCtrlDown() && hoveredShape != null && hoveredShape.getType() == ShapeType.LINE && selectedShape.getType() == ShapeType.POINT) {
+			double[] pointsOnLine = ShapeMath.getPointOnLine(hoveredShape, x, y);
+			mousePoint.setCoordinates(pointsOnLine[0] - selectedShape.getSelectedX(), pointsOnLine[1] - selectedShape.getSelectedY());
 		}
 
-		moveAllSelectedShapesToCursor(controller, fixedX, fixedY);
+		moveAllSelectedShapesToCursor(controller, mousePoint.getX(), mousePoint.getY());
 	}
 
 	private static void moveAllSelectedShapesToCursor(Controller controller, double x, double y) {
