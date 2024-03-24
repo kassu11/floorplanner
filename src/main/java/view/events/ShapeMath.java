@@ -14,6 +14,12 @@ public class ShapeMath {
         return (originalAngle >= 0 ? Math.round(originalAngle / snappingAngle) : Math.ceil(originalAngle / snappingAngle - 0.5)) * snappingAngle;
     }
 
+    public static double[] getSnapCoordinates(Point point, double x, double y) {
+        double snappedAngle = ShapeMath.getSnapAngle(point.getX(), point.getY(), x, y);
+        double radius = ShapeMath.getRadius(point.getX(), point.getY(), x, y);
+        return new double[]{ShapeMath.getSnapAngleX(point.getX(), radius, snappedAngle), ShapeMath.getSnapAngleY(point.getY(), radius, snappedAngle)};
+    }
+
     public static double calculateAngle(Point pointA, Point pointB) {
         return Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
     }

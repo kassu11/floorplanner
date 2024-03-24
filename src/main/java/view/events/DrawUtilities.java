@@ -73,46 +73,43 @@ public class DrawUtilities {
     }
 
     public static void renderDrawingPreview(Controller controller, double x, double y, CustomCanvas gc) {
-        Shape lastPoint = controller.getLastPoint();
+        Point lastPoint = controller.getLastPoint();
         Shape hoveredShape = controller.getHoveredShape();
+        Point mousePoint = controller.createAbsolutePoint(x, y);
         double fixedY = y;
         double fixedX = x;
 
         if(lastPoint != null && controller.isCtrlDown()) {
-            double snappedAngle = ShapeMath.getSnapAngle(lastPoint.getX(), lastPoint.getY(), x, y);
-            double radius = ShapeMath.getRadius(lastPoint.getX(), lastPoint.getY(), x, y);
-            fixedX = ShapeMath.getSnapAngleX(lastPoint.getX(), radius, snappedAngle);
-            fixedY = ShapeMath.getSnapAngleY(lastPoint.getY(), radius, snappedAngle);
+            mousePoint.setCoordinates(ShapeMath.getSnapCoordinates(lastPoint, x, y));
+//            double snappedAngle = ShapeMath.getSnapAngle(lastPoint.getX(), lastPoint.getY(), x, y);
+//            double radius = ShapeMath.getRadius(lastPoint.getX(), lastPoint.getY(), x, y);
+//            fixedX = ShapeMath.getSnapAngleX(lastPoint.getX(), radius, snappedAngle);
+//            fixedY = ShapeMath.getSnapAngleY(lastPoint.getY(), radius, snappedAngle);
         }
 
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
             if (lastPoint == null || !controller.isCtrlDown()) {
                 Point pointA = hoveredShape.getPoints().get(0);
-                double hoveredDistance = hoveredShape.calculateDistanceFromMouse(fixedX, fixedY);
-                double distanceFromPointA = pointA.calculateDistanceFromMouse(fixedX, fixedY);
+                double hoveredDistance = hoveredShape.calculateDistanceFromMouse(mousePoint.getX(), mousePoint.getY());
+                double distanceFromPointA = pointA.calculateDistanceFromMouse(mousePoint.getX(), mousePoint.getY());
                 double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
                 double radius = Math.hypot(distanceFromPointA, hoveredDistance);
-
-                fixedY = pointA.getY() + radius * Math.sin(angle);
-                fixedX = pointA.getX() + radius * Math.cos(angle);
+                mousePoint.setCoordinates(pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle));
+//                fixedY = pointA.getY() + radius * Math.sin(angle);
+//                fixedX = pointA.getX() + radius * Math.cos(angle);
             } else {
-                Shape line = controller.createShape(fixedX, fixedY, lastPoint.getX(), lastPoint.getY(), ShapeType.LINE, null);
+                Shape line = controller.createShape(mousePoint.getX(), mousePoint.getY(), lastPoint.getX(), lastPoint.getY(), ShapeType.LINE, null);
                 Point intersection = ShapeMath.createIntersectionPoint(controller, line, hoveredShape);
-                if (intersection != null) {
-                    fixedX = intersection.getX();
-                    fixedY = intersection.getY();
-                }
+                if (intersection != null) mousePoint = intersection;
             }
-            controller.createAbsolutePoint(fixedX, fixedY).draw(gc);
+            mousePoint.draw(gc);
         }
 
 
         if (lastPoint == null) return;
 
-
-        Point point = controller.createAbsolutePoint(fixedX, fixedY);
-        if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) point = controller.createAbsolutePoint(hoveredShape.getX(), hoveredShape.getY());
-        Shape createdShape = controller.createShape(point, lastPoint.getX(), lastPoint.getY(), controller.getCurrentShape(), null);
+        if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) mousePoint.setCoordinates(hoveredShape.getX(), hoveredShape.getY());
+        Shape createdShape = controller.createShape(mousePoint, lastPoint.getX(), lastPoint.getY(), controller.getCurrentShape(), null);
         createdShape.draw(gc);
         createdShape.drawLength(gc);
     }
