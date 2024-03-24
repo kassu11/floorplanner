@@ -16,8 +16,8 @@ public class ShapeMath {
 
     public static double[] getSnapCoordinates(Point point, double x, double y) {
         double snappedAngle = ShapeMath.getSnapAngle(point.getX(), point.getY(), x, y);
-        double radius = ShapeMath.getRadius(point.getX(), point.getY(), x, y);
-        return new double[]{ShapeMath.getSnapAngleX(point.getX(), radius, snappedAngle), ShapeMath.getSnapAngleY(point.getY(), radius, snappedAngle)};
+        double radius = Math.hypot(x - point.getX(), y - point.getY());
+        return new double[]{point.getX() + Math.cos(snappedAngle) * radius, point.getY() + Math.sin(snappedAngle) * radius};
     }
 
     public static double[] getPointOnLine(Shape hoveredShape, double x, double y) {
@@ -28,23 +28,10 @@ public class ShapeMath {
         double radius = Math.hypot(distanceFromPointA, hoveredDistance);
 
         return new double[]{pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle)};
-//        mousePoint.setCoordinates(pointA.getX() + radius * Math.cos(angle), pointA.getY() + radius * Math.sin(angle));
     }
 
-    public static double calculateAngle(Point pointA, Point pointB) {
+    private static double calculateAngle(Point pointA, Point pointB) {
         return Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
-    }
-
-    public static double getRadius(double startX, double startY, double endX, double endY) {
-        return Math.hypot(endX - startX, endY - startY);
-    }
-
-    public static double getSnapAngleX(double x, double radius, double angle) {
-        return x + Math.cos(angle) * radius;
-    }
-
-    public static double getSnapAngleY(double y, double radius, double angle) {
-        return y + Math.sin(angle) * radius;
     }
 
     public static Point createIntersectionPoint(Controller controller, Shape lineA, Shape lineB) {

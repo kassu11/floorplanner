@@ -10,22 +10,14 @@ public class DrawUtilities {
     public static void addShapesFirstPoint(Controller controller, double x, double y) {
         Point point = controller.getHoveredPoint();
         Shape hoveredShape = controller.getHoveredShape();
-        double fixedY = y;
-        double fixedX = x;
-        if (hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
-            Point pointA = hoveredShape.getPoints().get(0);
-            double hoveredDistance = hoveredShape.calculateDistanceFromMouse(x, y);
-            double distanceFromPointA = pointA.calculateDistanceFromMouse(x, y);
-            double angle = ShapeMath.calculateAngle(pointA, hoveredShape.getPoints().get(1));
-            double radius = Math.hypot(distanceFromPointA, hoveredDistance);
+        Point mousePoint = controller.createAbsolutePoint(x, y);
 
-            fixedY = pointA.getY() + radius * Math.sin(angle);
-            fixedX = pointA.getX() + radius * Math.cos(angle);
+        if (hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
+            mousePoint.setCoordinates(ShapeMath.getPointOnLine(hoveredShape, x, y));
         }
-        if (point == null) point = controller.createAbsolutePoint(fixedX, fixedY, Controller.SingletonType.FINAL);
+        if (point == null) point = controller.createAbsolutePoint(mousePoint.getX(), mousePoint.getY(), Controller.SingletonType.FINAL);
 
         controller.getHistoryManager().addFirstPoint(point);
-
         controller.setLastPoint(point);
     }
 
