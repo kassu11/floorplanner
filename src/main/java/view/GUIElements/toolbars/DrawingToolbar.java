@@ -41,7 +41,7 @@ public class DrawingToolbar extends CustomToolbar {
                 controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
                 System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
             });
-            modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("Mode").getHeight());
+            modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
         }
     }
 
