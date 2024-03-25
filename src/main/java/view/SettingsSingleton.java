@@ -11,7 +11,7 @@ public class SettingsSingleton {
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 25;
-    private static Locale locale = new Locale("fi", "FI");
+    private static Locale locale = new Locale("en", "US");
 
     private SettingsSingleton() {
     }
