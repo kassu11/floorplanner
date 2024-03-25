@@ -20,6 +20,7 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(new Button("Mode"));
         addButton(new Button("Delete"));
         addButton(new Button("Rotate"));
+        addButton(new Button("Dimension"));
         addButton(new Button("Reset"));
 
         // Set up the mode menu

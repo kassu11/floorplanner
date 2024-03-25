@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.shapes.Dimension;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.Ruler;
@@ -108,6 +109,13 @@ public class GUI extends Application {
                     controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
 
                 }
+                case DIMENSION -> {
+                    if(hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
+                        Dimension dimension = controller.setDimensionLine(hoveredShape,  Math.random() * 200 + 200);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        dimension.draw(gc);
+                    }
+                }
             }
         });
         // This is the preview drawing
@@ -201,6 +209,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
+        drawToolbar.getButtons().get("Dimension").setOnAction(event -> drawToolbar.changeMode(ModeType.DIMENSION));
         drawToolbar.getButtons().get("Reset").setOnAction(event -> {
                 controller.removeAllShapes();
                 gc.getGrid().drawGrid();

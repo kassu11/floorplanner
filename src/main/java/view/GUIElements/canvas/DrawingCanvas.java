@@ -61,8 +61,12 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
     }
 
-    public void setLineWidth(int width) {
+    public void setLineWidth(double width) {
         gc.setLineWidth(width);
+    }
+
+    public double getLineWidth() {
+        return gc.getLineWidth();
     }
 
     public void setStrokeColor(String color) {

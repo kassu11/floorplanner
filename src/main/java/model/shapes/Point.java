@@ -4,9 +4,13 @@ import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Point extends AbstractShape {
     private double width = 15, height = 15;
     private int priority = 1;
+    private List<Dimension> dimensions = new ArrayList<>();
 
     public Point(double x, double y) {
         super(x, y);
@@ -78,5 +82,9 @@ public class Point extends AbstractShape {
             i--;
             shape.delete(shapeContainer);
         }
+    }
+
+    public void addDimension(Dimension dimension) {
+        dimensions.add(dimension);
     }
 }

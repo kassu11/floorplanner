@@ -309,4 +309,15 @@ public class Controller {
     public String getSelectedColor() {
         return selectedColor;
     }
+
+    public Dimension setDimensionLine(Shape shape, double distance) {
+        Dimension dimension = new Dimension();
+        dimension.setDistance(distance);
+        dimension.addShape(shape);
+        dimension.resize();
+        if(shape.getType() == ShapeType.LINE) {
+            ((Line) shape).addDimension(dimension);
+        }
+        return dimension;
+    }
 }

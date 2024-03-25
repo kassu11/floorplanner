@@ -24,7 +24,9 @@ public interface CustomCanvas {
 
   public Canvas getCanvas();
 
-  public void setLineWidth(int width);
+  public void setLineWidth(double width);
+
+  public double getLineWidth();
 
   public void setStrokeColor(String color);
 

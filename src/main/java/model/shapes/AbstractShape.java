@@ -13,6 +13,7 @@ public abstract class AbstractShape implements Shape {
     private List<Shape> children = new ArrayList<>();
     private Shape parentShape;
     private int priority, id;
+    private boolean isSelected;
 
     public AbstractShape(double x, double y) {
         this.x = x;
@@ -191,5 +192,13 @@ public abstract class AbstractShape implements Shape {
     }
 
     public void drawLength(CustomCanvas gc) {
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 }
