@@ -175,8 +175,8 @@ public class OptionsToolbar extends CustomToolbar {
     }
 
     public void updateLocalization(){
-        this.getButton("file").setText(settings.getLocalizationString("file"));
-        this.getButton("settings").setText(settings.getLocalizationString("settings"));
-        this.getButton("gridSize").setText(settings.getLocalizationString("gridSize"));
+        for(String key : getButtons().keySet()){
+            getButtons().get(key).setText(settings.getLocalizationString(key));
+        }
     }
 }

@@ -46,11 +46,9 @@ public class DrawingToolbar extends CustomToolbar {
     }
 
     public void updateLocalization(){
-        getButtons().get("select").setText(settings.getLocalizationString("select"));
-        getButtons().get("mode").setText(settings.getLocalizationString("mode"));
-        getButtons().get("delete").setText(settings.getLocalizationString("delete"));
-        getButtons().get("rotate").setText(settings.getLocalizationString("rotate"));
-        getButtons().get("reset").setText(settings.getLocalizationString("reset"));
+        for(String key : getButtons().keySet()){
+            getButtons().get(key).setText(settings.getLocalizationString(key));
+        }
         lineMode.setText(settings.getLocalizationString("line"));
         rectangleMode.setText(settings.getLocalizationString("rectangle"));
         circleMode.setText(settings.getLocalizationString("circle"));
