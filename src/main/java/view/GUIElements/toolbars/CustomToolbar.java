@@ -17,10 +17,10 @@ abstract class CustomToolbar extends ToolBar {
         this.stage = stage;
     }
 
-    public void addButton(Button button) {
+    public void addButton(Button button, String key) {
         this.getItems().add(button);
         this.getItems().add(new javafx.scene.control.Separator());
-        buttons.put(button.getText(), button);
+        buttons.put(key, button);
     }
 
     public void setCursorCoordinates() {
@@ -58,5 +58,9 @@ abstract class CustomToolbar extends ToolBar {
 
     public void setButtons(HashMap<String, Button> buttons) {
         this.buttons = buttons;
+    }
+
+    public Button getButton(String key) {
+        return buttons.get(key);
     }
 }

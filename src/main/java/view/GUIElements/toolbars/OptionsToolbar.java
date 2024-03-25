@@ -33,15 +33,15 @@ public class OptionsToolbar extends CustomToolbar {
         this.controller = controller;
         this.gc = gc;
         this.setOrientation(Orientation.HORIZONTAL);
-        addButton(new Button(settings.getLocalizationString("file")));
-        addButton(new Button(settings.getLocalizationString("settings")));
+        addButton(new Button(settings.getLocalizationString("file")), "file");
+        addButton(new Button(settings.getLocalizationString("settings")), "settings");
         TextField gridWidth = new TextField();
         gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
         TextField gridHeight = new TextField();
         gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
         TextField gridSize = new TextField();
         gridSize.setText(String.format("%d", SettingsSingleton.getGridSize()));
-        Button setGridSize = new Button(settings.getLocalizationString("gridSize"));
+        addButton(new Button(settings.getLocalizationString("gridSize")), "gridSize");
         this.getItems().add(new Separator());
         this.getItems().add(gridWidth);
         this.getItems().add(new Separator());
@@ -49,8 +49,7 @@ public class OptionsToolbar extends CustomToolbar {
         this.getItems().add(new Separator());
         this.getItems().add(gridSize);
         this.getItems().add(new Separator());
-        this.getItems().add(setGridSize);
-        setGridSize.setOnAction(e -> {
+        getButton("gridSize").setOnAction(e -> {
             SettingsSingleton.setGridWidth(Double.parseDouble(gridWidth.getText()));
             SettingsSingleton.setGridHeight(Double.parseDouble(gridHeight.getText()));
             SettingsSingleton.setGridSize(Integer.parseInt(gridSize.getText()));
@@ -133,6 +132,7 @@ public class OptionsToolbar extends CustomToolbar {
             SettingsSingleton.setLocale(getLocale(languageSettings.getValue()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
+            controller.updateToolbarLocalization();
             settingsWindow.close();
         });
 
@@ -174,4 +174,9 @@ public class OptionsToolbar extends CustomToolbar {
         }
     }
 
+    public void updateLocalization(){
+        this.getButton("file").setText(settings.getLocalizationString("file"));
+        this.getButton("settings").setText(settings.getLocalizationString("settings"));
+        this.getButton("gridSize").setText(settings.getLocalizationString("gridSize"));
+    }
 }

@@ -18,11 +18,11 @@ public class DrawingToolbar extends CustomToolbar {
         super(stage);
         this.controller = controller;
         this.setOrientation(Orientation.VERTICAL);
-        addButton(new Button(settings.getLocalizationString("select")));
-        addButton(new Button(settings.getLocalizationString("mode")));
-        addButton(new Button(settings.getLocalizationString("delete")));
-        addButton(new Button(settings.getLocalizationString("rotate")));
-        addButton(new Button(settings.getLocalizationString("reset")));
+        addButton(new Button(settings.getLocalizationString("select")), "select");
+        addButton(new Button(settings.getLocalizationString("mode")), "mode");
+        addButton(new Button(settings.getLocalizationString("delete")), "delete");
+        addButton(new Button(settings.getLocalizationString("rotate")), "rotate");
+        addButton(new Button(settings.getLocalizationString("reset")), "reset");
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
@@ -43,6 +43,18 @@ public class DrawingToolbar extends CustomToolbar {
             });
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("Mode").getHeight());
         }
+    }
+
+    public void updateLocalization(){
+        getButtons().get("select").setText(settings.getLocalizationString("select"));
+        getButtons().get("mode").setText(settings.getLocalizationString("mode"));
+        getButtons().get("delete").setText(settings.getLocalizationString("delete"));
+        getButtons().get("rotate").setText(settings.getLocalizationString("rotate"));
+        getButtons().get("reset").setText(settings.getLocalizationString("reset"));
+        lineMode.setText(settings.getLocalizationString("line"));
+        rectangleMode.setText(settings.getLocalizationString("rectangle"));
+        circleMode.setText(settings.getLocalizationString("circle"));
+        multilineMode.setText(settings.getLocalizationString("multiline"));
     }
 
 }
