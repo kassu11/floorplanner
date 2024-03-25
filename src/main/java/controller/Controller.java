@@ -248,6 +248,10 @@ public class Controller {
         }
         this.currentMode = currentMode;
     }
+
+    public void updateToolbarLocalization() {
+        gui.updateToolbarLocalization();
+    }
     public void setLastPoint(Point lastPoint) {
         this.lastPoint = lastPoint;
     }
