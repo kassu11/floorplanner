@@ -27,6 +27,7 @@ public class GUI extends Application {
     private int canvasWidth = 750;
     private int canvasHeight = 750;
     private double middleX, middleY;
+    private SettingsSingleton settings = SettingsSingleton.getInstance();
 
     @Override
     public void init() {
@@ -198,20 +199,20 @@ public class GUI extends Application {
         });
 
         DrawingToolbar drawToolbar = new DrawingToolbar(controller, stage);
-        drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
-        drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
-        drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
-        drawToolbar.getButtons().get("Reset").setOnAction(event -> {
+        drawToolbar.getButtons().get(settings.getLocalizationString("mode")).setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
+        drawToolbar.getButtons().get(settings.getLocalizationString("select")).setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
+        drawToolbar.getButtons().get(settings.getLocalizationString("delete")).setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
+        drawToolbar.getButtons().get(settings.getLocalizationString("reset")).setOnAction(event -> {
                 controller.removeAllShapes();
                 gc.getGrid().drawGrid();
             }
         );
 
-        drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
+        drawToolbar.getButtons().get(settings.getLocalizationString("rotate")).setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
         System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
         OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
-        optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
-        optionBar.getButtons().get("File").setOnAction(event -> optionBar.showFile());
+        optionBar.getButtons().get(settings.getLocalizationString("settings")).setOnAction(event -> optionBar.showSettings());
+        optionBar.getButtons().get(settings.getLocalizationString("file")).setOnAction(event -> optionBar.showFile());
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);

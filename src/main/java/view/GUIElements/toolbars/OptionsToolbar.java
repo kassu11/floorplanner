@@ -16,6 +16,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
+import java.util.Locale;
+import java.util.Set;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -23,7 +25,7 @@ public class OptionsToolbar extends CustomToolbar {
 
     private final Controller controller;
     private CustomCanvas gc;
-
+    private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
@@ -31,15 +33,15 @@ public class OptionsToolbar extends CustomToolbar {
         this.controller = controller;
         this.gc = gc;
         this.setOrientation(Orientation.HORIZONTAL);
-        addButton(new Button("File"));
-        addButton(new Button("Settings"));
+        addButton(new Button(settings.getLocalizationString("file")));
+        addButton(new Button(settings.getLocalizationString("settings")));
         TextField gridWidth = new TextField();
         gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
         TextField gridHeight = new TextField();
         gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
         TextField gridSize = new TextField();
         gridSize.setText(String.format("%d", SettingsSingleton.getGridSize()));
-        Button setGridSize = new Button("Set grid size");
+        Button setGridSize = new Button(settings.getLocalizationString("gridSize"));
         this.getItems().add(new Separator());
         this.getItems().add(gridWidth);
         this.getItems().add(new Separator());
@@ -63,8 +65,8 @@ public class OptionsToolbar extends CustomToolbar {
         Stage fileWindow = new Stage();
 
         fileWindow.setTitle("File");
-        Button exportButton = new Button("Save Floorplan");
-        Button importButton = new Button("Load Floorplan");
+        Button exportButton = new Button(settings.getLocalizationString("saveFloorplan"));
+        Button importButton = new Button(settings.getLocalizationString("loadFloorplan"));
 
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Filter all ser files", "ser");
@@ -113,20 +115,22 @@ public class OptionsToolbar extends CustomToolbar {
     public void showSettings() {
         Stage settingsWindow = new Stage();
 
-        settingsWindow.setTitle("Settings");
-        CheckBox showLengths = new CheckBox("Show lengths");
+        settingsWindow.setTitle(settings.getLocalizationString("settings"));
+        CheckBox showLengths = new CheckBox(settings.getLocalizationString("showLengths"));
         showLengths.setSelected(SettingsSingleton.isDrawLengths());
-        CheckBox showAreas = new CheckBox("Show areas");
-        Label shapeLabel = new Label("Shape settings");
+        CheckBox showAreas = new CheckBox(settings.getLocalizationString("showAreas"));
+        Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
         ComboBox<String> languageSettings = new ComboBox<>();
-        Label otherSettingsLabel = new Label("Other settings");
-        CheckBox showGrid = new CheckBox("Show grid");
+        languageSettings.setValue(SettingsSingleton.getLocaleSimpleName());
+        Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
+        CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(SettingsSingleton.isGridEnabled());
-        Button saveButton = new Button("Save");
+        Button saveButton = new Button(settings.getLocalizationString("save"));
 
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
+            SettingsSingleton.setLocale(getLocale(languageSettings.getValue()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             settingsWindow.close();
@@ -136,7 +140,7 @@ public class OptionsToolbar extends CustomToolbar {
 
         Insets defaultInsets = new Insets(10, 10, 10, 10);
 
-        HBox languageSettingsLayout = new HBox(new Label("Language"), languageSettings);
+        HBox languageSettingsLayout = new HBox(new Label(settings.getLocalizationString("language")), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
         VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, saveButton);
@@ -155,6 +159,19 @@ public class OptionsToolbar extends CustomToolbar {
 
         settingsWindow.setScene(settingsScene);
         settingsWindow.show();
+    }
+
+    private Locale getLocale(String language) {
+        switch (language) {
+            case "ENG":
+                return new Locale("en", "US");
+            case "FIN":
+                return new Locale("fi", "FI");
+            case "JPN":
+                return new Locale("ja", "JP");
+            default:
+                return new Locale("en", "US");
+        }
     }
 
 }

@@ -2,12 +2,16 @@ package view;
 
 import entity.Settings;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class SettingsSingleton {
     private static boolean drawLengths = true;
     private static boolean isDrawGrid = true;
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 25;
+    private static Locale locale = new Locale("fi", "FI");
 
     private SettingsSingleton() {
     }
@@ -65,6 +69,31 @@ public class SettingsSingleton {
         setGridHeight(settings.getGridHeight());
         setGridWidth(settings.getGridWidth());
         setGridSize(settings.getGridSize());
+    }
+
+    public ResourceBundle getLocalization() {
+        return ResourceBundle.getBundle("localization", locale);
+    }
+
+    public String getLocalizationString(String key) {
+        return getLocalization().getString(key);
+    }
+
+    public static String getLocaleSimpleName() {
+        switch(locale.getLanguage()) {
+            case "en":
+                return "ENG";
+            case "fi":
+                return "FIN";
+            case "ja":
+                return "JPN";
+            default:
+                return "ENG";
+        }
+    }
+
+    public static void setLocale(Locale locale) {
+        SettingsSingleton.locale = locale;
     }
 
     public Settings getSettings() {

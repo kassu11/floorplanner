@@ -4,6 +4,7 @@ import controller.Controller;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import view.SettingsSingleton;
 import view.types.ModeType;
 import view.types.ShapeType;
 
@@ -11,16 +12,17 @@ public class DrawingToolbar extends CustomToolbar {
     private final ContextMenu modeMenu = new ContextMenu();
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
     private Controller controller;
+    private SettingsSingleton settings = SettingsSingleton.getInstance();
 
     public DrawingToolbar(Controller controller, Stage stage) {
         super(stage);
         this.controller = controller;
         this.setOrientation(Orientation.VERTICAL);
-        addButton(new Button("Select"));
-        addButton(new Button("Mode"));
-        addButton(new Button("Delete"));
-        addButton(new Button("Rotate"));
-        addButton(new Button("Reset"));
+        addButton(new Button(settings.getLocalizationString("select")));
+        addButton(new Button(settings.getLocalizationString("mode")));
+        addButton(new Button(settings.getLocalizationString("delete")));
+        addButton(new Button(settings.getLocalizationString("rotate")));
+        addButton(new Button(settings.getLocalizationString("reset")));
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
