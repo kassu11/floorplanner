@@ -146,7 +146,10 @@ public class Controller {
 
     public void saveSettings() {
         if(settingsDao.find(1) == null) {
-            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
+            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(),
+                    SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize(),
+                    SettingsSingleton.getLocaleSimpleName());
+
             settingsDao.persist(settings);
             System.out.println("Settings saved!");
         } else {
@@ -223,7 +226,7 @@ public class Controller {
 
 
 
-    public ShapeType getCurrentShape() {
+    public ShapeType getCurrentShapeType() {
         return currentShape;
     }
 

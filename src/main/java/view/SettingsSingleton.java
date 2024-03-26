@@ -69,6 +69,7 @@ public class SettingsSingleton {
         setGridHeight(settings.getGridHeight());
         setGridWidth(settings.getGridWidth());
         setGridSize(settings.getGridSize());
+        setLocaleWithString(settings.getLocale());
     }
 
     public ResourceBundle getLocalization() {
@@ -92,11 +93,32 @@ public class SettingsSingleton {
         }
     }
 
+    public static Locale getLocale() {
+        return locale;
+    }
+
+    private Locale getLocaleWithString(String language) {
+        switch (language) {
+            case "ENG":
+                return new Locale("en", "US");
+            case "FIN":
+                return new Locale("fi", "FI");
+            case "JPN":
+                return new Locale("ja", "JP");
+            default:
+                return new Locale("en", "US");
+        }
+    }
+
     public static void setLocale(Locale locale) {
         SettingsSingleton.locale = locale;
     }
 
+    public static void setLocaleWithString(String localeSimpleName) {
+        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
+    }
+
     public Settings getSettings() {
-        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize);
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, getLocaleSimpleName());
     }
 }

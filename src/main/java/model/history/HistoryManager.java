@@ -64,7 +64,7 @@ public class HistoryManager {
 
     public void addFirstPoint(Point point) {
         boolean isNewPoint = this.assignShape(point);
-        ShapeType mode = controller.getCurrentShape();
+        ShapeType mode = controller.getCurrentShapeType();
 
         HistoryHandler redo = () -> {
             if (isNewPoint) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(point);

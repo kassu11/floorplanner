@@ -69,13 +69,13 @@ public class GUI extends Application {
                 case DRAW -> {
                     if (controller.getLastPoint() == null) DrawUtilities.addShapesFirstPoint(controller, mouseX, mouseY);
                     else {
-                        Shape newShape = DrawUtilities.addShapesLastPoint(controller, mouseX, mouseY, controller.getCurrentShape());
+                        Shape newShape = DrawUtilities.addShapesLastPoint(controller, mouseX, mouseY, controller.getCurrentShapeType());
 
                         previewGc.clear();
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         newShape.calculateShapeArea();
 
-//                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)) {
+//                        if (controller.getCurrentShapeType() == ShapeType.MULTILINE) {
 //                            controller.addCustomShape(newShape);
 //                            controller.checkIfConnected(newShape);
 //                        }

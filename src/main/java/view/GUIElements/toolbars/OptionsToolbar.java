@@ -129,7 +129,7 @@ public class OptionsToolbar extends CustomToolbar {
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
-            SettingsSingleton.setLocale(getLocale(languageSettings.getValue()));
+            SettingsSingleton.setLocaleWithString((languageSettings.getValue()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
@@ -159,19 +159,6 @@ public class OptionsToolbar extends CustomToolbar {
 
         settingsWindow.setScene(settingsScene);
         settingsWindow.show();
-    }
-
-    private Locale getLocale(String language) {
-        switch (language) {
-            case "ENG":
-                return new Locale("en", "US");
-            case "FIN":
-                return new Locale("fi", "FI");
-            case "JPN":
-                return new Locale("ja", "JP");
-            default:
-                return new Locale("en", "US");
-        }
     }
 
     public void updateLocalization(){
