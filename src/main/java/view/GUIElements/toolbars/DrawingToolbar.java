@@ -25,10 +25,10 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("reset")), "reset");
 
         // Set up the mode menu
-        this.lineMode = new CustomMenuItem("Line", ShapeType.LINE);
-        this.rectangleMode = new CustomMenuItem("Rectangle", ShapeType.RECTANGLE);
-        this.circleMode = new CustomMenuItem("Circle", ShapeType.CIRCLE);
-        this.multilineMode = new CustomMenuItem("Multiline", ShapeType.MULTILINE);
+        this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
+        this.rectangleMode = new CustomMenuItem(settings.getLocalizationString("rectangle"), ShapeType.RECTANGLE);
+        this.circleMode = new CustomMenuItem(settings.getLocalizationString("circle"), ShapeType.CIRCLE);
+        this.multilineMode = new CustomMenuItem(settings.getLocalizationString("multiline"), ShapeType.MULTILINE);
         this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
     }
 
@@ -39,7 +39,6 @@ public class DrawingToolbar extends CustomToolbar {
         if (mode == ModeType.DRAW) {
             modeMenu.setOnAction(event -> {
                 controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
-                System.out.println(((CustomMenuItem) event.getTarget()).getShapeType());
             });
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
         }

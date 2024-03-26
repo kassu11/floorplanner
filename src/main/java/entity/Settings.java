@@ -19,12 +19,15 @@ public class Settings {
 
     private int gridSize;
 
-    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize) {
+    private String locale;
+
+    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale) {
         this.isDrawLengths = isDrawLengths;
         this.isDrawGrid = isDrawGrid;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         this.gridSize = gridSize;
+        this.locale = locale;
     }
 
     public Settings() {
@@ -79,11 +82,20 @@ public class Settings {
         this.gridSize = gridSize;
     }
 
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
     public void setSettings(Settings settings) {
         this.isDrawLengths = settings.isDrawLengths;
         this.isDrawGrid = settings.isDrawGrid;
         this.gridHeight = settings.gridHeight;
         this.gridWidth = settings.gridWidth;
         this.gridSize = settings.gridSize;
+        this.locale = settings.locale;
     }
 }
