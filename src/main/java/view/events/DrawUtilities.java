@@ -44,6 +44,7 @@ public class DrawUtilities {
 
         Shape shape = controller.createShape(endPoint, startPoint, shapeType, Controller.SingletonType.FINAL);
         if(shapeType != ShapeType.MULTILINE) controller.setLastPoint(null);
+        else controller.setLastPoint(endPoint);
 
         controller.getHistoryManager().addShape(shape);
 

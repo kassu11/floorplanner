@@ -26,14 +26,12 @@ public class Controller {
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
     private SettingsDao settingsDao = new SettingsDao();
-
     private boolean ctrlIsDown = false;
     private ShapeType currentShape = ShapeType.LINE;
     private ModeType currentMode = ModeType.DRAW;
     private Point lastPoint, hoveredPoint;
     private Shape selectedShape, hoveredShape;
     private double mouseX, mouseY;
-
     private String hoverColor, selectedColor;
 
     public enum SingletonType {
