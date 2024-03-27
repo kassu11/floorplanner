@@ -122,7 +122,7 @@ public class OptionsToolbar extends CustomToolbar {
         Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
 
         ComboBox<ComboBoxItem> languageSettings = new ComboBox<>();
-        ComboBoxItem defaultItem = new ComboBoxItem(SettingsSingleton.getLocale().getLanguage(), SettingsSingleton.getLocaleFullName());
+        ComboBoxItem defaultItem = new ComboBoxItem(SettingsSingleton.getLocale().getLanguage(), settings.getLocalizationString("languageName"));
         languageSettings.setValue(defaultItem);
 
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
@@ -133,7 +133,7 @@ public class OptionsToolbar extends CustomToolbar {
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
-            SettingsSingleton.setLocaleWithString((languageSettings.getValue().getValue()));
+            SettingsSingleton.setLocaleWithLocaleLanguage((languageSettings.getValue().getValue()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();

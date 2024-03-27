@@ -3,6 +3,7 @@ package view;
 import entity.Settings;
 import org.springframework.core.io.Resource;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -70,7 +71,7 @@ public class SettingsSingleton {
         setGridHeight(settings.getGridHeight());
         setGridWidth(settings.getGridWidth());
         setGridSize(settings.getGridSize());
-        setLocaleWithString(settings.getLocale());
+        setLocaleWithLocaleLanguage(settings.getLocale());
     }
 
     public ResourceBundle getLocalization() {
@@ -85,32 +86,6 @@ public class SettingsSingleton {
         return ResourceBundle.getBundle("localization", locale);
     }
 
-    public static String getLocaleSimpleName() {
-        switch(locale.getLanguage()) {
-            case "en":
-                return "ENG";
-            case "fi":
-                return "FIN";
-            case "ja":
-                return "JPN";
-            default:
-                return "ENG";
-        }
-    }
-
-    public static String getLocaleFullName() {
-        switch(locale.getLanguage()) {
-            case "en":
-                return "English";
-            case "fi":
-                return "Suomi";
-            case "ja":
-                return "日本語";
-            default:
-                return "English";
-        }
-    }
-
     public static Locale getLocale() {
         return locale;
     }
@@ -119,25 +94,33 @@ public class SettingsSingleton {
         return LocaleConfig.values();
     }
 
-    private Locale getLocaleWithString(String language) {
-        switch (language) {
-            case "en":
-                return new Locale("en", "US");
-            case "fi":
-                return new Locale("fi", "FI");
-            case "ja":
-                return new Locale("ja", "JP");
-            default:
-                return new Locale("en", "US");
-        }
-    }
+//    private Locale getLocaleWithString(String language) {
+//        switch (language) {
+//            case "en":
+//                return new Locale("en", "US");
+//            case "fi":
+//                return new Locale("fi", "FI");
+//            case "ja":
+//                return new Locale("ja", "JP");
+//            default:
+//                return new Locale("en", "US");
+//        }
+//    }
+//
+//    public static void setLocale(Locale locale) {
+//        SettingsSingleton.locale = locale;
+//    }
+//
+//    public static void setLocaleWithString(String localeSimpleName) {
+//        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
+//    }
 
-    public static void setLocale(Locale locale) {
-        SettingsSingleton.locale = locale;
-    }
-
-    public static void setLocaleWithString(String localeSimpleName) {
-        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
+    public static void setLocaleWithLocaleLanguage(String language) {
+        SettingsSingleton.locale = Arrays.stream(LocaleConfig.values())
+                .map(LocaleConfig::getLocale)
+                .filter(localeConfigLocale -> localeConfigLocale.getLanguage().equals(language))
+                .findFirst()
+                .orElse(LocaleConfig.ENGLISH.getLocale());
     }
 
     public Settings getSettings() {
