@@ -146,7 +146,7 @@ public class Controller {
         if(settingsDao.find(1) == null) {
             Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(),
                     SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize(),
-                    SettingsSingleton.getLocaleSimpleName());
+                    SettingsSingleton.getLocale().getLanguage());
 
             settingsDao.persist(settings);
             System.out.println("Settings saved!");

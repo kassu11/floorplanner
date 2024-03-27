@@ -1,6 +1,7 @@
 package view;
 
 import entity.Settings;
+import org.springframework.core.io.Resource;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -80,6 +81,10 @@ public class SettingsSingleton {
         return getLocalization().getString(key);
     }
 
+    public static ResourceBundle getLocalizationWithLocale(Locale locale) {
+        return ResourceBundle.getBundle("localization", locale);
+    }
+
     public static String getLocaleSimpleName() {
         switch(locale.getLanguage()) {
             case "en":
@@ -110,6 +115,10 @@ public class SettingsSingleton {
         return locale;
     }
 
+    public static LocaleConfig[] getAllLocalization() {
+        return LocaleConfig.values();
+    }
+
     private Locale getLocaleWithString(String language) {
         switch (language) {
             case "en":
@@ -132,6 +141,6 @@ public class SettingsSingleton {
     }
 
     public Settings getSettings() {
-        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, getLocaleSimpleName());
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage());
     }
 }

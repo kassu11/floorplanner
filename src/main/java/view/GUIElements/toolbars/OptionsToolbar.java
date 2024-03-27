@@ -17,6 +17,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -118,9 +120,11 @@ public class OptionsToolbar extends CustomToolbar {
         showLengths.setSelected(SettingsSingleton.isDrawLengths());
         CheckBox showAreas = new CheckBox(settings.getLocalizationString("showAreas"));
         Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
+
         ComboBox<ComboBoxItem> languageSettings = new ComboBox<>();
         ComboBoxItem defaultItem = new ComboBoxItem(SettingsSingleton.getLocale().getLanguage(), SettingsSingleton.getLocaleFullName());
         languageSettings.setValue(defaultItem);
+
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(SettingsSingleton.isGridEnabled());
@@ -136,10 +140,9 @@ public class OptionsToolbar extends CustomToolbar {
             settingsWindow.close();
         });
 
-        ComboBoxItem eng = new ComboBoxItem("en", "English");
-        ComboBoxItem fin = new ComboBoxItem("fi", "Suomi");
-        ComboBoxItem jpn = new ComboBoxItem("ja", "日本語");
-        languageSettings.getItems().addAll(eng, fin, jpn);
+        List<ComboBoxItem> comboItems = Arrays.stream(SettingsSingleton.getAllLocalization())
+                .map(locale -> new ComboBoxItem(locale.getLocale().getLanguage(), SettingsSingleton.getLocalizationWithLocale(locale.getLocale()).getString("languageName"))).toList();
+        languageSettings.getItems().addAll(comboItems);
 
         Insets defaultInsets = new Insets(10, 10, 10, 10);
 
