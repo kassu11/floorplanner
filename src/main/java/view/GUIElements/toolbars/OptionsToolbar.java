@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.FileManager;
+import view.GUIElements.ComboBoxItem;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 
@@ -16,8 +17,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
-import java.util.Locale;
-import java.util.Set;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -119,8 +118,9 @@ public class OptionsToolbar extends CustomToolbar {
         showLengths.setSelected(SettingsSingleton.isDrawLengths());
         CheckBox showAreas = new CheckBox(settings.getLocalizationString("showAreas"));
         Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
-        ComboBox<String> languageSettings = new ComboBox<>();
-        languageSettings.setValue(SettingsSingleton.getLocaleSimpleName());
+        ComboBox<ComboBoxItem> languageSettings = new ComboBox<>();
+        ComboBoxItem defaultItem = new ComboBoxItem(SettingsSingleton.getLocale().getLanguage(), SettingsSingleton.getLocaleFullName());
+        languageSettings.setValue(defaultItem);
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(SettingsSingleton.isGridEnabled());
@@ -129,14 +129,17 @@ public class OptionsToolbar extends CustomToolbar {
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
-            SettingsSingleton.setLocaleWithString((languageSettings.getValue()));
+            SettingsSingleton.setLocaleWithString((languageSettings.getValue().getValue()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
             settingsWindow.close();
         });
 
-        languageSettings.getItems().addAll("ENG", "FIN", "JPN");
+        ComboBoxItem eng = new ComboBoxItem("en", "English");
+        ComboBoxItem fin = new ComboBoxItem("fi", "Suomi");
+        ComboBoxItem jpn = new ComboBoxItem("ja", "日本語");
+        languageSettings.getItems().addAll(eng, fin, jpn);
 
         Insets defaultInsets = new Insets(10, 10, 10, 10);
 
