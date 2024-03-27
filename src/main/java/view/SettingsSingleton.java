@@ -11,7 +11,7 @@ public class SettingsSingleton {
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 25;
-    private static Locale locale = new Locale("en", "US");
+    private static Locale locale = LocaleConfig.values()[0].getLocale();
 
     private SettingsSingleton() {
     }
@@ -93,17 +93,30 @@ public class SettingsSingleton {
         }
     }
 
+    public static String getLocaleFullName() {
+        switch(locale.getLanguage()) {
+            case "en":
+                return "English";
+            case "fi":
+                return "Suomi";
+            case "ja":
+                return "日本語";
+            default:
+                return "English";
+        }
+    }
+
     public static Locale getLocale() {
         return locale;
     }
 
     private Locale getLocaleWithString(String language) {
         switch (language) {
-            case "ENG":
+            case "en":
                 return new Locale("en", "US");
-            case "FIN":
+            case "fi":
                 return new Locale("fi", "FI");
-            case "JPN":
+            case "ja":
                 return new Locale("ja", "JP");
             default:
                 return new Locale("en", "US");
