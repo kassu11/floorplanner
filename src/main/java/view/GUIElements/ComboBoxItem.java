@@ -8,7 +8,7 @@ public class ComboBoxItem {
         this.label = label;
     }
 
-    public String getValue() {
+    public String getKey() {
         return value;
     }
 

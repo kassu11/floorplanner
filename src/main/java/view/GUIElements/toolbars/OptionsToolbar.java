@@ -133,7 +133,7 @@ public class OptionsToolbar extends CustomToolbar {
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
-            SettingsSingleton.setLocaleWithLocaleLanguage((languageSettings.getValue().getValue()));
+            SettingsSingleton.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
