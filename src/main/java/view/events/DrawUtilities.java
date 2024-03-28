@@ -43,7 +43,7 @@ public class DrawUtilities {
         if (endPoint == null) endPoint = controller.createAbsolutePoint(mousePoint.getX(), mousePoint.getY(), Controller.SingletonType.FINAL);
 
         Shape shape = controller.createShape(endPoint, startPoint, shapeType, Controller.SingletonType.FINAL);
-        if(shapeType != ShapeType.MULTILINE) controller.setLastPoint(null);
+        controller.setLastPoint(shapeType == ShapeType.MULTILINE ? endPoint : null);
 
         controller.getHistoryManager().addShape(shape);
 

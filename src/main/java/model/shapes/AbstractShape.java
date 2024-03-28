@@ -2,6 +2,7 @@ package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
+import view.events.ShapeMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public abstract class AbstractShape implements Shape {
     private boolean isSelected;
 
     public AbstractShape(double x, double y) {
-        this.x = x;
-        this.y = y;
+        this.x = ShapeMath.toFixed(x, 9);
+        this.y = ShapeMath.toFixed(y, 9);
     }
 
     public AbstractShape(List<Shape> shapes, List<Point> points) {
@@ -129,7 +130,7 @@ public abstract class AbstractShape implements Shape {
     }
 
     public void setX(double x) {
-        this.x = x;
+        this.x = ShapeMath.toFixed(x, 9);
     }
 
     public double getY() {
@@ -137,7 +138,7 @@ public abstract class AbstractShape implements Shape {
     }
 
     public void setY(double y) {
-        this.y = y;
+        this.y = ShapeMath.toFixed(y, 9);
     }
 
     public double getCentroidX() {
