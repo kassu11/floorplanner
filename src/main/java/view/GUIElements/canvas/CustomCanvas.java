@@ -6,7 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
 public interface CustomCanvas {
-  public void resize(double width, double height);
+
+  public void resizeCanvas(double width, double height);
 
   public void moveTo(double x, double y);
 
