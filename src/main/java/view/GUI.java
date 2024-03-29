@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.Ruler;
@@ -200,6 +201,26 @@ public class GUI extends Application {
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
 
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Width changed" + newVal.intValue());
+            SettingsSingleton.setGridWidth(newVal.intValue());
+            gc.clear();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasWidth = newVal.intValue();
+            canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            xRuler.updateRuler(canvasContainer.getZoom());
+        });
+
+        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println("Height changed" + newVal.intValue());
+            SettingsSingleton.setGridHeight(newVal.intValue());
+            gc.clear();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasHeight = newVal.intValue();
+            canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            yRuler.updateRuler(canvasContainer.getZoom());
+        });
+
         drawToolbar = new DrawingToolbar(controller, stage);
         drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
@@ -217,6 +238,7 @@ public class GUI extends Application {
         optionBar.getButtons().get("settings").setOnAction(event -> optionBar.showSettings());
         optionBar.getButtons().get("file").setOnAction(event -> optionBar.showFile());
 
+
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
 
@@ -229,6 +251,7 @@ public class GUI extends Application {
         root.setCenter(canvasBorder);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
+
         stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
         stage.show();

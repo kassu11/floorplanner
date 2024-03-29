@@ -27,7 +27,7 @@ public class CanvasContainer extends GridPane {
 
   public void resizeCanvas(double width, double height) {
     for (CustomCanvas layer : layers) {
-      layer.resize(width, height);
+      layer.resizeCanvas(width, height);
     }
   }
 
