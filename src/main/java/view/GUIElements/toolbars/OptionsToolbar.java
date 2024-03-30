@@ -28,6 +28,10 @@ public class OptionsToolbar extends CustomToolbar {
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
 
+    private TextField gridWidth;
+    private TextField gridHeight;
+    private TextField gridSize;
+
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
         this.controller = controller;
@@ -36,13 +40,13 @@ public class OptionsToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
 
-        TextField gridWidth = new TextField();
+        gridWidth = new TextField();
         gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
 
-        TextField gridHeight = new TextField();
+        gridHeight = new TextField();
         gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
 
-        TextField gridSize = new TextField();
+        gridSize = new TextField();
         gridSize.setText(String.format("%d", SettingsSingleton.getGridSize()));
 
         addButton(new Button(settings.getLocalizationString("gridSize")), "gridSize");
@@ -62,6 +66,11 @@ public class OptionsToolbar extends CustomToolbar {
             System.out.println("Grid size set to " + SettingsSingleton.getGridWidth() + "x" + SettingsSingleton.getGridHeight());
         });
 
+    }
+
+    public void updateResolution(){
+        gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
+        gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
     }
 
     public void showFile() {

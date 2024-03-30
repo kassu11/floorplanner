@@ -202,23 +202,19 @@ public class GUI extends Application {
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Width changed" + newVal.intValue());
             SettingsSingleton.setGridWidth(newVal.intValue());
-            gc.clear();
+            optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasWidth = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
-            xRuler.updateRuler(canvasContainer.getZoom());
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Height changed" + newVal.intValue());
             SettingsSingleton.setGridHeight(newVal.intValue());
-            gc.clear();
+            optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasHeight = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
-            yRuler.updateRuler(canvasContainer.getZoom());
         });
 
         drawToolbar = new DrawingToolbar(controller, stage);
@@ -245,8 +241,8 @@ public class GUI extends Application {
         BorderPane canvasBorder = new BorderPane();
 
         canvasBorder.setCenter(canvasContainer);
-        canvasBorder.setTop(xRuler);
-        canvasBorder.setLeft(yRuler);
+        //canvasBorder.setTop(xRuler);
+        //canvasBorder.setLeft(yRuler);
 
         root.setCenter(canvasBorder);
 
