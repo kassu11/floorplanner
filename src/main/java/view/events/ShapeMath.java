@@ -75,4 +75,9 @@ public class ShapeMath {
         double y2 = line.getPoints().get(1).getY();
         return !(x < Math.min(x1, x2) || x > Math.max(x1, x2) || y < Math.min(y1, y2) || y > Math.max(y1, y2));
     }
+
+    public static double toFixed(double num, int decimal) {
+        double power = Math.pow(10, decimal);
+        return Math.round(num * power) / power;
+    }
 }

@@ -23,7 +23,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.zoom = 1;
         gc = getGraphicsContext2D();
         grid = new CanvasGrid(this);
-
     }
 
 
@@ -64,8 +63,12 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
     }
 
-    public void setLineWidth(int width) {
+    public void setLineWidth(double width) {
         gc.setLineWidth(width);
+    }
+
+    public double getLineWidth() {
+        return gc.getLineWidth();
     }
 
     public void setStrokeColor(String color) {
@@ -102,6 +105,11 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
     public Canvas getCanvas() {
         return this;
+    }
+
+    @Override
+    public void setLineWidth(int width) {
+        gc.setLineWidth(width);
     }
 
     public void setX(double x) {
@@ -166,6 +174,15 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     @Override
+    public void closePath() {
+        gc.closePath();
+    }
+
+    @Override
+    public void fill() {
+        gc.fill();
+    }
+
     public void strokeText(String text, double x, double y) {
         gc.strokeText(text, -this.x + x * zoom, -this.y + y * zoom);
     }

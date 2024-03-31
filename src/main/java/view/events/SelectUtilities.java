@@ -1,6 +1,7 @@
 package view.events;
 
 import controller.Controller;
+import model.shapes.Line;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
@@ -74,6 +75,9 @@ public class SelectUtilities {
 		}
 
 		moveAllSelectedShapesToCursor(controller, mousePoint.getX(), mousePoint.getY());
+		for(Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+			if(shape.getType() == ShapeType.LINE) ((Line)shape).resizeToDimensions();
+		}
 	}
 
 	private static void moveAllSelectedShapesToCursor(Controller controller, double x, double y) {
@@ -114,6 +118,7 @@ public class SelectUtilities {
 
 		controller.setSelectedShape(null);
 		if(canvas != null) controller.drawAllShapes(canvas, Controller.SingletonType.PREVIEW);
+		controller.getShapes(Controller.SingletonType.PREVIEW).forEach(shape -> shape.setSelected(false));
 		controller.transferAllShapesTo(Controller.SingletonType.FINAL);
 	}
 
@@ -177,6 +182,7 @@ public class SelectUtilities {
 	}
 
 	private static boolean canTransferShape(Controller controller, Shape shape, Controller.SingletonType type) {
+		if (type == Controller.SingletonType.PREVIEW) shape.setSelected(true);
 		return !controller.getShapeContainer(type).getShapes().contains(shape);
 	}
 }

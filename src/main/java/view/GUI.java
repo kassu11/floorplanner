@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.shapes.Dimension;
 import javafx.stage.StageStyle;
 import model.shapes.Point;
 import model.shapes.Shape;
@@ -15,6 +16,7 @@ import view.GUIElements.canvas.CanvasContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.GUIElements.toolbars.DrawingToolbar;
 import view.GUIElements.toolbars.OptionsToolbar;
+import view.events.AreaUtilities;
 import view.events.DrawUtilities;
 import view.events.KeyboardEvents;
 import view.events.SelectUtilities;
@@ -112,6 +114,24 @@ public class GUI extends Application {
                     controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
 
                 }
+                case SIZING -> {
+                    if(hoveredShape != null && hoveredShape.getType() == ShapeType.LINE) {
+                        Dimension dimension = controller.setDimensionLine(hoveredShape,  Math.random() * 200 + 200);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        dimension.draw(gc);
+                    }
+                }
+                case AREA -> {
+                    if(selectedShape != null && !event.isShiftDown()) {
+                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    }
+                    if (hoveredShape != null) {
+                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
+                        previewGc.clear();
+                        AreaUtilities.drawArea(controller, previewGc);
+                    }
+                }
             }
         });
         // This is the preview drawing
@@ -150,6 +170,9 @@ public class GUI extends Application {
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
 
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            } else if(controller.getCurrentMode() == ModeType.AREA) {
+                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                AreaUtilities.drawArea(controller, previewGc);
             } else if (controller.getCurrentMode() == ModeType.ROTATE && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.rotateSelectedShape(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
@@ -221,6 +244,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
+        drawToolbar.getButtons().get("area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
         drawToolbar.getButtons().get("reset").setOnAction(event -> {
                 controller.removeAllShapes();
                 gc.getGrid().drawGrid();

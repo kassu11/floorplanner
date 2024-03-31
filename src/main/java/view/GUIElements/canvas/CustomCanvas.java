@@ -23,6 +23,9 @@ public interface CustomCanvas {
 
     public void clear();
 
+    public void setLineWidth(double width);
+
+    public double getLineWidth();
     public Canvas getCanvas();
 
     public void setLineWidth(int width);
@@ -61,9 +64,12 @@ public interface CustomCanvas {
 
     public double getCanvasWidth();
 
-    public double getCanvasHeight();
-
     public CanvasGrid getGrid();
+
+    void closePath();
+
+    void fill();
+    public double getCanvasHeight();
 
     public void strokeText(String text, double x, double y);
 

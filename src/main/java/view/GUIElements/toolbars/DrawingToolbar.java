@@ -23,6 +23,7 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("delete")), "delete");
         addButton(new Button(settings.getLocalizationString("rotate")), "rotate");
         addButton(new Button(settings.getLocalizationString("reset")), "reset");
+        addButton(new Button(settings.getLocalizationString("area")), "area");
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
