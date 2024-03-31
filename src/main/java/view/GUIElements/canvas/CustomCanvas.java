@@ -6,67 +6,72 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
 public interface CustomCanvas {
-  public void resize(double width, double height);
 
-  public void moveTo(double x, double y);
+    public void resizeCanvas(double width, double height);
 
-  public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length);
+    public void moveTo(double x, double y);
 
-  public void rect(double x, double y, double width, double height);
+    public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length);
 
-  public void lineTo(double x, double y);
+    public void rect(double x, double y, double width, double height);
 
-  public void fillOval(double x, double y, double width, double height);
+    public void lineTo(double x, double y);
 
-  public void fillOvalWithOutScaling(double x, double y, double width, double height);
+    public void fillOval(double x, double y, double width, double height);
 
-  public void clear();
+    public void fillOvalWithOutScaling(double x, double y, double width, double height);
 
-  public Canvas getCanvas();
+    public void clear();
 
-  public void setLineWidth(double width);
+    public void setLineWidth(double width);
 
-  public double getLineWidth();
+    public double getLineWidth();
+    public Canvas getCanvas();
 
-  public void setStrokeColor(String color);
+    public void setLineWidth(int width);
 
-  public void setFillColor(String color);
+    public void setStrokeColor(String color);
 
-  public void setStrokeWidth(int width);
+    public void setFillColor(String color);
 
-  public void setFill(Color color);
+    public void setStrokeWidth(int width);
 
-  public void setStroke(Color color);
+    public void setFill(Color color);
 
-  public void beginPath();
+    public void setStroke(Color color);
 
-  public void stroke();
+    public void beginPath();
 
-  public void strokeArc(double x, double y, double width, double height, double startAngle, double length, ArcType open);
+    public void stroke();
 
-  public void setX(double x);
+    public void strokeArc(double x, double y, double width, double height, double startAngle, double length, ArcType open);
 
-  public void setY(double y);
+    public void setX(double x);
 
-  public void setZoom(double zoom);
+    public void setY(double y);
 
-  public void fillText(String text, double radians, double x, double y, double textHalfWidth);
+    public void setZoom(double zoom);
 
-  public Affine getTransform();
+    public void fillText(String text, double radians, double x, double y, double textHalfWidth);
 
-  public void rotate(double angle);
+    public Affine getTransform();
 
-  public void setTransform(double decrease, double x, double y);
+    public void rotate(double angle);
 
-  public void setTransform(Affine affine);
+    public void setTransform(double decrease, double x, double y);
 
-  public double getCanvasWidth();
+    public void setTransform(Affine affine);
 
-  public double getCanvasHeight();
+    public double getCanvasWidth();
 
-  public CanvasGrid getGrid();
+    public CanvasGrid getGrid();
 
-  void closePath();
+    void closePath();
 
-  void fill();
+    void fill();
+    public double getCanvasHeight();
+
+    public void strokeText(String text, double x, double y);
+
+    public void strokeText(String text, double x, double y, double offsetX, double offsetY);
 }

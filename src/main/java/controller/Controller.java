@@ -26,14 +26,12 @@ public class Controller {
     private SettingsSingleton settingsSingleton = SettingsSingleton.getInstance();
     private List<Shape> customShapes = new ArrayList<>();
     private SettingsDao settingsDao = new SettingsDao();
-
     private boolean ctrlIsDown = false;
     private ShapeType currentShape = ShapeType.LINE;
     private ModeType currentMode = ModeType.DRAW;
     private Point lastPoint, hoveredPoint;
     private Shape selectedShape, hoveredShape;
     private double mouseX, mouseY;
-
     private String hoverColor, selectedColor;
 
     public enum SingletonType {
@@ -146,7 +144,10 @@ public class Controller {
 
     public void saveSettings() {
         if(settingsDao.find(1) == null) {
-            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(), SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize());
+            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(),
+                    SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize(),
+                    SettingsSingleton.getLocaleSimpleName());
+
             settingsDao.persist(settings);
             System.out.println("Settings saved!");
         } else {
@@ -223,7 +224,7 @@ public class Controller {
 
 
 
-    public ShapeType getCurrentShape() {
+    public ShapeType getCurrentShapeType() {
         return currentShape;
     }
 
@@ -253,6 +254,10 @@ public class Controller {
             this.hoverColor = "#000000";
         }
         this.currentMode = currentMode;
+    }
+
+    public void updateToolbarLocalization() {
+        gui.updateToolbarLocalization();
     }
     public void setLastPoint(Point lastPoint) {
         this.lastPoint = lastPoint;

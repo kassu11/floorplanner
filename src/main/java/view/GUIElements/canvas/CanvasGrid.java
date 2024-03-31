@@ -17,14 +17,18 @@ public class CanvasGrid {
             double width = SettingsSingleton.getGridWidth();
             double height = SettingsSingleton.getGridHeight();
             int gridSize = SettingsSingleton.getGridSize();
-            canvas.setFill(LIGHTGRAY);
-            canvas.setStroke(LIGHTGRAY);
             canvas.setLineWidth(1);
             for (int i = 0; i < width; i += gridSize) {
+                canvas.setStroke(BLACK);
+                canvas.strokeText(String.valueOf(i), i, 0, 2, 12);
+                canvas.setStroke(LIGHTGRAY);
                 canvas.moveTo(i, 0);
                 canvas.lineTo(i, height);
             }
             for (int i = 0; i < height; i += gridSize) {
+                canvas.setStroke(BLACK);
+                canvas.strokeText(String.valueOf(i), 0, i, 2, 12);
+                canvas.setStroke(LIGHTGRAY);
                 canvas.moveTo(0, i);
                 canvas.lineTo(width, i);
             }

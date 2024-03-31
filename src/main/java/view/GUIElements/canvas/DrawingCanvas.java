@@ -25,6 +25,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         grid = new CanvasGrid(this);
     }
 
+
     public void resizeCanvas(double width, double height) {
         this.width = width;
         this.height = height;
@@ -55,6 +56,8 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     public void fillOvalWithOutScaling(double x, double y, double width, double height) {
         gc.fillOval(-this.x + x * zoom - width / 2, -this.y + y * zoom - height / 2, width, height);
     }
+
+
 
     public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length) {
         gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
@@ -102,6 +105,11 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
     public Canvas getCanvas() {
         return this;
+    }
+
+    @Override
+    public void setLineWidth(int width) {
+        gc.setLineWidth(width);
     }
 
     public void setX(double x) {
@@ -175,4 +183,11 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc.fill();
     }
 
+    public void strokeText(String text, double x, double y) {
+        gc.strokeText(text, -this.x + x * zoom, -this.y + y * zoom);
+    }
+
+    public void strokeText(String text, double x, double y, double offsetX, double offsetY) {
+        gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
+    }
 }

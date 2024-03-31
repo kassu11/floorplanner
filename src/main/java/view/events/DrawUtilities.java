@@ -74,7 +74,7 @@ public class DrawUtilities {
         if (lastPoint == null) return;
 
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) mousePoint.setCoordinates(hoveredShape.getX(), hoveredShape.getY());
-        Shape createdShape = controller.createShape(mousePoint, lastPoint.getX(), lastPoint.getY(), controller.getCurrentShape(), null);
+        Shape createdShape = controller.createShape(mousePoint, lastPoint.getX(), lastPoint.getY(), controller.getCurrentShapeType(), null);
         createdShape.draw(gc);
         createdShape.drawLength(gc);
     }

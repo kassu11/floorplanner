@@ -8,6 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.shapes.Dimension;
+import javafx.stage.StageStyle;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.Ruler;
@@ -29,6 +30,9 @@ public class GUI extends Application {
     private int canvasWidth = 750;
     private int canvasHeight = 750;
     private double middleX, middleY;
+    private SettingsSingleton settings = SettingsSingleton.getInstance();
+    private OptionsToolbar optionBar;
+    private DrawingToolbar drawToolbar;
 
     @Override
     public void init() {
@@ -68,13 +72,13 @@ public class GUI extends Application {
                 case DRAW -> {
                     if (controller.getLastPoint() == null) DrawUtilities.addShapesFirstPoint(controller, mouseX, mouseY);
                     else {
-                        Shape newShape = DrawUtilities.addShapesLastPoint(controller, mouseX, mouseY, controller.getCurrentShape());
+                        Shape newShape = DrawUtilities.addShapesLastPoint(controller, mouseX, mouseY, controller.getCurrentShapeType());
 
                         previewGc.clear();
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         newShape.calculateShapeArea();
 
-//                        if (SettingsSingleton.isShapeType(ShapeType.MULTILINE)) {
+//                        if (controller.getCurrentShapeType() == ShapeType.MULTILINE) {
 //                            controller.addCustomShape(newShape);
 //                            controller.checkIfConnected(newShape);
 //                        }
@@ -220,23 +224,40 @@ public class GUI extends Application {
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
 
-        DrawingToolbar drawToolbar = new DrawingToolbar(controller, stage);
-        drawToolbar.getButtons().get("Mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
-        drawToolbar.getButtons().get("Select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
-        drawToolbar.getButtons().get("Delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
-        drawToolbar.getButtons().get("Sizing").setOnAction(event -> drawToolbar.changeMode(ModeType.SIZING));
-        drawToolbar.getButtons().get("Area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
-        drawToolbar.getButtons().get("Reset").setOnAction(event -> {
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            SettingsSingleton.setGridWidth(newVal.intValue());
+            optionBar.updateResolution();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasWidth = newVal.intValue();
+            canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+        });
+
+        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            SettingsSingleton.setGridHeight(newVal.intValue());
+            optionBar.updateResolution();
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasHeight = newVal.intValue();
+            canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+        });
+
+        drawToolbar = new DrawingToolbar(controller, stage);
+        drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
+        drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
+        drawToolbar.getButtons().get("delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
+        drawToolbar.getButtons().get("area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
+        drawToolbar.getButtons().get("reset").setOnAction(event -> {
                 controller.removeAllShapes();
                 gc.getGrid().drawGrid();
             }
         );
 
-        drawToolbar.getButtons().get("Rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
+        drawToolbar.getButtons().get("rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
         System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
-        OptionsToolbar optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
-        optionBar.getButtons().get("Settings").setOnAction(event -> optionBar.showSettings());
-        optionBar.getButtons().get("File").setOnAction(event -> optionBar.showFile());
+
+        optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
+        optionBar.getButtons().get("settings").setOnAction(event -> optionBar.showSettings());
+        optionBar.getButtons().get("file").setOnAction(event -> optionBar.showFile());
+
 
         root.setLeft(drawToolbar);
         root.setTop(optionBar);
@@ -244,12 +265,13 @@ public class GUI extends Application {
         BorderPane canvasBorder = new BorderPane();
 
         canvasBorder.setCenter(canvasContainer);
-        canvasBorder.setTop(xRuler);
-        canvasBorder.setLeft(yRuler);
+        //canvasBorder.setTop(xRuler);
+        //canvasBorder.setLeft(yRuler);
 
         root.setCenter(canvasBorder);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
+
         stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
         stage.show();
@@ -260,5 +282,10 @@ public class GUI extends Application {
 
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
+    }
+
+    public void updateToolbarLocalization() {
+        drawToolbar.updateLocalization();
+        optionBar.updateLocalization();
     }
 }
