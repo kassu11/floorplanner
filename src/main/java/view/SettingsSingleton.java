@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 public class SettingsSingleton {
     private static boolean drawLengths = true;
     private static boolean isDrawGrid = true;
-    private static boolean rulerVisible = true;
+    private static boolean unitsVisible = true;
     private static double gridHeight = 750;
     private static double gridWidth = 750;
     private static int gridSize = 50;
@@ -56,12 +56,12 @@ public class SettingsSingleton {
         SettingsSingleton.gridWidth = gridWidth;
     }
 
-    public static boolean isRulerVisible() {
-        return rulerVisible;
+    public static boolean isUnitsVisible() {
+        return unitsVisible;
     }
 
-    public static void setRulerVisible(boolean rulerVisible) {
-        SettingsSingleton.rulerVisible = rulerVisible;
+    public static void setUnitsVisible(boolean unitsVisible) {
+        SettingsSingleton.unitsVisible = unitsVisible;
     }
 
     public static int getGridSize() {

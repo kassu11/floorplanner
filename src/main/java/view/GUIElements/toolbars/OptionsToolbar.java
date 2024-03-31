@@ -137,12 +137,15 @@ public class OptionsToolbar extends CustomToolbar {
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(SettingsSingleton.isGridEnabled());
+        CheckBox showUnits = new CheckBox(settings.getLocalizationString("showUnits"));
+        showUnits.setSelected(SettingsSingleton.isUnitsVisible());
         Button saveButton = new Button(settings.getLocalizationString("save"));
 
         saveButton.setOnAction(e -> {
             SettingsSingleton.setDrawLengths(showLengths.isSelected());
             SettingsSingleton.setDrawGrid(showGrid.isSelected());
             SettingsSingleton.setLocaleWithString((languageSettings.getValue()));
+            SettingsSingleton.setUnitsVisible(showUnits.isSelected());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
@@ -156,7 +159,7 @@ public class OptionsToolbar extends CustomToolbar {
         HBox languageSettingsLayout = new HBox(new Label(settings.getLocalizationString("language")), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
-        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, saveButton);
+        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, showUnits, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 
