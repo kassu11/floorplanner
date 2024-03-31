@@ -245,6 +245,12 @@ public class Controller {
         } else if(currentMode == ModeType.DELETE) {
             this.selectedColor = "#000000";
             this.hoverColor = "#ff0000";
+        } else if(currentMode == ModeType.AREA) {
+            this.selectedColor = "#4269f54a";
+            this.hoverColor = "#78b0fa";
+        } else {
+            this.selectedColor = "#000000";
+            this.hoverColor = "#000000";
         }
         this.currentMode = currentMode;
     }

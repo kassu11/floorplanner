@@ -65,4 +65,8 @@ public interface CustomCanvas {
   public double getCanvasHeight();
 
   public CanvasGrid getGrid();
+
+  void closePath();
+
+  void fill();
 }

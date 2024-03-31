@@ -1,5 +1,5 @@
 package view.types;
 
 public enum ModeType {
-    DRAW, SELECT, DELETE, ROTATE, DIMENSION
+    DRAW, SELECT, DELETE, ROTATE, SIZING, AREA
 }
