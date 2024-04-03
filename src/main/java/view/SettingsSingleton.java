@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 public class SettingsSingleton {
     private boolean drawLengths = true;
     private boolean isDrawGrid = true;
+    private boolean unitsVisible = true;
     private double gridHeight = 750;
     private double gridWidth = 750;
     private int gridSize = 25;
@@ -56,6 +57,14 @@ public class SettingsSingleton {
 
     public int getGridSize() {
         return gridSize;
+    }
+      
+    public boolean isUnitsVisible() {
+        return unitsVisible;
+    }
+
+    public void setUnitsVisible(boolean unitsVisible) {
+        SettingsSingleton.unitsVisible = unitsVisible;
     }
 
     public void setGridSize(int gridSize) {

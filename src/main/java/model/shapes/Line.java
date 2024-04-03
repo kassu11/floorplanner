@@ -6,7 +6,11 @@ import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Line extends AbstractShape {
+    private List<Dimension> dimensions = new ArrayList<>();
 
     public Line(Point pointA, Point pointB) {
         super(pointA, pointB);
@@ -34,6 +38,8 @@ public class Line extends AbstractShape {
         gc.moveTo(pointA.getX(), pointA.getY());
         gc.lineTo(pointB.getX(), pointB.getY());
         gc.stroke();
+
+        dimensions.forEach(dimension -> dimension.draw(gc));
     }
 
     public double calculateDistanceFromMouse(double x, double y) {
@@ -112,5 +118,13 @@ public class Line extends AbstractShape {
         gc.setTransform(radians, this.getCentroidX(), this.getCentroidY());
         gc.fillText(text, radians, this.getCentroidX(), this.getCentroidY(), textOffset);
         gc.setTransform(original);
+    }
+
+    public void addDimension(Dimension dimension) {
+        dimensions.add(dimension);
+    }
+
+    public void resizeToDimensions() {
+        dimensions.forEach(Dimension::resize);
     }
 }

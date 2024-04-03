@@ -61,4 +61,8 @@ public interface Shape extends Serializable {
     public void updateSelectedCoordinates();
 
     public double getSelectedY();
+
+    public void setSelected(boolean selected);
+
+    public boolean isSelected();
 }

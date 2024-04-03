@@ -245,6 +245,12 @@ public class Controller {
         } else if(currentMode == ModeType.DELETE) {
             this.selectedColor = "#000000";
             this.hoverColor = "#ff0000";
+        } else if(currentMode == ModeType.AREA) {
+            this.selectedColor = "#4269f54a";
+            this.hoverColor = "#78b0fa";
+        } else {
+            this.selectedColor = "#000000";
+            this.hoverColor = "#000000";
         }
         this.currentMode = currentMode;
     }
@@ -312,5 +318,16 @@ public class Controller {
 
     public String getSelectedColor() {
         return selectedColor;
+    }
+
+    public Dimension setDimensionLine(Shape shape, double distance) {
+        Dimension dimension = new Dimension();
+        dimension.setDistance(distance);
+        dimension.addShape(shape);
+        dimension.resize();
+        if(shape.getType() == ShapeType.LINE) {
+            ((Line) shape).addDimension(dimension);
+        }
+        return dimension;
     }
 }

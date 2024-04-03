@@ -28,8 +28,8 @@ public class OptionsToolbar extends CustomToolbar {
     private CustomCanvas gc;
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
-
     private List<TextFieldWithLabel> textFields;
+
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
@@ -50,6 +50,7 @@ public class OptionsToolbar extends CustomToolbar {
             if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
             this.getItems().add(textField);
         }
+
         this.getItems().add(new Separator());
 
         addButton(new Button(settings.getLocalizationString("gridSizeButton")), "gridSizeButton");
@@ -63,6 +64,11 @@ public class OptionsToolbar extends CustomToolbar {
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
 
+    }
+
+    public void updateResolution(){
+        gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
+        gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
     }
 
     public void showFile() {
@@ -138,6 +144,7 @@ public class OptionsToolbar extends CustomToolbar {
             settings.setDrawLengths(showLengths.isSelected());
             settings.setDrawGrid(showGrid.isSelected());
             settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
+
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
@@ -153,7 +160,7 @@ public class OptionsToolbar extends CustomToolbar {
         HBox languageSettingsLayout = new HBox(new Label(settings.getLocalizationString("language")), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
-        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, saveButton);
+        VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, showUnits, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 

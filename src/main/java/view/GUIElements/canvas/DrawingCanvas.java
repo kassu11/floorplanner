@@ -23,8 +23,8 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         this.zoom = 1;
         gc = getGraphicsContext2D();
         grid = new CanvasGrid(this);
-
     }
+
 
     public void resizeCanvas(double width, double height) {
         this.width = width;
@@ -57,12 +57,18 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         gc.fillOval(-this.x + x * zoom - width / 2, -this.y + y * zoom - height / 2, width, height);
     }
 
+
+
     public void arc(double x, double y, double radiusX, double radiusY, double startAngle, double length) {
         gc.arc(-this.x + x * zoom, -this.y + y * zoom, radiusX * zoom, radiusY * zoom, startAngle, length);
     }
 
-    public void setLineWidth(int width) {
+    public void setLineWidth(double width) {
         gc.setLineWidth(width);
+    }
+
+    public double getLineWidth() {
+        return gc.getLineWidth();
     }
 
     public void setStrokeColor(String color) {
@@ -99,6 +105,11 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
 
     public Canvas getCanvas() {
         return this;
+    }
+
+    @Override
+    public void setLineWidth(int width) {
+        gc.setLineWidth(width);
     }
 
     public void setX(double x) {
@@ -162,4 +173,21 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         return grid;
     }
 
+    @Override
+    public void closePath() {
+        gc.closePath();
+    }
+
+    @Override
+    public void fill() {
+        gc.fill();
+    }
+
+    public void strokeText(String text, double x, double y) {
+        gc.strokeText(text, -this.x + x * zoom, -this.y + y * zoom);
+    }
+
+    public void strokeText(String text, double x, double y, double offsetX, double offsetY) {
+        gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
+    }
 }
