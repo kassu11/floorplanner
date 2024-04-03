@@ -54,7 +54,7 @@ public class GUI extends Application {
         xRuler.setPadding(new Insets(0, 0, 0, 50));
         Ruler yRuler = new Ruler(true);
 
-        if(SettingsSingleton.isGridEnabled()) gc.getGrid().drawGrid();
+        if(settings.isGridEnabled()) gc.getGrid().drawGrid();
 
 
         canvasContainer.setOnMouseClicked(event -> {

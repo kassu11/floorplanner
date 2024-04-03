@@ -1,84 +1,74 @@
 package view;
 
 import entity.Settings;
+import org.springframework.core.io.Resource;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class SettingsSingleton {
-    private static boolean drawLengths = true;
-    private static boolean isDrawGrid = true;
-    private static boolean unitsVisible = true;
-    private static double gridHeight = 750;
-    private static double gridWidth = 750;
-    private static int gridSize = 50;
-    private static Locale locale = new Locale("en", "US");
+    private boolean drawLengths = true;
+    private boolean isDrawGrid = true;
+    private boolean unitsVisible = true;
+    private double gridHeight = 750;
+    private double gridWidth = 750;
+    private int gridSize = 25;
+    private Locale locale = LocaleConfig.values()[0].getLocale();
 
     private SettingsSingleton() {
-    }
-
-    private static class SettingsSingletonHelper {
-        private static final SettingsSingleton INSTANCE = new SettingsSingleton();
     }
 
     public static SettingsSingleton getInstance() {
         return SettingsSingletonHelper.INSTANCE;
     }
-    public static boolean isDrawLengths() {
+
+    public boolean isDrawLengths() {
         return drawLengths;
     }
 
-    public static void setDrawLengths(boolean drawLengths) {
-        SettingsSingleton.drawLengths = drawLengths;
+    public void setDrawLengths(boolean drawLengths) {
+        this.drawLengths = drawLengths;
     }
 
-    public static boolean isGridEnabled() {
+    public boolean isGridEnabled() {
         return isDrawGrid;
     }
 
-    public static void setDrawGrid(boolean isDrawGrid) {
-        SettingsSingleton.isDrawGrid = isDrawGrid;
+    public void setDrawGrid(boolean isDrawGrid) {
+        this.isDrawGrid = isDrawGrid;
     }
 
-    public static double getGridHeight() {
+    public double getGridHeight() {
         return gridHeight;
     }
 
-    public static void setGridHeight(double gridHeight) {
-        SettingsSingleton.gridHeight = gridHeight;
+    public void setGridHeight(double gridHeight) {
+        this.gridHeight = gridHeight;
     }
 
-    public static double getGridWidth() {
+    public double getGridWidth() {
         return gridWidth;
     }
 
-    public static void setGridWidth(double gridWidth) {
-        SettingsSingleton.gridWidth = gridWidth;
+    public void setGridWidth(double gridWidth) {
+        this.gridWidth = gridWidth;
     }
 
-    public static boolean isUnitsVisible() {
+    public int getGridSize() {
+        return gridSize;
+    }
+      
+    public boolean isUnitsVisible() {
         return unitsVisible;
     }
 
-    public static void setUnitsVisible(boolean unitsVisible) {
+    public void setUnitsVisible(boolean unitsVisible) {
         SettingsSingleton.unitsVisible = unitsVisible;
     }
 
-    public static int getGridSize() {
-        return gridSize;
-    }
-
-    public static void setGridSize(int gridSize) {
-        SettingsSingleton.gridSize = gridSize;
-    }
-
-    public void setSettings(Settings settings) {
-        setDrawLengths(settings.isDrawLengths());
-        setDrawGrid(settings.isDrawGrid());
-        setGridHeight(settings.getGridHeight());
-        setGridWidth(settings.getGridWidth());
-        setGridSize(settings.getGridSize());
-        setLocaleWithString(settings.getLocale());
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
     }
 
     public ResourceBundle getLocalization() {
@@ -89,45 +79,40 @@ public class SettingsSingleton {
         return getLocalization().getString(key);
     }
 
-    public static String getLocaleSimpleName() {
-        switch(locale.getLanguage()) {
-            case "en":
-                return "ENG";
-            case "fi":
-                return "FIN";
-            case "ja":
-                return "JPN";
-            default:
-                return "ENG";
-        }
+    public ResourceBundle getLocalizationWithLocale(Locale locale) {
+        return ResourceBundle.getBundle("localization", locale);
     }
 
-    public static Locale getLocale() {
+    public Locale getLocale() {
         return locale;
     }
 
-    private Locale getLocaleWithString(String language) {
-        switch (language) {
-            case "ENG":
-                return new Locale("en", "US");
-            case "FIN":
-                return new Locale("fi", "FI");
-            case "JPN":
-                return new Locale("ja", "JP");
-            default:
-                return new Locale("en", "US");
-        }
+    public LocaleConfig[] getAllLocalization() {
+        return LocaleConfig.values();
     }
 
-    public static void setLocale(Locale locale) {
-        SettingsSingleton.locale = locale;
-    }
-
-    public static void setLocaleWithString(String localeSimpleName) {
-        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
+    public void setLocaleWithLocaleLanguage(String language) {
+        this.locale = Arrays.stream(LocaleConfig.values())
+                .map(LocaleConfig::getLocale)
+                .filter(localeConfigLocale -> localeConfigLocale.getLanguage().equals(language))
+                .findFirst()
+                .orElse(LocaleConfig.ENGLISH.getLocale());
     }
 
     public Settings getSettings() {
-        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, getLocaleSimpleName());
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage());
+    }
+
+    public void setSettings(Settings settings) {
+        setDrawLengths(settings.isDrawLengths());
+        setDrawGrid(settings.isDrawGrid());
+        setGridHeight(settings.getGridHeight());
+        setGridWidth(settings.getGridWidth());
+        setGridSize(settings.getGridSize());
+        setLocaleWithLocaleLanguage(settings.getLocale());
+    }
+
+    private static class SettingsSingletonHelper {
+        private static final SettingsSingleton INSTANCE = new SettingsSingleton();
     }
 }

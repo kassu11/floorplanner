@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.FileManager;
+import view.GUIElements.ComboBoxItem;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 
@@ -16,8 +17,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
-import java.util.Locale;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import static javafx.geometry.Pos.CENTER;
 
@@ -27,10 +28,8 @@ public class OptionsToolbar extends CustomToolbar {
     private CustomCanvas gc;
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
+    private List<TextFieldWithLabel> textFields;
 
-    private TextField gridWidth;
-    private TextField gridHeight;
-    private TextField gridSize;
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
@@ -40,30 +39,29 @@ public class OptionsToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
 
-        gridWidth = new TextField();
-        gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
+        TextFieldWithLabel gridWidth = new TextFieldWithLabel("gridWidth", String.format("%.0f", settings.getGridWidth()));
+        TextFieldWithLabel gridHeight = new TextFieldWithLabel("gridHeight", String.format("%.0f", settings.getGridHeight()));
+        TextFieldWithLabel gridSize = new TextFieldWithLabel("gridSize", String.format("%d", settings.getGridSize()));
 
-        gridHeight = new TextField();
-        gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
+        textFields = Arrays.asList(gridWidth, gridHeight, gridSize);
 
-        gridSize = new TextField();
-        gridSize.setText(String.format("%d", SettingsSingleton.getGridSize()));
+        for (TextFieldWithLabel textField : textFields) {
+            textField.setMaxWidth(100);
+            if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
+            this.getItems().add(textField);
+        }
 
-        addButton(new Button(settings.getLocalizationString("gridSize")), "gridSize");
         this.getItems().add(new Separator());
-        this.getItems().add(gridWidth);
-        this.getItems().add(new Separator());
-        this.getItems().add(gridHeight);
-        this.getItems().add(new Separator());
-        this.getItems().add(gridSize);
-        this.getItems().add(new Separator());
-        getButton("gridSize").setOnAction(e -> {
-            SettingsSingleton.setGridWidth(Double.parseDouble(gridWidth.getText()));
-            SettingsSingleton.setGridHeight(Double.parseDouble(gridHeight.getText()));
-            SettingsSingleton.setGridSize(Integer.parseInt(gridSize.getText()));
+
+        addButton(new Button(settings.getLocalizationString("gridSizeButton")), "gridSizeButton");
+
+        getButton("gridSizeButton").setOnAction(e -> {
+            settings.setGridWidth(Double.parseDouble(gridWidth.getTextField().getText()));
+            settings.setGridHeight(Double.parseDouble(gridHeight.getTextField().getText()));
+            settings.setGridSize(Integer.parseInt(gridSize.getTextField().getText()));
             gc.clear();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-            System.out.println("Grid size set to " + SettingsSingleton.getGridWidth() + "x" + SettingsSingleton.getGridHeight());
+            System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
 
     }
@@ -129,30 +127,33 @@ public class OptionsToolbar extends CustomToolbar {
 
         settingsWindow.setTitle(settings.getLocalizationString("settings"));
         CheckBox showLengths = new CheckBox(settings.getLocalizationString("showLengths"));
-        showLengths.setSelected(SettingsSingleton.isDrawLengths());
+        showLengths.setSelected(settings.isDrawLengths());
         CheckBox showAreas = new CheckBox(settings.getLocalizationString("showAreas"));
         Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
-        ComboBox<String> languageSettings = new ComboBox<>();
-        languageSettings.setValue(SettingsSingleton.getLocaleSimpleName());
+
+        ComboBox<ComboBoxItem> languageSettings = new ComboBox<>();
+        ComboBoxItem defaultItem = new ComboBoxItem(settings.getLocale().getLanguage(), settings.getLocalizationString("languageName"));
+        languageSettings.setValue(defaultItem);
+
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
-        showGrid.setSelected(SettingsSingleton.isGridEnabled());
-        CheckBox showUnits = new CheckBox(settings.getLocalizationString("showUnits"));
-        showUnits.setSelected(SettingsSingleton.isUnitsVisible());
+        showGrid.setSelected(settings.isGridEnabled());
         Button saveButton = new Button(settings.getLocalizationString("save"));
 
         saveButton.setOnAction(e -> {
-            SettingsSingleton.setDrawLengths(showLengths.isSelected());
-            SettingsSingleton.setDrawGrid(showGrid.isSelected());
-            SettingsSingleton.setLocaleWithString((languageSettings.getValue()));
-            SettingsSingleton.setUnitsVisible(showUnits.isSelected());
+            settings.setDrawLengths(showLengths.isSelected());
+            settings.setDrawGrid(showGrid.isSelected());
+            settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
+
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
             settingsWindow.close();
         });
 
-        languageSettings.getItems().addAll("ENG", "FIN", "JPN");
+        List<ComboBoxItem> comboItems = Arrays.stream(settings.getAllLocalization())
+                .map(locale -> new ComboBoxItem(locale.getLocale().getLanguage(), settings.getLocalizationWithLocale(locale.getLocale()).getString("languageName"))).toList();
+        languageSettings.getItems().addAll(comboItems);
 
         Insets defaultInsets = new Insets(10, 10, 10, 10);
 
@@ -177,9 +178,12 @@ public class OptionsToolbar extends CustomToolbar {
         settingsWindow.show();
     }
 
-    public void updateLocalization(){
-        for(String key : getButtons().keySet()){
+    public void updateLocalization() {
+        for (String key : getButtons().keySet()) {
             getButtons().get(key).setText(settings.getLocalizationString(key));
+        }
+        for (TextFieldWithLabel textField : textFields) {
+            textField.getLabel().setText(settings.getLocalizationString(textField.getKey()));
         }
     }
 }
