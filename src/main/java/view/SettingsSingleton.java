@@ -8,12 +8,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class SettingsSingleton {
-    private static boolean drawLengths = true;
-    private static boolean isDrawGrid = true;
-    private static double gridHeight = 750;
-    private static double gridWidth = 750;
-    private static int gridSize = 25;
-    private static Locale locale = LocaleConfig.values()[0].getLocale();
+    private boolean drawLengths = true;
+    private boolean isDrawGrid = true;
+    private double gridHeight = 750;
+    private double gridWidth = 750;
+    private int gridSize = 25;
+    private Locale locale = LocaleConfig.values()[0].getLocale();
 
     private SettingsSingleton() {
     }
@@ -25,44 +25,44 @@ public class SettingsSingleton {
     public static SettingsSingleton getInstance() {
         return SettingsSingletonHelper.INSTANCE;
     }
-    public static boolean isDrawLengths() {
+    public boolean isDrawLengths() {
         return drawLengths;
     }
 
-    public static void setDrawLengths(boolean drawLengths) {
-        SettingsSingleton.drawLengths = drawLengths;
+    public void setDrawLengths(boolean drawLengths) {
+        this.drawLengths = drawLengths;
     }
 
-    public static boolean isGridEnabled() {
+    public boolean isGridEnabled() {
         return isDrawGrid;
     }
 
-    public static void setDrawGrid(boolean isDrawGrid) {
-        SettingsSingleton.isDrawGrid = isDrawGrid;
+    public void setDrawGrid(boolean isDrawGrid) {
+        this.isDrawGrid = isDrawGrid;
     }
 
-    public static double getGridHeight() {
+    public double getGridHeight() {
         return gridHeight;
     }
 
-    public static void setGridHeight(double gridHeight) {
-        SettingsSingleton.gridHeight = gridHeight;
+    public void setGridHeight(double gridHeight) {
+        this.gridHeight = gridHeight;
     }
 
-    public static double getGridWidth() {
+    public double getGridWidth() {
         return gridWidth;
     }
 
-    public static void setGridWidth(double gridWidth) {
-        SettingsSingleton.gridWidth = gridWidth;
+    public void setGridWidth(double gridWidth) {
+        this.gridWidth = gridWidth;
     }
 
-    public static int getGridSize() {
+    public int getGridSize() {
         return gridSize;
     }
 
-    public static void setGridSize(int gridSize) {
-        SettingsSingleton.gridSize = gridSize;
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
     }
 
     public void setSettings(Settings settings) {
@@ -82,15 +82,15 @@ public class SettingsSingleton {
         return getLocalization().getString(key);
     }
 
-    public static ResourceBundle getLocalizationWithLocale(Locale locale) {
+    public ResourceBundle getLocalizationWithLocale(Locale locale) {
         return ResourceBundle.getBundle("localization", locale);
     }
 
-    public static Locale getLocale() {
+    public Locale getLocale() {
         return locale;
     }
 
-    public static LocaleConfig[] getAllLocalization() {
+    public LocaleConfig[] getAllLocalization() {
         return LocaleConfig.values();
     }
 
@@ -115,8 +115,8 @@ public class SettingsSingleton {
 //        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
 //    }
 
-    public static void setLocaleWithLocaleLanguage(String language) {
-        SettingsSingleton.locale = Arrays.stream(LocaleConfig.values())
+    public void setLocaleWithLocaleLanguage(String language) {
+        this.locale = Arrays.stream(LocaleConfig.values())
                 .map(LocaleConfig::getLocale)
                 .filter(localeConfigLocale -> localeConfigLocale.getLanguage().equals(language))
                 .findFirst()

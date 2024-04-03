@@ -144,14 +144,14 @@ public class Controller {
 
     public void saveSettings() {
         if(settingsDao.find(1) == null) {
-            Settings settings = new Settings(SettingsSingleton.isDrawLengths(), SettingsSingleton.isGridEnabled(),
-                    SettingsSingleton.getGridHeight(), SettingsSingleton.getGridWidth(), SettingsSingleton.getGridSize(),
-                    SettingsSingleton.getLocale().getLanguage());
+            Settings settings = new Settings(settingsSingleton.isDrawLengths(), settingsSingleton.isGridEnabled(),
+                    settingsSingleton.getGridHeight(), settingsSingleton.getGridWidth(), settingsSingleton.getGridSize(),
+                    settingsSingleton.getLocale().getLanguage());
 
             settingsDao.persist(settings);
             System.out.println("Settings saved!");
         } else {
-            Settings settings = SettingsSingleton.getInstance().getSettings();
+            Settings settings = settingsSingleton.getInstance().getSettings();
             settingsDao.find(1).setSettings(settings);
             settingsDao.update(settingsDao.find(1));
         }
@@ -160,11 +160,10 @@ public class Controller {
     public void loadSettings() {
         Settings settings = settingsDao.find(1);
         if(settings != null) {
-            SettingsSingleton.getInstance().setSettings(settings);
+            settingsSingleton.setSettings(settings);
         }
         else {
-            settings = SettingsSingleton.getInstance().getSettings();
-            settingsDao.persist(settings);
+            settingsDao.persist(settingsSingleton.getSettings());
         }
     }
 
