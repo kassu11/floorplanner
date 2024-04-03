@@ -37,26 +37,25 @@ public class OptionsToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
 
-        TextField gridWidth = new TextField();
-        gridWidth.setText(String.format("%.0f", settings.getGridWidth()));
-        TextField gridHeight = new TextField();
-        gridHeight.setText(String.format("%.0f", settings.getGridHeight()));
-        TextField gridSize = new TextField();
-        gridSize.setText(String.format("%d", settings.getGridSize()));
-        addButton(new Button(settings.getLocalizationString("gridSize")), "gridSize");
+        TextFieldWithLabel gridWidth = new TextFieldWithLabel(settings.getLocalizationString("gridWidth"), String.format("%.0f", settings.getGridWidth()));
+        TextFieldWithLabel gridHeight = new TextFieldWithLabel(settings.getLocalizationString("gridHeight"), String.format("%.0f", settings.getGridHeight()));
+        TextFieldWithLabel gridSize = new TextFieldWithLabel(settings.getLocalizationString("gridSize"), String.format("%d", settings.getGridSize()));
 
-        this.getItems().add(new Separator());
-        this.getItems().add(gridWidth);
-        this.getItems().add(new Separator());
-        this.getItems().add(gridHeight);
-        this.getItems().add(new Separator());
-        this.getItems().add(gridSize);
+        List<TextFieldWithLabel> textFields = Arrays.asList(gridWidth, gridHeight, gridSize);
+
+        for (TextFieldWithLabel textField : textFields) {
+            textField.setMaxWidth(50);
+            this.getItems().add(new Separator());
+            this.getItems().add(textField);
+        }
         this.getItems().add(new Separator());
 
-        getButton("gridSize").setOnAction(e -> {
-            settings.setGridWidth(Double.parseDouble(gridWidth.getText()));
-            settings.setGridHeight(Double.parseDouble(gridHeight.getText()));
-            settings.setGridSize(Integer.parseInt(gridSize.getText()));
+        addButton(new Button(settings.getLocalizationString("gridSizeButton")), "gridSizeButton");
+
+        getButton("gridSizeButton").setOnAction(e -> {
+            settings.setGridWidth(Double.parseDouble(gridWidth.getTextField().getText()));
+            settings.setGridHeight(Double.parseDouble(gridHeight.getTextField().getText()));
+            settings.setGridSize(Integer.parseInt(gridSize.getTextField().getText()));
             gc.clear();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
