@@ -12,14 +12,15 @@ import model.FileManager;
 import view.GUIElements.ComboBoxItem;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static javafx.geometry.Pos.CENTER;
 
 public class OptionsToolbar extends CustomToolbar {
@@ -43,7 +44,7 @@ public class OptionsToolbar extends CustomToolbar {
         TextFieldWithLabel gridHeight = new TextFieldWithLabel("gridHeight", String.format("%.0f", settings.getGridHeight()));
         TextFieldWithLabel gridSize = new TextFieldWithLabel("gridSize", String.format("%d", settings.getGridSize()));
 
-        textFields = Arrays.asList(gridWidth, gridHeight, gridSize);
+        textFields = asList(gridWidth, gridHeight, gridSize);
 
         for (TextFieldWithLabel textField : textFields) {
             textField.setMaxWidth(100);
@@ -64,11 +65,6 @@ public class OptionsToolbar extends CustomToolbar {
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
 
-    }
-
-    public void updateResolution(){
-        gridWidth.setText(String.format("%.0f", SettingsSingleton.getGridWidth()));
-        gridHeight.setText(String.format("%.0f", SettingsSingleton.getGridHeight()));
     }
 
     public void showFile() {
@@ -138,6 +134,7 @@ public class OptionsToolbar extends CustomToolbar {
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(settings.isGridEnabled());
+        CheckBox showUnits = new CheckBox(settings.getLocalizationString("showUnits"));
         Button saveButton = new Button(settings.getLocalizationString("save"));
 
         saveButton.setOnAction(e -> {
@@ -184,6 +181,13 @@ public class OptionsToolbar extends CustomToolbar {
         }
         for (TextFieldWithLabel textField : textFields) {
             textField.getLabel().setText(settings.getLocalizationString(textField.getKey()));
+        }
+    }
+
+    public void updateResolution(){
+        for(TextFieldWithLabel textField : textFields){
+            if(textField.getKey().equals("gridWidth")) textField.getTextField().setText(String.format("%.0f", settings.getGridWidth()));
+            if(textField.getKey().equals("gridHeight")) textField.getTextField().setText(String.format("%.0f", settings.getGridHeight()));
         }
     }
 }

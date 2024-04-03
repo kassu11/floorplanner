@@ -21,7 +21,7 @@ public class CanvasGrid {
         int gridSize = settings.getGridSize();
         canvas.setLineWidth(1);
         for (int i = 0; i < width; i += gridSize) {
-            if (SettingsSingleton.isUnitsVisible()) {
+            if (settings.isUnitsVisible()) {
                 canvas.setStroke(BLACK);
                 canvas.strokeText(String.valueOf(i), i, 0, 2, 12);
             }
@@ -30,7 +30,7 @@ public class CanvasGrid {
             canvas.lineTo(i, height);
         }
         for (int i = 0; i < height; i += gridSize) {
-            if (SettingsSingleton.isUnitsVisible()) {
+            if (settings.isUnitsVisible()) {
                 canvas.setStroke(BLACK);
                 canvas.strokeText(String.valueOf(i), 0, i, 2, 12);
             }

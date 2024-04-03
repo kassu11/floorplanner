@@ -225,7 +225,7 @@ public class GUI extends Application {
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            SettingsSingleton.setGridWidth(newVal.intValue());
+            settings.setGridWidth(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasWidth = newVal.intValue();
@@ -233,7 +233,7 @@ public class GUI extends Application {
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            SettingsSingleton.setGridHeight(newVal.intValue());
+            settings.setGridHeight(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasHeight = newVal.intValue();

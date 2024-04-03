@@ -64,7 +64,7 @@ public class SettingsSingleton {
     }
 
     public void setUnitsVisible(boolean unitsVisible) {
-        SettingsSingleton.unitsVisible = unitsVisible;
+        this.unitsVisible = unitsVisible;
     }
 
     public void setGridSize(int gridSize) {
