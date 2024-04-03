@@ -47,7 +47,7 @@ public class OptionsToolbar extends CustomToolbar {
 
         for (TextFieldWithLabel textField : textFields) {
             textField.setMaxWidth(100);
-            if(textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
+            if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
             this.getItems().add(textField);
         }
         this.getItems().add(new Separator());
@@ -171,11 +171,11 @@ public class OptionsToolbar extends CustomToolbar {
         settingsWindow.show();
     }
 
-    public void updateLocalization(){
-        for(String key : getButtons().keySet()){
+    public void updateLocalization() {
+        for (String key : getButtons().keySet()) {
             getButtons().get(key).setText(settings.getLocalizationString(key));
         }
-        for(TextFieldWithLabel textField : textFields){
+        for (TextFieldWithLabel textField : textFields) {
             textField.getLabel().setText(settings.getLocalizationString(textField.getKey()));
         }
     }

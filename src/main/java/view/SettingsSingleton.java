@@ -18,13 +18,10 @@ public class SettingsSingleton {
     private SettingsSingleton() {
     }
 
-    private static class SettingsSingletonHelper {
-        private static final SettingsSingleton INSTANCE = new SettingsSingleton();
-    }
-
     public static SettingsSingleton getInstance() {
         return SettingsSingletonHelper.INSTANCE;
     }
+
     public boolean isDrawLengths() {
         return drawLengths;
     }
@@ -65,15 +62,6 @@ public class SettingsSingleton {
         this.gridSize = gridSize;
     }
 
-    public void setSettings(Settings settings) {
-        setDrawLengths(settings.isDrawLengths());
-        setDrawGrid(settings.isDrawGrid());
-        setGridHeight(settings.getGridHeight());
-        setGridWidth(settings.getGridWidth());
-        setGridSize(settings.getGridSize());
-        setLocaleWithLocaleLanguage(settings.getLocale());
-    }
-
     public ResourceBundle getLocalization() {
         return ResourceBundle.getBundle("localization", locale);
     }
@@ -94,27 +82,6 @@ public class SettingsSingleton {
         return LocaleConfig.values();
     }
 
-//    private Locale getLocaleWithString(String language) {
-//        switch (language) {
-//            case "en":
-//                return new Locale("en", "US");
-//            case "fi":
-//                return new Locale("fi", "FI");
-//            case "ja":
-//                return new Locale("ja", "JP");
-//            default:
-//                return new Locale("en", "US");
-//        }
-//    }
-//
-//    public static void setLocale(Locale locale) {
-//        SettingsSingleton.locale = locale;
-//    }
-//
-//    public static void setLocaleWithString(String localeSimpleName) {
-//        SettingsSingleton.locale = getInstance().getLocaleWithString(localeSimpleName);
-//    }
-
     public void setLocaleWithLocaleLanguage(String language) {
         this.locale = Arrays.stream(LocaleConfig.values())
                 .map(LocaleConfig::getLocale)
@@ -125,5 +92,18 @@ public class SettingsSingleton {
 
     public Settings getSettings() {
         return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage());
+    }
+
+    public void setSettings(Settings settings) {
+        setDrawLengths(settings.isDrawLengths());
+        setDrawGrid(settings.isDrawGrid());
+        setGridHeight(settings.getGridHeight());
+        setGridWidth(settings.getGridWidth());
+        setGridSize(settings.getGridSize());
+        setLocaleWithLocaleLanguage(settings.getLocale());
+    }
+
+    private static class SettingsSingletonHelper {
+        private static final SettingsSingleton INSTANCE = new SettingsSingleton();
     }
 }
