@@ -29,6 +29,8 @@ public class OptionsToolbar extends CustomToolbar {
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
 
+    private List<TextFieldWithLabel> textFields;
+
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
         this.controller = controller;
@@ -37,15 +39,15 @@ public class OptionsToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
 
-        TextFieldWithLabel gridWidth = new TextFieldWithLabel(settings.getLocalizationString("gridWidth"), String.format("%.0f", settings.getGridWidth()));
-        TextFieldWithLabel gridHeight = new TextFieldWithLabel(settings.getLocalizationString("gridHeight"), String.format("%.0f", settings.getGridHeight()));
-        TextFieldWithLabel gridSize = new TextFieldWithLabel(settings.getLocalizationString("gridSize"), String.format("%d", settings.getGridSize()));
+        TextFieldWithLabel gridWidth = new TextFieldWithLabel("gridWidth", String.format("%.0f", settings.getGridWidth()));
+        TextFieldWithLabel gridHeight = new TextFieldWithLabel("gridHeight", String.format("%.0f", settings.getGridHeight()));
+        TextFieldWithLabel gridSize = new TextFieldWithLabel("gridSize", String.format("%d", settings.getGridSize()));
 
-        List<TextFieldWithLabel> textFields = Arrays.asList(gridWidth, gridHeight, gridSize);
+        textFields = Arrays.asList(gridWidth, gridHeight, gridSize);
 
         for (TextFieldWithLabel textField : textFields) {
-            textField.setMaxWidth(50);
-            this.getItems().add(new Separator());
+            textField.setMaxWidth(100);
+            if(textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
             this.getItems().add(textField);
         }
         this.getItems().add(new Separator());
@@ -172,6 +174,9 @@ public class OptionsToolbar extends CustomToolbar {
     public void updateLocalization(){
         for(String key : getButtons().keySet()){
             getButtons().get(key).setText(settings.getLocalizationString(key));
+        }
+        for(TextFieldWithLabel textField : textFields){
+            textField.getLabel().setText(settings.getLocalizationString(textField.getKey()));
         }
     }
 }
