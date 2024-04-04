@@ -58,7 +58,7 @@ public class SettingsSingleton {
     public int getGridSize() {
         return gridSize;
     }
-      
+
     public boolean isUnitsVisible() {
         return unitsVisible;
     }
@@ -76,7 +76,12 @@ public class SettingsSingleton {
     }
 
     public String getLocalizationString(String key) {
-        return getLocalization().getString(key);
+        try {
+            return getLocalization().getString(key);
+        } catch (Exception e) {
+            System.out.println("Key " + key + " not found in " + locale.getLanguage() + " locale, trying English locale");
+            return ResourceBundle.getBundle("localization", LocaleConfig.ENGLISH.getLocale()).getString(key);
+        }
     }
 
     public ResourceBundle getLocalizationWithLocale(Locale locale) {
