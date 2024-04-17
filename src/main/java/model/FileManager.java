@@ -32,12 +32,12 @@ public class FileManager {
 
     public boolean checkFileFormat(String file) {
         String lastFour = file.substring(file.length() - 4);
-        if (lastFour.equals(".ser")){
-            System.out.println("Correct file format");
-            return true;
-        }
-        System.out.println("Wrong file format");
-        return false;
+        return lastFour.equals(".ser");
+    }
+
+    public String addFileFormat(String file) {
+        if (checkFileFormat(file)) return file;
+        return file + ".ser";
     }
 
     public void exportFloorPlan() {
@@ -47,7 +47,6 @@ public class FileManager {
             objectOut.writeObject(finalShapesSingleton.getShapes());
             objectOut.close();
             fileOut.close();
-            System.out.println("The Floor plan was successfully exported to " + currentFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,18 +68,4 @@ public class FileManager {
             throw new RuntimeException(e);
         }
     }
-
-    public List<File> getFiles() {
-        List<File> files = new ArrayList<>();
-        File folder = new File("./src/main/resources/");
-        File[] listOfFiles = folder.listFiles();
-        for (File file : listOfFiles) {
-            if (file.isFile()) {
-                files.add(file);
-            }
-            System.out.println(file.getName());
-        }
-        return files;
-    }
-
 }
