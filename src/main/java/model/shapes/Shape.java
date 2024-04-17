@@ -50,7 +50,7 @@ public interface Shape extends Serializable {
 
     ShapeType getType();
 
-    void drawLength(CustomCanvas gc);
+    void drawLength(CustomCanvas gc, String unit, double modifier);
     public void assignId();
     public void assignId(int id);
     public int getId();

@@ -4,6 +4,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
+import view.SettingsSingleton;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
@@ -101,11 +102,12 @@ public class Line extends AbstractShape {
         }
     }
 
-    public void drawLength(CustomCanvas gc) {
+    public void drawLength(CustomCanvas gc, String unit, double modifier) {
+
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
 
-        String text = String.format("%.2f cm", calculateShapeLength());
+        String text = String.format("%.2f "+ unit, calculateShapeLength() * modifier);
         final Text textElement = new Text(text);
 
         double textOffset = textElement.getLayoutBounds().getWidth() / 2;

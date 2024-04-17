@@ -189,10 +189,9 @@ public abstract class AbstractShape implements Shape {
     }
 
     public void delete(ShapeContainer shapeContainer) {
-        System.out.println("AbstractShape does not have a delete method.");
     }
 
-    public void drawLength(CustomCanvas gc) {
+    public void drawLength(CustomCanvas gc, String unit, double modifier) {
     }
 
     public void setSelected(boolean selected) {

@@ -12,6 +12,9 @@ import model.FileManager;
 import view.GUIElements.ComboBoxItem;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.*;
@@ -30,7 +33,6 @@ public class OptionsToolbar extends CustomToolbar {
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private FileManager fileManager = FileManager.getInstance();
     private List<TextFieldWithLabel> textFields;
-
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
@@ -129,6 +131,12 @@ public class OptionsToolbar extends CustomToolbar {
         ComboBoxItem defaultItem = new ComboBoxItem(settings.getLocale().getLanguage(), settings.getLocalizationString("languageName"));
         languageSettings.setValue(defaultItem);
 
+        ComboBox<String> measurementSettings = new ComboBox<>();
+        measurementSettings.setValue(settings.getMeasurementUnit());
+        for(String measurement : settings.getMeasurementUnits().keySet()){
+            measurementSettings.getItems().add(measurement);
+        }
+
         Label otherSettingsLabel = new Label(settings.getLocalizationString("otherSettings"));
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(settings.isGridEnabled());
@@ -140,6 +148,7 @@ public class OptionsToolbar extends CustomToolbar {
             settings.setDrawGrid(showGrid.isSelected());
             settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
 
+            settings.setMeasurementUnit(measurementSettings.getValue());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
@@ -155,11 +164,14 @@ public class OptionsToolbar extends CustomToolbar {
         HBox languageSettingsLayout = new HBox(new Label(settings.getLocalizationString("language")), languageSettings);
         languageSettingsLayout.setSpacing(10);
 
+        HBox measurementSettingsLayout = new HBox(new Label(settings.getLocalizationString("measurementUnit")), measurementSettings);
+        measurementSettingsLayout.setSpacing(10);
+
         VBox shapeSettingsLayout = new VBox(shapeLabel, showLengths, showAreas, showGrid, showUnits, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 
-        VBox otherSettingsLayout = new VBox(otherSettingsLabel, languageSettingsLayout);
+        VBox otherSettingsLayout = new VBox(otherSettingsLabel, languageSettingsLayout, measurementSettingsLayout);
         otherSettingsLayout.setPadding(defaultInsets);
         otherSettingsLayout.setSpacing(10);
 
