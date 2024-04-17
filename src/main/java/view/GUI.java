@@ -271,7 +271,9 @@ public class GUI extends Application {
         root.setCenter(canvasBorder);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
-
+        view.getStylesheets().add("main.css");
+        view.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        view.getRoot().setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
         stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
         stage.show();
