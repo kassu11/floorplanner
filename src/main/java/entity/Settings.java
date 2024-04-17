@@ -30,6 +30,16 @@ public class Settings {
         this.locale = locale;
     }
 
+    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale, int id) {
+        this.isDrawLengths = isDrawLengths;
+        this.isDrawGrid = isDrawGrid;
+        this.gridHeight = gridHeight;
+        this.gridWidth = gridWidth;
+        this.gridSize = gridSize;
+        this.locale = locale;
+        this.id = id;
+    }
+
     public Settings() {
 
     }
@@ -98,4 +108,6 @@ public class Settings {
         this.gridSize = settings.gridSize;
         this.locale = settings.locale;
     }
+
+
 }
