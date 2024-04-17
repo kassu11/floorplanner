@@ -83,12 +83,10 @@ public class OptionsToolbar extends CustomToolbar {
         exportButton.setOnAction(e -> {
             int response = fileChooser.showSaveDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                if (fileManager.checkFileFormat(selectedFile.getName())) {
-                    fileManager.setCurrentFile(selectedFile);
-                    fileManager.exportFloorPlan();
-                    fileWindow.close();
-                }
+                File selectedFile = new File(fileManager.addFileFormat(fileChooser.getSelectedFile().getAbsolutePath()));
+                fileManager.setCurrentFile(selectedFile);
+                fileManager.exportFloorPlan();
+                fileWindow.close();
             }
         });
 
