@@ -4,6 +4,7 @@ import controller.Controller;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
+import view.SettingsSingleton;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
@@ -45,7 +46,9 @@ public class AreaUtilities {
         gc.fill();
         double area = calculateArea(points);
         gc.setFillColor("#000000");
-        gc.fillText(String.format("%.2f cm2", area), 0, x / points.size(), y / points.size(), 0);
+        String unit = SettingsSingleton.getInstance().getMeasurementUnit();
+        double modifier = SettingsSingleton.getInstance().getMeasurementModifier();
+        gc.fillText(String.format("%.2f %s²", area * Math.pow(modifier, 2), unit), 0, x / points.size(), y / points.size(), 0);
     }
 
     private static double calculateArea(List<Point> points) {

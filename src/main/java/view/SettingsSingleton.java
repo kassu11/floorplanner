@@ -22,7 +22,10 @@ public class SettingsSingleton {
     private SettingsSingleton() {
         measurementUnits.put("mm", 10.0);
         measurementUnits.put("cm", 1.0);
-        measurementUnits.put("m", 0.1);
+        measurementUnits.put("dm", 0.1);
+        measurementUnits.put("m", 0.01);
+        measurementUnits.put("in", 0.393701);
+        measurementUnits.put("ft", 0.0328084);
     }
 
     public static SettingsSingleton getInstance() {
