@@ -101,7 +101,7 @@ public class Controller {
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
-            if (settingsSingleton.isDrawLengths()) {
+            if (settingsSingleton.isUnitsVisible()) {
                 shape.drawLength(customCanvas, settingsSingleton.getMeasurementUnit(), settingsSingleton.getMeasurementModifier());
             }
         }
