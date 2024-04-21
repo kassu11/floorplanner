@@ -196,7 +196,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     @Override
-    public void drawRulerX(Controller controller) {
+    public void drawRulerX() {
         double gridSize = settings.getGridSize();
         double height = settings.getGridHeight();
         for (int i = 0; i <= height / gridSize; i++) {
@@ -207,7 +207,7 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     }
 
     @Override
-    public void drawRulerY(Controller controller) {
+    public void drawRulerY() {
         double gridSize = settings.getGridSize();
         double width = settings.getGridWidth();
         for (int i = 0; i <= width / gridSize; i++) {

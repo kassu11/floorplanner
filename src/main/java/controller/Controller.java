@@ -99,8 +99,8 @@ public class Controller {
         customCanvas.clear();
         if(settingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
         if(settingsSingleton.isUnitsVisible()){
-            customCanvas.drawRulerX(this);
-            customCanvas.drawRulerY(this);
+            customCanvas.drawRulerX();
+            customCanvas.drawRulerY();
         }
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);

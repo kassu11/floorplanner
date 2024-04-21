@@ -76,7 +76,7 @@ public interface CustomCanvas {
 
     public void strokeText(String text, double x, double y, double offsetX, double offsetY);
 
-    void drawRulerX(Controller controller);
+    void drawRulerX();
 
-    void drawRulerY(Controller controller);
+    void drawRulerY();
 }
