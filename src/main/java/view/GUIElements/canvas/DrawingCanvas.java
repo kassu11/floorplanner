@@ -190,4 +190,9 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     public void strokeText(String text, double x, double y, double offsetX, double offsetY) {
         gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
     }
+
+    @Override
+    public void strokeRulerTextX(String s, int i, int i1, int i2, int i3) {
+        gc.strokeText(s, i, i1);
+    }
 }

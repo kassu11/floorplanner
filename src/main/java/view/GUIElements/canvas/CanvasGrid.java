@@ -20,6 +20,10 @@ public class CanvasGrid {
         double height = settings.getGridHeight();
         int gridSize = settings.getGridSize();
         canvas.setLineWidth(1);
+        for (int i = 0; i < 10; i++) {
+            //canvas.strokeText(, 0, i, 2, 12);
+        }
+
         for (int i = 0; i < width; i += gridSize) {
             if (settings.isUnitsVisible()) {
                 canvas.setStroke(BLACK);

@@ -202,6 +202,12 @@ public class GUI extends Application {
                 canvasContainer.clear();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+
+                for(int i = 0; i < 20; i++) {
+                    gc.setLineWidth(1);
+                    int value = (int) controller.getCanvasMath().relativeYtoAbsoluteY(i * 50);
+                    gc.strokeRulerTextX(String.valueOf(value), 0, i * 50, 2, 12);
+                }
             }
         });
 
@@ -224,6 +230,8 @@ public class GUI extends Application {
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
 
+
+
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
             settings.setGridWidth(newVal.intValue());
             optionBar.updateResolution();
@@ -239,6 +247,8 @@ public class GUI extends Application {
             canvasHeight = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
         });
+
+
 
         drawToolbar = new DrawingToolbar(controller, stage);
         drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));

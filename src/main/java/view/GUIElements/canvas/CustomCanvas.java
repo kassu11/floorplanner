@@ -74,4 +74,6 @@ public interface CustomCanvas {
     public void strokeText(String text, double x, double y);
 
     public void strokeText(String text, double x, double y, double offsetX, double offsetY);
+
+    void strokeRulerTextX(String s, int i, int i1, int i2, int i3);
 }
