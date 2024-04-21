@@ -20,14 +20,16 @@ public class Settings {
     private int gridSize;
 
     private String locale;
+    private String measurementUnit;
 
-    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale) {
+    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale, String measurementUnit) {
         this.isDrawLengths = isDrawLengths;
         this.isDrawGrid = isDrawGrid;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         this.gridSize = gridSize;
         this.locale = locale;
+        this.measurementUnit = measurementUnit;
     }
 
     public Settings() {
@@ -97,5 +99,14 @@ public class Settings {
         this.gridWidth = settings.gridWidth;
         this.gridSize = settings.gridSize;
         this.locale = settings.locale;
+        this.measurementUnit = settings.measurementUnit;
+    }
+
+    public String getMeasurementUnit() {
+        return measurementUnit;
+    }
+
+    public void setMeasurementUnit(String measurementUnit) {
+        this.measurementUnit = measurementUnit;
     }
 }

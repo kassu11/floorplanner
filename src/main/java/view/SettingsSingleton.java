@@ -4,6 +4,7 @@ import entity.Settings;
 import org.springframework.core.io.Resource;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -14,9 +15,17 @@ public class SettingsSingleton {
     private double gridHeight = 750;
     private double gridWidth = 750;
     private int gridSize = 25;
+    private String measurementUnit = "cm";
+    private HashMap<String, Double> measurementUnits = new HashMap<>();
     private Locale locale = LocaleConfig.values()[0].getLocale();
 
     private SettingsSingleton() {
+        measurementUnits.put("mm", 10.0);
+        measurementUnits.put("cm", 1.0);
+        measurementUnits.put("dm", 0.1);
+        measurementUnits.put("m", 0.01);
+        measurementUnits.put("in", 0.393701);
+        measurementUnits.put("ft", 0.0328084);
     }
 
     public static SettingsSingleton getInstance() {
@@ -105,7 +114,7 @@ public class SettingsSingleton {
     }
 
     public Settings getSettings() {
-        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage());
+        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage(), measurementUnit);
     }
 
     public void setSettings(Settings settings) {
@@ -115,9 +124,26 @@ public class SettingsSingleton {
         setGridWidth(settings.getGridWidth());
         setGridSize(settings.getGridSize());
         setLocaleWithLocaleLanguage(settings.getLocale());
+        setMeasurementUnit(settings.getMeasurementUnit());
     }
 
     private static class SettingsSingletonHelper {
         private static final SettingsSingleton INSTANCE = new SettingsSingleton();
+    }
+
+    public String getMeasurementUnit() {
+        return measurementUnit;
+    }
+
+    public void setMeasurementUnit(String measurementUnit) {
+        this.measurementUnit = measurementUnit;
+    }
+
+    public HashMap<String, Double> getMeasurementUnits() {
+        return measurementUnits;
+    }
+
+    public double getMeasurementModifier() {
+        return measurementUnits.get(measurementUnit);
     }
 }

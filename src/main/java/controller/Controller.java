@@ -105,8 +105,8 @@ public class Controller {
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
-            if (settingsSingleton.isDrawLengths()) {
-                shape.drawLength(customCanvas);
+            if (settingsSingleton.isUnitsVisible()) {
+                shape.drawLength(customCanvas, settingsSingleton.getMeasurementUnit(), settingsSingleton.getMeasurementModifier());
             }
         }
     }
@@ -150,7 +150,7 @@ public class Controller {
         if(settingsDao.find(1) == null) {
             Settings settings = new Settings(settingsSingleton.isDrawLengths(), settingsSingleton.isGridEnabled(),
                     settingsSingleton.getGridHeight(), settingsSingleton.getGridWidth(), settingsSingleton.getGridSize(),
-                    settingsSingleton.getLocale().getLanguage());
+                    settingsSingleton.getLocale().getLanguage(), settingsSingleton.getMeasurementUnit());
 
             settingsDao.persist(settings);
             System.out.println("Settings saved!");

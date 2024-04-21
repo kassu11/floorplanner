@@ -4,6 +4,7 @@ import controller.Controller;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
+import view.SettingsSingleton;
 import view.types.ShapeType;
 
 public class DrawUtilities {
@@ -76,6 +77,6 @@ public class DrawUtilities {
         if (hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) mousePoint.setCoordinates(hoveredShape.getX(), hoveredShape.getY());
         Shape createdShape = controller.createShape(mousePoint, lastPoint.getX(), lastPoint.getY(), controller.getCurrentShapeType(), null);
         createdShape.draw(gc);
-        createdShape.drawLength(gc);
+        createdShape.drawLength(gc, SettingsSingleton.getInstance().getMeasurementUnit(), SettingsSingleton.getInstance().getMeasurementModifier());
     }
 }
