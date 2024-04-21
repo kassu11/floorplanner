@@ -202,6 +202,9 @@ public class GUI extends Application {
                 canvasContainer.clear();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                gc.drawRulerX(controller);
+                gc.drawRulerY(controller);
+
             }
         });
 
@@ -239,6 +242,8 @@ public class GUI extends Application {
             canvasHeight = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
         });
+
+
 
         drawToolbar = new DrawingToolbar(controller, stage);
         drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
