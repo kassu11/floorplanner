@@ -202,12 +202,9 @@ public class GUI extends Application {
                 canvasContainer.clear();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                gc.drawRulerX(controller);
+                gc.drawRulerY(controller);
 
-                for(int i = 0; i < 20; i++) {
-                    gc.setLineWidth(1);
-                    int value = (int) controller.getCanvasMath().relativeYtoAbsoluteY(i * 50);
-                    gc.strokeRulerTextX(String.valueOf(value), 0, i * 50, 2, 12);
-                }
             }
         });
 
@@ -229,8 +226,6 @@ public class GUI extends Application {
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
         });
-
-
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
             settings.setGridWidth(newVal.intValue());

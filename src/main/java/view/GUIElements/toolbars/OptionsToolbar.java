@@ -135,13 +135,14 @@ public class OptionsToolbar extends CustomToolbar {
         CheckBox showGrid = new CheckBox(settings.getLocalizationString("showGrid"));
         showGrid.setSelected(settings.isGridEnabled());
         CheckBox showUnits = new CheckBox(settings.getLocalizationString("showUnits"));
+        showUnits.setSelected(settings.isUnitsVisible());
         Button saveButton = new Button(settings.getLocalizationString("save"));
 
         saveButton.setOnAction(e -> {
             settings.setDrawLengths(showLengths.isSelected());
             settings.setDrawGrid(showGrid.isSelected());
             settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
-
+            settings.setUnitsVisible(showUnits.isSelected());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();
             controller.updateToolbarLocalization();
