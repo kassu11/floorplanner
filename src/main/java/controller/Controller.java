@@ -2,6 +2,7 @@ package controller;
 
 import dao.SettingsDao;
 import entity.Settings;
+import javafx.scene.paint.Color;
 import model.history.HistoryManager;
 import model.shapeContainers.FinalShapesSingleton;
 import model.shapeContainers.PreviewShapesSingleton;
@@ -102,6 +103,8 @@ public class Controller {
             customCanvas.drawRulerX();
             customCanvas.drawRulerY();
         }
+        customCanvas.setLineWidth(4);
+        customCanvas.setFill(Color.BLACK);
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
