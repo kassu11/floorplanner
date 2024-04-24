@@ -144,7 +144,7 @@ public class Controller {
 
     public void saveSettings() {
         if(settingsDao.find(1) == null) {
-            Settings settings = new Settings(settingsSingleton.isDrawLengths(), settingsSingleton.isGridEnabled(),
+            Settings settings = new Settings(settingsSingleton.isGridEnabled(),
                     settingsSingleton.getGridHeight(), settingsSingleton.getGridWidth(), settingsSingleton.getGridSize(),
                     settingsSingleton.getLocale().getLanguage(), settingsSingleton.getMeasurementUnit());
 

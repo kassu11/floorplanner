@@ -9,8 +9,6 @@ public class Settings {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
-    private boolean isDrawLengths;
-
     private boolean isDrawGrid;
 
     private double gridHeight;
@@ -22,8 +20,7 @@ public class Settings {
     private String locale;
     private String measurementUnit;
 
-    public Settings(boolean isDrawLengths, boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale, String measurementUnit) {
-        this.isDrawLengths = isDrawLengths;
+    public Settings(boolean isDrawGrid, double gridHeight, double gridWidth, int gridSize, String locale, String measurementUnit) {
         this.isDrawGrid = isDrawGrid;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
@@ -42,14 +39,6 @@ public class Settings {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public boolean isDrawLengths() {
-        return isDrawLengths;
-    }
-
-    public void setDrawLengths(boolean drawLengths) {
-        isDrawLengths = drawLengths;
     }
 
     public boolean isDrawGrid() {
@@ -93,7 +82,6 @@ public class Settings {
     }
 
     public void setSettings(Settings settings) {
-        this.isDrawLengths = settings.isDrawLengths;
         this.isDrawGrid = settings.isDrawGrid;
         this.gridHeight = settings.gridHeight;
         this.gridWidth = settings.gridWidth;

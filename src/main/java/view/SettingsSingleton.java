@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class SettingsSingleton {
-    private boolean drawLengths = true;
     private boolean isDrawGrid = true;
     private boolean unitsVisible = true;
     private double gridHeight = 750;
@@ -30,14 +29,6 @@ public class SettingsSingleton {
 
     public static SettingsSingleton getInstance() {
         return SettingsSingletonHelper.INSTANCE;
-    }
-
-    public boolean isDrawLengths() {
-        return drawLengths;
-    }
-
-    public void setDrawLengths(boolean drawLengths) {
-        this.drawLengths = drawLengths;
     }
 
     public boolean isGridEnabled() {
@@ -114,11 +105,10 @@ public class SettingsSingleton {
     }
 
     public Settings getSettings() {
-        return new Settings(drawLengths, isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage(), measurementUnit);
+        return new Settings(isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage(), measurementUnit);
     }
 
     public void setSettings(Settings settings) {
-        setDrawLengths(settings.isDrawLengths());
         setDrawGrid(settings.isDrawGrid());
         setGridHeight(settings.getGridHeight());
         setGridWidth(settings.getGridWidth());
