@@ -1,5 +1,6 @@
 package view.GUIElements.canvas;
 
+import controller.Controller;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.shape.ArcType;
 import javafx.scene.paint.Color;
@@ -74,4 +75,8 @@ public interface CustomCanvas {
     public void strokeText(String text, double x, double y);
 
     public void strokeText(String text, double x, double y, double offsetX, double offsetY);
+
+    void drawRulerX();
+
+    void drawRulerY();
 }

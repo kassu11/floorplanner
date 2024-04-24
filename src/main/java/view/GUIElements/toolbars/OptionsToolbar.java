@@ -146,7 +146,7 @@ public class OptionsToolbar extends CustomToolbar {
             settings.setDrawGrid(showGrid.isSelected());
             settings.setUnitsVisible(showUnits.isSelected());
             settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
-
+            settings.setUnitsVisible(showUnits.isSelected());
             settings.setMeasurementUnit(measurementSettings.getValue());
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.saveSettings();

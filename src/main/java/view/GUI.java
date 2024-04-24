@@ -240,6 +240,8 @@ public class GUI extends Application {
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
         });
 
+
+
         drawToolbar = new DrawingToolbar(controller, stage);
         drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
