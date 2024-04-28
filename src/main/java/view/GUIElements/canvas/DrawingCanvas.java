@@ -217,6 +217,18 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
         }
     }
 
+    @Override
+    public void drawRulerXpointer(double x) {
+        gc.setLineWidth(3);
+        gc.strokeLine(x, 0, x, 20); // Draws a vertical line at x
+    }
+
+    @Override
+    public void drawRulerYpointer(double y) {
+        gc.setLineWidth(3);
+        gc.strokeLine(0, y, 20, y); // Draws a horizontal line at y
+    }
+
 
 
 }

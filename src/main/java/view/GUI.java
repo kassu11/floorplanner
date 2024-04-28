@@ -141,6 +141,8 @@ public class GUI extends Application {
             Shape hoveredShape = null;
             controller.setHoveredShape(null);
             previewGc.clear();
+            previewGc.drawRulerXpointer(event.getX());
+            previewGc.drawRulerYpointer(event.getY());
             controller.setHoveredPoint(null);
             double distanceCutOff = controller.getCanvasMath().relativeDistance(15);
             double lowestDistance = distanceCutOff;
