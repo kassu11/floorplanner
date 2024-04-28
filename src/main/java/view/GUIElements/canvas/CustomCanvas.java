@@ -79,4 +79,8 @@ public interface CustomCanvas {
     void drawRulerX();
 
     void drawRulerY();
+
+    void drawRulerXpointer(double x);
+
+    void drawRulerYpointer(double y);
 }
