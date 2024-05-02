@@ -7,13 +7,34 @@ import javafx.stage.Stage;
 import view.SettingsSingleton;
 import view.types.ModeType;
 import view.types.ShapeType;
-
+/**
+ * Drawing toolbar class
+ */
 public class DrawingToolbar extends CustomToolbar {
+    /**
+     * Mode menu
+     */
     private final ContextMenu modeMenu = new ContextMenu();
+    /**
+     * Line mode
+     * Rectangle mode
+     * Circle mode
+     * Multiline mode
+     */
     private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
+    /**
+     * Controller
+     */
     private Controller controller;
+    /**
+     * Settings singleton
+     */
     private SettingsSingleton settings = SettingsSingleton.getInstance();
-
+    /**
+     * Constructor for the drawing toolbar
+     * @param controller controller
+     * @param stage stage
+     */
     public DrawingToolbar(Controller controller, Stage stage) {
         super(stage);
         this.controller = controller;
@@ -32,7 +53,10 @@ public class DrawingToolbar extends CustomToolbar {
         this.multilineMode = new CustomMenuItem(settings.getLocalizationString("multiline"), ShapeType.MULTILINE);
         this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
     }
-
+    /**
+     * Changes the draw mode
+     * @param mode mode
+     */
     public void changeMode(ModeType mode) {
         setCursorCoordinates();
         controller.setCurrentMode(mode);
@@ -44,7 +68,9 @@ public class DrawingToolbar extends CustomToolbar {
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
         }
     }
-
+    /**
+     * Updates the localization of all the text in the toolbar
+     */
     public void updateLocalization(){
         for(String key : getButtons().keySet()){
             getButtons().get(key).setText(settings.getLocalizationString(key));

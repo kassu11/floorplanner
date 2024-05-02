@@ -9,7 +9,9 @@ import view.types.ShapeType;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class for handling area utilities
+ */
 public class AreaUtilities {
 //    public static void addToArea(Controller controller, double x, double y, CustomCanvas gc) {
 //        SelectUtilities.selectHoveredShape(controller, x, y);
@@ -23,7 +25,11 @@ public class AreaUtilities {
 //        double area = calculateArea(points);
 //        gc.fillText(String.valueOf(area), 0, x, y, 0);
 //    }
-
+    /**
+     * Draws the area of shapes in the preview ShapeContainer
+     * @param controller controller
+     * @param gc custom canvas
+     */
     public static void drawArea(Controller controller, CustomCanvas gc) {
         List<Point> points = new ArrayList<>();
         double x = 0, y = 0;
@@ -50,7 +56,11 @@ public class AreaUtilities {
         double modifier = SettingsSingleton.getInstance().getMeasurementModifier();
         gc.fillText(String.format("%.2f %s²", area * Math.pow(modifier, 2), unit), 0, x / points.size(), y / points.size(), 0);
     }
-
+    /**
+     * Calculates the area of a list of points
+     * @param points list of points
+     * @return area
+     */
     private static double calculateArea(List<Point> points) {
         if (points.size() < 3) return 0;
 

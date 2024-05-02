@@ -22,23 +22,56 @@ import view.events.KeyboardEvents;
 import view.events.SelectUtilities;
 import view.types.ModeType;
 import view.types.ShapeType;
-
+/**
+ * GUI class for the main application
+ */
 public class GUI extends Application {
-
-    Controller controller;
+    /**
+     * Controller
+     */
+    private Controller controller;
+    /**
+     * Canvas container
+     */
     private CanvasContainer canvasContainer;
+    /**
+     * Canvas width
+     */
     private int canvasWidth = 750;
+    /**
+     * Canvas height
+     */
     private int canvasHeight = 750;
+    /**
+     * Middle x
+     * Middle y
+     */
     private double middleX, middleY;
+    /**
+     * Settings singleton
+     */
     private SettingsSingleton settings = SettingsSingleton.getInstance();
+    /**
+     * Option bar
+     */
     private OptionsToolbar optionBar;
+    /**
+     * Drawing toolbar
+     */
     private DrawingToolbar drawToolbar;
+    /**
+     * Init method
+     */
 
     @Override
     public void init() {
         canvasContainer = new CanvasContainer(canvasWidth, canvasHeight);
         controller = new Controller(this);
     }
+    /**
+     * Start method
+     * @param stage stage
+     */
 
     @Override
     public void start(Stage stage) {
@@ -55,7 +88,6 @@ public class GUI extends Application {
         Ruler yRuler = new Ruler(true);
 
         if(settings.isGridEnabled()) gc.getGrid().drawGrid();
-
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
@@ -283,11 +315,16 @@ public class GUI extends Application {
         view.setOnKeyPressed(KeyboardEvents.onKeyPressed(previewGc, gc, controller)::handle);
         view.setOnKeyReleased(KeyboardEvents.onKeyReleased(previewGc, gc, controller)::handle);
     }
-
+    /**
+     * Returns the canvas container
+     * @return canvas container
+     */
     public CanvasContainer getCanvasContainer() {
         return canvasContainer;
     }
-
+    /**
+     * Updates the toolbar localization
+     */
     public void updateToolbarLocalization() {
         drawToolbar.updateLocalization();
         optionBar.updateLocalization();

@@ -5,11 +5,27 @@ import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
-
+/**
+ * Class for handling keyboard events
+ */
 public class KeyboardEvents {
+    /**
+     * Interface for handling keyboard events
+     */
     public interface KeyboardEventHandler {
+        /**
+         * Handles the keyboard event
+         * @param event keyboard event
+         */
         void handle(KeyEvent event);
     }
+    /**
+     * Handles the key pressed event
+     * @param previewGc preview custom canvas
+     * @param gc custom canvas
+     * @param controller controller
+     * @return keyboard event handler
+     */
 
     public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         return (KeyEvent event) -> {
@@ -30,7 +46,13 @@ public class KeyboardEvents {
             }
         };
     }
-
+    /**
+     * Handles the key released event
+     * @param previewGc preview custom canvas
+     * @param gc custom canvas
+     * @param controller controller
+     * @return keyboard event handler
+     */
     public static KeyboardEventHandler onKeyReleased(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         return (KeyEvent event) -> {
             switch (event.getCode()) {
@@ -40,7 +62,14 @@ public class KeyboardEvents {
             }
         };
     }
-
+    /**
+     * Handles the history shortcuts
+     * @param keyEvent key event
+     * @param historyEvent history event
+     * @param previewGc preview custom canvas
+     * @param gc custom canvas
+     * @param controller controller
+     */
     private static void handleHistoryShortCuts(KeyEvent keyEvent, HistoryHandler historyEvent, CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         if (keyEvent.isControlDown()) {
             historyEvent.handle();
