@@ -467,7 +467,7 @@ public class Controller {
     public Dimension setDimensionLine(Shape shape, double distance) {
         Dimension dimension = new Dimension();
         dimension.setDistance(distance);
-        dimension.addShape(shape);
+        dimension.setShape(shape);
         dimension.resize();
         if(shape.getType() == ShapeType.LINE) {
             ((Line) shape).addDimension(dimension);
