@@ -27,7 +27,7 @@ public class CanvasContainer extends GridPane {
         zoom = 1;
 
         for (int i = 0; i < layers.length; i++) {
-            DrawingCanvas canvas = new DrawingCanvas(width, height);
+            CustomCanvas canvas = new CustomCanvas(width, height);
             layers[i] = canvas;
             add(canvas, 0, 0);
         }
