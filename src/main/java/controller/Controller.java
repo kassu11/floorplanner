@@ -429,7 +429,17 @@ public class Controller {
     }
     /** The setSelectedShape method that sets the selected shape to the given shape*/
     public void setSelectedShape(Shape selectedShape) {
+        if(this.selectedShape != null) {
+            if(this.selectedShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) {
+                this.selectedShape.setShapeDataType(ShapeDataType.HOVER);
+            } else this.selectedShape.setShapeDataType(ShapeDataType.NORMAL);
+        }
         this.selectedShape = selectedShape;
+        if(selectedShape != null) {
+            if (selectedShape.getShapeDataType() == ShapeDataType.HOVER) {
+                selectedShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
+            } else selectedShape.setShapeDataType(ShapeDataType.SELECTED);
+        }
     }
     /** The getHoveredShape method that returns the hovered shape*/
     public Shape getHoveredShape() {
@@ -437,17 +447,15 @@ public class Controller {
     }
     /** The setHoveredShape method that sets the hovered shape to the given shape*/
     public void setHoveredShape(Shape hoveredShape) {
-        if(this.hoveredShape != null) {
-            if(this.hoveredShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) {
-                this.hoveredShape.setShapeDataType(ShapeDataType.SELECTED);
-            } else this.hoveredShape.setShapeDataType(ShapeDataType.NORMAL);
+        if (this.hoveredShape != null) {
+            if(this.hoveredShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.SELECTED);
+            else if(this.hoveredShape.getShapeDataType() == ShapeDataType.HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.NORMAL);
+        }
+        if(hoveredShape != null) {
+            if (hoveredShape.getShapeDataType() == ShapeDataType.SELECTED) hoveredShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
+            else hoveredShape.setShapeDataType(ShapeDataType.HOVER);
         }
         this.hoveredShape = hoveredShape;
-        if(hoveredShape != null) {
-            if (hoveredShape.getShapeDataType() == ShapeDataType.SELECTED) {
-                hoveredShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
-            } else hoveredShape.setShapeDataType(ShapeDataType.HOVER);
-        }
     }
     /** The getMouseX method that returns the mouse x coordinate*/
     public double getMouseX() {
