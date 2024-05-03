@@ -46,6 +46,7 @@ public class GUI extends Application {
      * Middle y
      */
     private double middleX, middleY;
+    private double initialSelectionX, initialSelectionY;
     /**
      * Settings singleton
      */
@@ -110,7 +111,12 @@ public class GUI extends Application {
                     }
                 }
                 case SELECT -> {
-                    if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
+                    double minDistance = controller.getCanvasMath().relativeDistance(15);
+                    double distanceFromInitialSelect = Math.hypot(initialSelectionX - mouseX, initialSelectionY - mouseY);
+                    if(distanceFromInitialSelect > minDistance) {
+                        SelectUtilities.selectShapesInsideBox(controller, previewGc, mouseX, mouseY, initialSelectionX, initialSelectionY, mouseX, mouseY);
+
+                    } else if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                     } else if (selectedShape != null) {
@@ -219,6 +225,10 @@ public class GUI extends Application {
                 middleY = canvasContainer.getY() + event.getY();
                 System.out.println("Middle X: " + middleX + " Middle Y: " + middleY);
             }
+            else if(event.getButton() == MouseButton.PRIMARY && controller.getCurrentMode() == ModeType.SELECT) {
+                initialSelectionX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
+                initialSelectionY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+            }
         });
 
         canvasContainer.setOnMouseDragged(event -> {
@@ -228,6 +238,11 @@ public class GUI extends Application {
                 canvasContainer.clear();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            }
+            else if(event.getButton() == MouseButton.PRIMARY && controller.getCurrentMode() == ModeType.SELECT) {
+                double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
+                double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+                SelectUtilities.drawSelectionBox(controller, previewGc, mouseX, mouseY, initialSelectionX, initialSelectionY);
             }
         });
 

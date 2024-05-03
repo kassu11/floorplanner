@@ -7,7 +7,9 @@ import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 /**
  * Class for handling select utilities
@@ -259,5 +261,34 @@ public class SelectUtilities {
 	private static boolean canTransferShape(Controller controller, Shape shape, Controller.SingletonType type) {
 		if (type == Controller.SingletonType.PREVIEW) shape.setSelected(true);
 		return !controller.getShapeContainer(type).getShapes().contains(shape);
+	}
+
+	public static void drawSelectionBox(Controller controller, CustomCanvas gc, double x1, double y1, double x2, double y2) {
+		gc.clear();
+		controller.createShape(x1, y1, x2, y2, ShapeType.RECTANGLE, null).draw(gc);
+	}
+	public static void selectShapesInsideBox(Controller controller, CustomCanvas gc, double mouseX, double mouseY, double x1, double y1, double x2, double y2){
+		List<Shape> selectedPoints = new ArrayList<>();
+		System.out.println("MouseX: " + mouseX + " MouseY: " + mouseY + " X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2);
+		for(Shape shape : controller.getShapes(Controller.SingletonType.FINAL)){
+			if(shape.getType() == ShapeType.POINT && isInsideSelectionBox(shape.getX(), shape.getY(), x1, y1, x2, y2)){
+				selectedPoints.add(shape);
+			}
+		}
+		if(selectedPoints.isEmpty()) return;
+		selectedPoints.forEach(point -> {
+			transferPoints(controller, point, Controller.SingletonType.PREVIEW);
+			point.setSelectedCoordinates(point.getX() - mouseX, point.getY() - mouseY);
+		});
+		controller.setSelectedShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
+		controller.setHoveredShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
+		controller.drawAllShapes(gc, Controller.SingletonType.PREVIEW);
+	}
+	public static boolean isInsideSelectionBox(double x, double y, double x1, double y1, double x2, double y2) {
+		double minX = Math.min(x1, x2);
+		double maxX = Math.max(x1, x2);
+		double minY = Math.min(y1, y2);
+		double maxY = Math.max(y1, y2);
+		return(x >= minX && x <= maxX && y >= minY && y <= maxY);
 	}
 }
