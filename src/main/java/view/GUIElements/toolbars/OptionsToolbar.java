@@ -12,9 +12,6 @@ import model.FileManager;
 import view.GUIElements.ComboBoxItem;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.*;

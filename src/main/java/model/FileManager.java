@@ -4,7 +4,6 @@ import model.shapeContainers.FinalShapesSingleton;
 import model.shapes.Shape;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
@@ -26,7 +25,7 @@ public class FileManager {
     }
 
     public void setCurrentFile(File currentFile) {
-        if (currentFile == null) throw new RuntimeException("File is null");
+        if (currentFile == null) throw new NullPointerException("File is null");
         this.currentFile = currentFile;
     }
 
@@ -41,31 +40,24 @@ public class FileManager {
     }
 
     public void exportFloorPlan() {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(currentFile);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        try (FileOutputStream fileOut = new FileOutputStream(currentFile);
+             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)){
             objectOut.writeObject(finalShapesSingleton.getShapes());
-            objectOut.close();
-            fileOut.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
     public void importFloorPlan() {
-        try {
-            FileInputStream fileIn = new FileInputStream(currentFile);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+        try (FileInputStream fileIn = new FileInputStream(currentFile);
+             ObjectInputStream objectIn = new ObjectInputStream(fileIn)){
             List<Shape> shapes = (List<Shape>) objectIn.readObject();
             finalShapesSingleton.clearShapes();
             finalShapesSingleton.addAllShapes(shapes);
-            objectIn.close();
-            fileIn.close();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 }

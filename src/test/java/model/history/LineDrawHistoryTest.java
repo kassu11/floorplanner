@@ -13,7 +13,7 @@ import view.events.DrawUtilities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LineDrawHistoryTest {
+class LineDrawHistoryTest {
 
     private static Controller controller;
 

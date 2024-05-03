@@ -6,11 +6,15 @@ import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
+
+import java.util.Iterator;
 import java.util.function.Consumer;
 /**
  * Class for handling select utilities
  */
 public class SelectUtilities {
+	private SelectUtilities() {
+	}
 	/**
 	 * X coordinate of the selected shape
 	 * Y coordinate of the selected shape
@@ -143,11 +147,12 @@ public class SelectUtilities {
 
 		if (hoveredShape != null && selectedShape.getType() == ShapeType.POINT && hoveredShape.getType() == ShapeType.POINT) {
 			if (history) controller.getHistoryManager().finalizeSelectionMerge(controller.getShapes(Controller.SingletonType.PREVIEW), (Point) selectedShape, (Point) hoveredShape);
-			for (int i = 0; i < selectedShape.getChildren().size(); i++) {
-				Shape childShape = selectedShape.getChildren().get(i);
+			Iterator<Shape> iterator = selectedShape.getChildren().iterator();
+			while (iterator.hasNext()) {
+				Shape childShape = iterator.next();
 				if (childShape.getPoints().contains(hoveredShape)) {
+					iterator.remove();
 					controller.deleteShape(childShape, Controller.SingletonType.PREVIEW);
-					i--;
 				} else {
 					childShape.getPoints().remove(selectedShape);
 					childShape.getPoints().add((Point) hoveredShape);

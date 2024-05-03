@@ -8,7 +8,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.shapes.Dimension;
-import javafx.stage.StageStyle;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.Ruler;
@@ -91,7 +90,6 @@ public class GUI extends Application {
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
-            // Point endPoint = ;
             Shape selectedShape = controller.getSelectedShape();
             Shape hoveredShape = controller.getHoveredShape();
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
@@ -109,11 +107,6 @@ public class GUI extends Application {
                         previewGc.clear();
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         newShape.calculateShapeArea();
-
-//                        if (controller.getCurrentShapeType() == ShapeType.MULTILINE) {
-//                            controller.addCustomShape(newShape);
-//                            controller.checkIfConnected(newShape);
-//                        }
                     }
                 }
                 case SELECT -> {
@@ -214,7 +207,6 @@ public class GUI extends Application {
             }
 
             if (hoveredShape != null) {
-//                if(hoveredShape.getType() == ShapeType.LINE && controller.getCurrentMode() == ModeType.SELECT && !event.isShiftDown()) return;
                 previewGc.setFillColor(controller.getHoverColor());
                 previewGc.setStrokeColor(controller.getHoverColor());
                 hoveredShape.draw(previewGc);
@@ -301,8 +293,6 @@ public class GUI extends Application {
         BorderPane canvasBorder = new BorderPane();
 
         canvasBorder.setCenter(canvasContainer);
-        //canvasBorder.setTop(xRuler);
-        //canvasBorder.setLeft(yRuler);
 
         root.setCenter(canvasBorder);
 

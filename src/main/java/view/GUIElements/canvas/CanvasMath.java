@@ -16,7 +16,7 @@ public class CanvasMath {
     }
     /**
      * Converts the relative X coordinate to an absolute X coordinate
-     * @param relativeY relative X coordinate
+     * @param relativeX relative X coordinate
      * @return absolute X coordinate
      */
     public double relativeXtoAbsoluteX(double relativeX) {

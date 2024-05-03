@@ -1,6 +1,5 @@
 package view.GUIElements.canvas;
 
-import controller.Controller;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.shape.ArcType;
 import javafx.scene.paint.Color;

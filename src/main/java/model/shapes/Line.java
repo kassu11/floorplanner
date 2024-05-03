@@ -4,10 +4,10 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
-import view.SettingsSingleton;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 /**
  * Concrete class for handling lines
@@ -32,8 +32,7 @@ public class Line extends AbstractShape {
     public double calculateShapeLength() {
         double deltaX = this.getPoints().get(0).getX() - this.getPoints().get(1).getX();
         double deltaY = this.getPoints().get(0).getY() - this.getPoints().get(1).getY();
-        double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        return length;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
     /**
      * Calculates the area of the line
@@ -65,6 +64,7 @@ public class Line extends AbstractShape {
      * @param y Y coordinate of the mouse
      * @return distance from the mouse to the line
      */
+    @Override
     public double calculateDistanceFromMouse(double x, double y) {
         double x1 = this.getPoints().get(1).getX();
         double x2 = this.getPoints().get(0).getX();
@@ -130,15 +130,15 @@ public class Line extends AbstractShape {
      * Deletes the line from the shape container
      * @param shapeContainer shape container
      */
+    @Override
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
-
-        for (int i = 0; i < getPoints().size(); i++) {
-            Shape point = getPoints().get(i);
-            getPoints().remove(i);
+        Iterator<Point> iterator = getPoints().iterator();
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
             point.removeChild(this);
-            if (point.getChildren().isEmpty() && shapeContainer != null) shapeContainer.getShapes().remove(point);
-            i--;
+            if(point.getChildren().isEmpty() && shapeContainer != null) shapeContainer.getShapes().remove(point);
+            iterator.remove();
         }
     }
     /**
@@ -147,6 +147,7 @@ public class Line extends AbstractShape {
      * @param unit unit of the length
      * @param modifier modifier of the length
      */
+    @Override
     public void drawLength(CustomCanvas gc, String unit, double modifier) {
 
         Point pointA = this.getPoints().get(0);

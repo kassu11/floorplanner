@@ -11,7 +11,7 @@ import view.SettingsSingleton;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ControllerDBTest {
+class ControllerDBTest {
 
     private static Controller controller;
     private static Settings originalSettings;
@@ -23,7 +23,7 @@ public class ControllerDBTest {
     }
     @BeforeEach
     void setUp() {
-        SettingsSingleton.getInstance().setSettings(new Settings(true, true, 750, 750, 25, "en"));
+        SettingsSingleton.getInstance().setSettings(new Settings(true, 750, 750, 25, "en", "cm"));
         GUI gui = new GUI();
         controller = new Controller(gui);
     }
@@ -35,7 +35,7 @@ public class ControllerDBTest {
     }
     @Test
     void saveSettings() {
-        Settings settings = new Settings(true, false, 700, 700, 20, "fi");
+        Settings settings = new Settings(true, 700, 700, 20, "fi", "cm");
         SettingsSingleton.getInstance().setSettings(settings);
         controller.saveSettings();
         controller.loadSettings();
@@ -45,10 +45,9 @@ public class ControllerDBTest {
         assertEquals(settings.getGridWidth(), singletonSettings.getGridWidth(), "Should return the same settings");
         assertEquals(settings.getGridSize(), singletonSettings.getGridSize(), "Should return the same settings");
         assertEquals(settings.isDrawGrid(), singletonSettings.isDrawGrid(), "Should return the same settings");
-        assertEquals(settings.isDrawLengths(), singletonSettings.isDrawLengths(), "Should return the same settings");
         assertEquals(settings.getLocale(), singletonSettings.getLocale(), "Should return the same settings");
 
-        Settings updatedSettings = new Settings(false, true, 500, 500, 10, "en");
+        Settings updatedSettings = new Settings(false, 500, 500, 10, "en", "cm");
         SettingsSingleton.getInstance().setSettings(updatedSettings);
         controller.saveSettings();
         controller.loadSettings();
@@ -58,7 +57,6 @@ public class ControllerDBTest {
         assertEquals(updatedSettings.getGridWidth(), singletonSettings.getGridWidth(), "Should return the same settings");
         assertEquals(updatedSettings.getGridSize(), singletonSettings.getGridSize(), "Should return the same settings");
         assertEquals(updatedSettings.isDrawGrid(), singletonSettings.isDrawGrid(), "Should return the same settings");
-        assertEquals(updatedSettings.isDrawLengths(), singletonSettings.isDrawLengths(), "Should return the same settings");
         assertEquals(updatedSettings.getLocale(), singletonSettings.getLocale(), "Should return the same settings");
     }
 
@@ -70,10 +68,9 @@ public class ControllerDBTest {
         assertEquals(originalSettings.getGridWidth(), singletonSettings.getGridWidth(), "Should return the same original settings");
         assertEquals(originalSettings.getGridSize(), singletonSettings.getGridSize(), "Should return the same original settings");
         assertEquals(originalSettings.isDrawGrid(), singletonSettings.isDrawGrid(), "Should return the same original settings");
-        assertEquals(originalSettings.isDrawLengths(), singletonSettings.isDrawLengths(), "Should return the same original settings");
         assertEquals(originalSettings.getLocale(), singletonSettings.getLocale(), "Should return the same original settings");
 
-        Settings settings = new Settings(true, false, 700, 700, 20, "fi");
+        Settings settings = new Settings(true, 700, 700, 20, "fi", "cm");
         SettingsSingleton.getInstance().setSettings(settings);
         controller.saveSettings();
         controller.loadSettings();
@@ -82,7 +79,6 @@ public class ControllerDBTest {
         assertEquals(settings.getGridWidth(), singletonSettings.getGridWidth(), "Should return the same default settings");
         assertEquals(settings.getGridSize(), singletonSettings.getGridSize(), "Should return the same default settings");
         assertEquals(settings.isDrawGrid(), singletonSettings.isDrawGrid(), "Should return the same default settings");
-        assertEquals(settings.isDrawLengths(), singletonSettings.isDrawLengths(), "Should return the same default settings");
         assertEquals(settings.getLocale(), singletonSettings.getLocale(), "Should return the same default settings");
     }
 }

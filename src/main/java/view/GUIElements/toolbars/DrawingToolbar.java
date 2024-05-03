@@ -62,9 +62,7 @@ public class DrawingToolbar extends CustomToolbar {
         controller.setCurrentMode(mode);
         modeMenu.hide();
         if (mode == ModeType.DRAW) {
-            modeMenu.setOnAction(event -> {
-                controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType());
-            });
+            modeMenu.setOnAction(event -> controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType()));
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
         }
     }

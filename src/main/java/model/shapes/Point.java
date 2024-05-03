@@ -5,6 +5,7 @@ import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 /**
  * Concrete class for handling points
@@ -76,6 +77,7 @@ public class Point extends AbstractShape {
      * @param y Y coordinate of the mouse
      * @return distance from the mouse to the point
      */
+    @Override
     public double calculateDistanceFromMouse(double x, double y) {
         double deltaX = this.getX() - x;
         double deltaY = this.getY() - y;
@@ -104,6 +106,7 @@ public class Point extends AbstractShape {
      * Returns the priority of the point
      * @return priority of the point
      */
+    @Override
     public int getPriority() {
         return priority;
     }
@@ -127,14 +130,14 @@ public class Point extends AbstractShape {
      * Deletes the point from the shape container
      * @param shapeContainer shape container
      */
+    @Override
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
-
-        for (int i = 0; i < getChildren().size(); i++) {
-            Shape shape = getChildren().get(i);
-            getChildren().remove(i);
+        Iterator<Shape> iterator = getChildren().iterator();
+        while (iterator.hasNext()) {
+            Shape shape = iterator.next();
+            iterator.remove();
             shape.removePoint(this);
-            i--;
             shape.delete(shapeContainer);
         }
     }
