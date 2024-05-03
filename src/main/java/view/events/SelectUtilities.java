@@ -264,7 +264,6 @@ public class SelectUtilities {
 	}
 
 	public static void drawSelectionBox(Controller controller, CustomCanvas gc, double x1, double y1, double x2, double y2) {
-		gc.clear();
 		controller.createShape(x1, y1, x2, y2, ShapeType.RECTANGLE, null).draw(gc);
 	}
 	public static void selectShapesInsideBox(Controller controller, CustomCanvas gc, double mouseX, double mouseY, double x1, double y1, double x2, double y2){
