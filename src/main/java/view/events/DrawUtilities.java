@@ -6,8 +6,16 @@ import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 import view.types.ShapeType;
-
+/**
+ * Class for handling draw utilities
+ */
 public class DrawUtilities {
+    /**
+     * Adds the first point of the shape
+     * @param controller controller
+     * @param x X coordinate
+     * @param y Y coordinate
+     */
     public static void addShapesFirstPoint(Controller controller, double x, double y) {
         Point point = controller.getHoveredPoint();
         Shape hoveredShape = controller.getHoveredShape();
@@ -21,7 +29,14 @@ public class DrawUtilities {
         controller.getHistoryManager().addFirstPoint(point);
         controller.setLastPoint(point);
     }
-
+    /**
+     * Adds the last point of the shape
+     * @param controller controller
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param shapeType type of the shape
+     * @return shape
+     */
     public static Shape addShapesLastPoint(Controller controller, double x, double y, ShapeType shapeType) {
         Point startPoint = controller.getLastPoint();
         Point endPoint = controller.getHoveredPoint();
@@ -50,7 +65,13 @@ public class DrawUtilities {
 
         return shape;
     }
-
+    /**
+     * Renders the drawing preview
+     * @param controller controller
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param gc custom canvas
+     */
     public static void renderDrawingPreview(Controller controller, double x, double y, CustomCanvas gc) {
         Point lastPoint = controller.getLastPoint();
         Shape hoveredShape = controller.getHoveredShape();

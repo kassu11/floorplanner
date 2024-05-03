@@ -9,17 +9,39 @@ import view.events.SelectUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Class for managing history events
+ */
 public class HistoryManager {
+    /**
+     * List of history events
+     */
     private List<HistoryEvent> events = new ArrayList<>();
+    /**
+     * Index of the history events
+     */
     private int index = 0;
+    /**
+     * Controller for the history manager
+     */
     private Controller controller;
+    /**
+     * Boolean for undo and redo
+     */
     private boolean undoRedo = false;
+    /**
+     * Constructor for the history manager
+     * @param controller controller for the history manager
+     */
 
     public HistoryManager(Controller controller) {
         this.controller = controller;
     }
-
+    /**
+     * Adds an event to the history manager
+     * @param redo redo handler
+     * @param undo undo handler
+     */
     public void addEvent(HistoryHandler redo, HistoryHandler undo) {
         if (index < events.size()) {
             events = events.subList(0, index);
@@ -28,26 +50,34 @@ public class HistoryManager {
         events.add(event);
         index++;
     }
-
+    /**
+     * Resets the history manager
+     */
     public void reset() {
         events.clear();
         index = 0;
     }
-
+    /**
+     * Handles the undo event
+     */
     public void undo() {
         if (index > 0) {
             index--;
             events.get(index).undo();
         }
     }
-
+    /**
+     * Handles the redo event
+     */
     public void redo() {
         if (index < events.size()) {
             events.get(index).redo();
             index++;
         }
     }
-
+    /**
+     * Handles the undo and redo event
+     */
     private void undoAndRedo() {
         if(undoRedo) return;
         undoRedo = true;
@@ -55,13 +85,20 @@ public class HistoryManager {
         this.redo();
         undoRedo = false;
     }
-
+    /**
+     * Assigns a shape to the history manager
+     * @param shape shape to assign
+     * @return boolean value for assigning the shape
+     */
     private boolean assignShape(Shape shape) {
         if (shape.getId() != 0)  return false;
         shape.assignId();
         return true;
     }
-
+    /**
+     * Adds the first point to the history manager
+     * @param point point to add
+     */
     public void addFirstPoint(Point point) {
         boolean isNewPoint = this.assignShape(point);
         ShapeType mode = controller.getCurrentShapeType();
@@ -81,12 +118,18 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Adds a shape to the history manager
+     * @param shape shape to add
+     */
     public void addShape(Shape shape) {
         if(shape.getType() == ShapeType.LINE) this.addLine(shape);
         else this.addComplexShape(shape);
     }
-
+    /**
+     * Adds a line to the history manager
+     * @param shape shape to add
+     */
     private void addLine(Shape shape) {
         Point[] points = shape.getPoints().toArray(new Point[0]);
         Point lastPoint = controller.getLastPoint();
@@ -117,7 +160,10 @@ public class HistoryManager {
         addEvent(redo, undo);
 
     }
-
+    /**
+     * Adds a complex shape to the history manager
+     * @param shape shape to add
+     */
     private void addComplexShape(Shape shape) {
         Point[] points = shape.getPoints().toArray(new Point[0]);
         Shape[] shapes = shape.getChildren().toArray(new Shape[0]);
@@ -170,7 +216,10 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Adds a point to the history manager
+     * @param point point to add
+     */
     public void startSelection(List<Shape> shapes) {
         ModeType currentMode = controller.getCurrentMode();
         Shape selectedShape = controller.getSelectedShape();
@@ -189,7 +238,10 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Copies coordinates of the selected shapes
+     * @param shapes shapes to copy
+     */
     private void copySelectionCoordinates(Shape[] shapes, Double[] selectionCoordinates, Shape selectedShape, ModeType currentMode) {
         controller.setCurrentMode(currentMode);
         controller.setLastPoint(null);
@@ -201,7 +253,10 @@ public class HistoryManager {
         }
         if (currentMode == ModeType.SELECT) SelectUtilities.moveSelectedArea(controller, controller.getMouseX(), controller.getMouseY());
     }
-
+    /**
+     * Sets selected shapes to coordinates
+     * @param shapes shapes to set
+     */
     private void setSelectedShapesToCoordinates(Shape[] shapes, Double[] originalCoordinates, ModeType currentMode) {
         controller.setHoveredShape(null);
         controller.setSelectedShape(null);
@@ -212,7 +267,10 @@ public class HistoryManager {
             shapes[i].setCoordinates(originalCoordinates[i * 2], originalCoordinates[i * 2 + 1]);
         }
     }
-
+    /**
+     * Adds to the selection
+     * @param shapes shapes to add
+     */
     public void addToSelection(List<Shape> shapes) {
         ModeType currentMode = controller.getCurrentMode();
         Shape selectedShape = controller.getSelectedShape();
@@ -234,7 +292,10 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Finalizes the selection merge
+     * @param shapes shapes to finalize
+     */
     public void finalizeSelectionMerge(List<Shape> shapes, Point selectedPoint, Point hoveredPoint) {
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
         Shape[] selectedShapes = selectedPoint.getChildren().toArray(new Shape[0]);
@@ -290,7 +351,12 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Adds merged links back
+     * @param point point to add
+     * @param pointChildren children of the point
+     * @param childrenLinks links of the children
+     */
     private void addMergedLinksBack(Point point, Shape[] pointChildren, Point[] childrenLinks) {
         for(int i = 0; i < pointChildren.length; i++) {
             pointChildren[i].getPoints().clear();
@@ -299,7 +365,10 @@ public class HistoryManager {
             point.addChild(pointChildren[i]);
         }
     }
-
+    /**
+     * Finalizes the selection
+     * @param shapes shapes to finalize
+     */
     public void finalizeSelection(List<Shape> shapes) {
         Shape selectedShape = controller.getSelectedShape();
         Shape[] copyShapes = shapes.toArray(new Shape[0]);
@@ -321,7 +390,10 @@ public class HistoryManager {
 
         addEvent(redo, undo);
     }
-
+    /**
+     * Deletes a shape
+     * @param shape shape to delete
+     */
     public void deleteShape(Shape shape) {
         Point[] points = shape.getPoints().toArray(new Point[0]);
         Shape[] children = shape.getChildren().toArray(new Shape[0]);

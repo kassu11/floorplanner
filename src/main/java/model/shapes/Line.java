@@ -9,14 +9,25 @@ import view.types.ShapeType;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Concrete class for handling lines
+ */
 public class Line extends AbstractShape {
+    /**
+     * List of dimensions
+     */
     private List<Dimension> dimensions = new ArrayList<>();
-
+    /**
+     * Constructor for the line with a list of points
+     * @param points list of points
+     */
     public Line(Point pointA, Point pointB) {
         super(pointA, pointB);
     }
-
+    /**
+     * Calculates the length of the line
+     * @return length of the line
+     */
     @Override
     public double calculateShapeLength() {
         double deltaX = this.getPoints().get(0).getX() - this.getPoints().get(1).getX();
@@ -24,13 +35,19 @@ public class Line extends AbstractShape {
         double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         return length;
     }
-
+    /**
+     * Calculates the area of the line
+     * @return area of the line
+     */
     @Override
     public double calculateShapeArea() {
         System.out.println("Line has no area");
         return 0;
     }
-
+    /**
+     * Draws the line
+     * @param gc custom canvas
+     */
     @Override
     public void draw(CustomCanvas gc) {
         Point pointA = this.getPoints().get(0);
@@ -42,7 +59,12 @@ public class Line extends AbstractShape {
 
         dimensions.forEach(dimension -> dimension.draw(gc));
     }
-
+    /**
+     * Calculates the distance from the mouse to the line
+     * @param x X coordinate of the mouse
+     * @param y Y coordinate of the mouse
+     * @return distance from the mouse to the line
+     */
     public double calculateDistanceFromMouse(double x, double y) {
         double x1 = this.getPoints().get(1).getX();
         double x2 = this.getPoints().get(0).getX();
@@ -58,21 +80,33 @@ public class Line extends AbstractShape {
 
         return 1000; // High default value
     }
-
+    /**
+     * Returns the type of the shape
+     * @return type of the shape
+     */
     @Override
     public ShapeType getType() {
         return ShapeType.LINE;
     }
-
+    /**
+     * Returns the distance of the shape
+     * @return distance of the shape
+     */
     private static double getDistance(double mouseX, double mouseY, double x1, double y1, double slope) {
         double b = y1 - slope * x1;
         return Math.abs(slope * mouseX - mouseY + b) / Math.sqrt(Math.pow(slope, 2) + 1);
     }
-
+    /**
+     * Returns the distance of the shape without slope
+     * @return distance of the shape without slope
+     */
     private static double getDistanceWithoutSlope(double mouseX, double x1) {
         return Math.abs(mouseX - x1);
     }
-
+    /**
+     * Checks if the mouse is between the lines
+     * @return true if the mouse is between the lines
+     */
     private boolean betweenLines(double mouseX, double mouseY, double x1, double x2, double y1, double y2, double slope) {
         double lineLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         double perpendicularSlope;
@@ -84,12 +118,18 @@ public class Line extends AbstractShape {
         perpendicularSlope = -1 / slope;
         return !(getDistance(mouseX, mouseY, x1, y1, perpendicularSlope) > lineLength || getDistance(mouseX, mouseY, x2, y2, perpendicularSlope) > lineLength);
     }
-
+    /**
+     * Checks if the mouse is between the lines without slope
+     * @return true if the mouse is between the lines without slope
+     */
     private boolean betweenLinesWithoutSlope(double mouseX, double mouseY, double x1, double x2, double y1, double y2) {
         double lineLength = Math.abs(y2 - y1);
         return !(getDistance(mouseX, mouseY, x1, y1, 0) > lineLength || getDistance(mouseX, mouseY, x2, y2, 0) > lineLength);
     }
-
+    /**
+     * Deletes the line from the shape container
+     * @param shapeContainer shape container
+     */
     public void delete(ShapeContainer shapeContainer) {
         if (shapeContainer != null) shapeContainer.getShapes().remove(this);
 
@@ -101,7 +141,12 @@ public class Line extends AbstractShape {
             i--;
         }
     }
-
+    /**
+     * Draws the length of the line
+     * @param gc custom canvas
+     * @param unit unit of the length
+     * @param modifier modifier of the length
+     */
     public void drawLength(CustomCanvas gc, String unit, double modifier) {
 
         Point pointA = this.getPoints().get(0);

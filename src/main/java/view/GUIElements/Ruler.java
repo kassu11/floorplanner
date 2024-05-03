@@ -2,9 +2,14 @@ package view.GUIElements;
 
 import javafx.geometry.Orientation;
 import javafx.scene.control.Slider;
-
+/**
+ * Ruler class
+ */
 public class Ruler extends Slider {
-
+    /**
+     * Constructor for the ruler
+     * @param isVertical is vertical
+     */
     public Ruler(boolean isVertical){
         super();
         if(isVertical)
@@ -21,7 +26,10 @@ public class Ruler extends Slider {
         this.setMinorTickCount(25);
         this.setBlockIncrement(1);
     }
-
+    /**
+     * Updates the ruler
+     * @param value value
+     */
     public void updateRuler(double value){
         this.setMax(Math.round(750 / value));
         this.setMajorTickUnit(Math.round(75 / value));

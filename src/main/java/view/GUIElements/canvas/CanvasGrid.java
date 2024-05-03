@@ -4,16 +4,28 @@ import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.LIGHTGRAY;
 
 import view.SettingsSingleton;
-
+/**
+ * Class for handling the canvas grid
+ */
 public class CanvasGrid {
-
+    /**
+     * Custom canvas
+     */
     private CustomCanvas canvas;
+    /**
+     * Settings singleton
+     */
     private SettingsSingleton settings = SettingsSingleton.getInstance();
-
+    /**
+     * Constructor for the canvas grid
+     * @param canvas custom canvas
+     */
     public CanvasGrid(CustomCanvas canvas) {
         this.canvas = canvas;
     }
-
+    /**
+     * Draws the grid
+     */
     public void drawGrid() {
         canvas.beginPath();
         double width = settings.getGridWidth();
@@ -35,7 +47,10 @@ public class CanvasGrid {
         canvas.setStroke(BLACK);
         canvas.setLineWidth(5);
     }
-
+    /**
+     * Sets the canvas
+     * @param canvas custom canvas
+     */
     public void setCanvas(CustomCanvas canvas) {
         this.canvas = canvas;
     }

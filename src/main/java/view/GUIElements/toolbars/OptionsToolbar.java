@@ -25,14 +25,36 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static javafx.geometry.Pos.CENTER;
-
+/**
+ * Options toolbar class
+ */
 public class OptionsToolbar extends CustomToolbar {
-
+    /**
+     * Controller
+     */
     private final Controller controller;
+    /**
+     * Custom canvas
+     */
     private CustomCanvas gc;
+    /**
+     * Settings singleton
+     */
     private SettingsSingleton settings = SettingsSingleton.getInstance();
+    /**
+     * File manager
+     */
     private FileManager fileManager = FileManager.getInstance();
+    /**
+     * List of text fields
+     */
     private List<TextFieldWithLabel> textFields;
+    /**
+     * Constructor for the options toolbar
+     * @param stage stage
+     * @param controller controller
+     * @param gc custom canvas
+     */
 
     public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
         super(stage);
@@ -68,7 +90,9 @@ public class OptionsToolbar extends CustomToolbar {
         });
 
     }
-
+    /**
+     * Shows the file window
+     */
     public void showFile() {
         Stage fileWindow = new Stage();
 
@@ -117,7 +141,9 @@ public class OptionsToolbar extends CustomToolbar {
         fileWindow.setScene(fileScene);
         fileWindow.show();
     }
-
+    /**
+     * Shows the settings window
+     */
     public void showSettings() {
         Stage settingsWindow = new Stage();
 
@@ -184,6 +210,9 @@ public class OptionsToolbar extends CustomToolbar {
         settingsWindow.show();
     }
 
+    /**
+     * Updates the localization of all the text in the toolbar
+     */
     public void updateLocalization() {
         for (String key : getButtons().keySet()) {
             getButtons().get(key).setText(settings.getLocalizationString(key));
@@ -192,7 +221,9 @@ public class OptionsToolbar extends CustomToolbar {
             textField.getLabel().setText(settings.getLocalizationString(textField.getKey()));
         }
     }
-
+    /**
+     * Updates the resolution
+     */
     public void updateResolution(){
         for(TextFieldWithLabel textField : textFields){
             if(textField.getKey().equals("gridWidth")) textField.getTextField().setText(String.format("%.0f", settings.getGridWidth()));

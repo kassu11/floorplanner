@@ -4,9 +4,17 @@ import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
 
 public class Rectangle extends AbstractShape {
-
+    /**
+     * All of the four lines of the rectangle
+     */
     double line1, line2, line3, line4;
-
+    /**
+     * Constructor for the rectangle with 4 points
+     * @param pointA point A
+     * @param pointB point B
+     * @param pointC point C
+     * @param pointD point D
+     */
     public Rectangle(Point pointA, Point pointB, Point pointC, Point pointD) {
         super(pointA, pointB, pointC, pointD);
         addChild(new Line(pointA, pointD));
@@ -15,7 +23,10 @@ public class Rectangle extends AbstractShape {
         addChild(new Line(pointC, pointA));
         this.getPoints().forEach(point -> point.setParentShape(this));
     }
-
+    /**
+     * Calculates the length of the rectangle
+     * @return length of the rectangle
+     */
     @Override
     public double calculateShapeLength() {
         line1 = this.getChildren().get(0).calculateShapeLength();
@@ -26,7 +37,10 @@ public class Rectangle extends AbstractShape {
         System.out.println("Perimeter of rectangle: " + perimeter);
         return perimeter;
     }
-
+    /**
+     * Calculates the area of the rectangle
+     * @return area of the rectangle
+     */
     @Override
     public double calculateShapeArea() {
         this.calculateShapeLength();
@@ -35,16 +49,24 @@ public class Rectangle extends AbstractShape {
         System.out.println("Area of rectangle: " + area);
         return area;
     }
-
+    /**
+     * Returns the type of the shape
+     */
     @Override
     public ShapeType getType() {
         return null;
     }
-
+    /**
+     * Adds a child to the rectangle
+     * @param shape shape to be added
+     */
     public void addChild(Shape shape) {
         super.addChild(shape);
     }
-
+    /**
+     * Draws the rectangle
+     * @param gc custom canvas
+     */
     @Override
     public void draw(CustomCanvas gc) {
         for (Shape shape : this.getChildren()) {

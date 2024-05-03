@@ -2,24 +2,47 @@ package model.shapes;
 
 import view.GUIElements.canvas.CustomCanvas;
 
-
+/**
+ * Class for handling dimensions
+ */
 public class Dimension {
+    /**
+     * Shape of the dimension
+     */
     private Shape shape;
+    /**
+     * Distance of the dimension
+     */
     private double distance;
+    /**
+     * Height of the dimension
+     */
     private double height = 15;
 
+    /**
+     * Sets the distance of the dimension
+     * @param distance
+     */
     public void setDistance(double distance) {
         this.distance = distance;
     }
-
-    public void addShape(Shape shape) {
+    /**
+     * Sets a shape to the dimension
+     * @param shape shape to be set
+     */
+    public void setShape(Shape shape) {
         this.shape = shape;
     }
-
+    /**
+     * Sets the height of the dimension
+     * @param height height to be set
+     */
     public void setHeight(double height) {
         this.height = height;
     }
-
+    /**
+     * Resizes the dimension
+     */
     public void resize() {
         Point movePoint = shape.getPoints().get(0);
         for(Point point : shape.getPoints()) {
@@ -36,7 +59,10 @@ public class Dimension {
             movePoint.setX(oppositePoint.getX() - distance);
         }
     }
-
+    /**
+     * Draws the dimension
+     * @param gc custom canvas
+     */
     public void draw(CustomCanvas gc) {
         gc.beginPath();
         Point point1 = shape.getPoints().get(0);
