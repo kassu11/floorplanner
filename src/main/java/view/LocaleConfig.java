@@ -24,7 +24,7 @@ public enum LocaleConfig {
      * @param language language
      * @param country country
      */
-    private LocaleConfig(String language, String country) {
+    LocaleConfig(String language, String country) {
         this.language = language;
         this.country = country;
     }

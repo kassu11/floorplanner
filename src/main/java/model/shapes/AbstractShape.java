@@ -52,7 +52,7 @@ public abstract class AbstractShape implements Shape {
      * @param y Y coordinate of the shape
      */
 
-    public AbstractShape(double x, double y) {
+    protected AbstractShape(double x, double y) {
         this.x = ShapeMath.toFixed(x, 9);
         this.y = ShapeMath.toFixed(y, 9);
     }
@@ -61,7 +61,7 @@ public abstract class AbstractShape implements Shape {
      * @param shapes list of shapes
      * @param points list of points
      */
-    public AbstractShape(List<Shape> shapes, List<Point> points) {
+    protected AbstractShape(List<Shape> shapes, List<Point> points) {
         this.points.addAll(points);
     }
     /**
@@ -69,7 +69,7 @@ public abstract class AbstractShape implements Shape {
      * @param pointA point A
      * @param pointB point B
      */
-    public AbstractShape(Point pointA, Point pointB) {
+    protected AbstractShape(Point pointA, Point pointB) {
         points.add(pointA);
         points.add(pointB);
         updateDimensions();
@@ -83,7 +83,7 @@ public abstract class AbstractShape implements Shape {
      * @param pointB point B
      * @param pointC point C
      */
-    public AbstractShape(Point pointA, Point pointB, Point pointC) {
+    protected AbstractShape(Point pointA, Point pointB, Point pointC) {
         points.add(pointA);
         points.add(pointB);
         points.add(pointC);
@@ -96,7 +96,7 @@ public abstract class AbstractShape implements Shape {
      * @param pointC point C
      * @param pointD point D
      */
-    public AbstractShape(Point pointA, Point pointB, Point pointC, Point pointD) {
+    protected AbstractShape(Point pointA, Point pointB, Point pointC, Point pointD) {
         points.add(pointA);
         points.add(pointB);
         points.add(pointC);
@@ -107,8 +107,8 @@ public abstract class AbstractShape implements Shape {
 
     /**
      * Calculates the dimensions of the shape
-     * @param pointA point A
-     * @param pointB point B
+     * @param a point A
+     * @param b point B
      */
     private Point calculateDimensions(Point a, Point b) {
         this.x = Math.min(a.getX(), b.getX());
@@ -163,13 +163,6 @@ public abstract class AbstractShape implements Shape {
         if (this.id == 0) this.id = idCounter++;
     }
     /**
-     * Assigns an id to the shape
-     * @param id id
-     */
-    public void assignId(int id) {
-        this.id = id;
-    }
-    /**
      * Returns the id of the shape
      * @return id
      */
@@ -205,7 +198,7 @@ public abstract class AbstractShape implements Shape {
     }
     /**
      * Removes a child point from the shape
-     * @param Point point
+     * @param shape child shape
      */
     public void removeChild(Shape shape) {
         children.remove(shape);
@@ -213,7 +206,7 @@ public abstract class AbstractShape implements Shape {
 
     /**
      * Removes a point from the shape
-     * @param Point point
+     * @param point point
      */
     public void removePoint(Point point) {
         boolean removed = points.remove(point);
@@ -275,11 +268,6 @@ public abstract class AbstractShape implements Shape {
     public Shape getParentShape() {
         return parentShape;
     }
-    /**
-     * Draws the shape, implementations vary based on shape type
-     * @param CustomCanvas gc
-     */
-    public abstract void draw(CustomCanvas gc);
     /**
      * Sets the parent shape
      * @param parentShape parent shape

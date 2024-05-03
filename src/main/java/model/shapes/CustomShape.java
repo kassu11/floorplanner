@@ -23,7 +23,7 @@ public class CustomShape extends AbstractShape {
      */
     @Override
     public void draw(CustomCanvas gc) {
-
+        //Not yet implemented
     }
     /**
      * Calculates the length of the custom shape

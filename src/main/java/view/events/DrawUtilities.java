@@ -10,6 +10,8 @@ import view.types.ShapeType;
  * Class for handling draw utilities
  */
 public class DrawUtilities {
+    private DrawUtilities() {
+    }
     /**
      * Adds the first point of the shape
      * @param controller controller

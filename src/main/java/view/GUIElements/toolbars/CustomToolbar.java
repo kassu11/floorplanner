@@ -5,6 +5,7 @@ import javafx.scene.control.ToolBar;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
+import java.util.Map;
 /**
  * Abstract Custom toolbar class
  */
@@ -21,12 +22,12 @@ abstract class CustomToolbar extends ToolBar {
     /**
      * List of buttons
      */
-    private HashMap<String, Button> buttons = new HashMap<>();
+    private Map<String, Button> buttons = new HashMap<>();
     /**
      * Constructor for the custom toolbar
      * @param stage stage
      */
-    public CustomToolbar(Stage stage) {
+    protected CustomToolbar(Stage stage) {
         super();
         this.stage = stage;
     }
@@ -93,14 +94,14 @@ abstract class CustomToolbar extends ToolBar {
      * Returns the list of buttons
      * @return list of buttons
      */
-    public HashMap<String, Button> getButtons() {
+    public Map<String, Button> getButtons() {
         return buttons;
     }
     /**
      * Sets the list of buttons
      * @param buttons list of buttons
      */
-    public void setButtons(HashMap<String, Button> buttons) {
+    public void setButtons(Map<String, Button> buttons) {
         this.buttons = buttons;
     }
     /**

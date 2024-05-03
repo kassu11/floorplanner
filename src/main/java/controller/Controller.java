@@ -112,7 +112,6 @@ public class Controller {
      * @return
      */
     public Shape createShape(Point pointA, Point pointB, ShapeType shapeType, SingletonType singletonType) {
-        // TODO: Refactor this to use a factory
 
         Shape shape = switch (shapeType) {
             case LINE, MULTILINE -> new Line(pointA, pointB);
@@ -128,7 +127,10 @@ public class Controller {
             case CIRCLE -> new Circle(pointA, pointB);
             default -> null;
         };
-        if (singletonType != null) shape.addToShapeContainer(getShapeContainer(singletonType));
+        if (singletonType != null) {
+            assert shape != null;
+            shape.addToShapeContainer(getShapeContainer(singletonType));
+        }
         return shape;
     }
 
@@ -266,7 +268,7 @@ public class Controller {
             settingsDao.persist(settings);
             System.out.println("Settings saved!");
         } else {
-            Settings settings = settingsSingleton.getInstance().getSettings();
+            Settings settings = SettingsSingleton.getInstance().getSettings();
             settingsDao.find(1).setSettings(settings);
             settingsDao.update(settingsDao.find(1));
         }
@@ -371,21 +373,27 @@ public class Controller {
     /** The setCurrentMode method that sets the current mode type*/
     public void setCurrentMode(ModeType currentMode) {
         String noColor = "#000000";
-        if(currentMode == ModeType.DRAW) {
-            this.selectedColor = "#00d415";
-            this.hoverColor = "#00d415";
-        } else if(currentMode == ModeType.SELECT || currentMode == ModeType.ROTATE) {
-            this.selectedColor = "#036ffc";
-            this.hoverColor = "#78b0fa";
-        } else if(currentMode == ModeType.DELETE) {
-            this.selectedColor = noColor;
-            this.hoverColor = "#ff0000";
-        } else if(currentMode == ModeType.AREA) {
-            this.selectedColor = "#4269f54a";
-            this.hoverColor = "#78b0fa";
-        } else {
-            this.selectedColor = noColor;
-            this.hoverColor = noColor;
+        switch (currentMode) {
+            case ModeType.DRAW -> {
+                this.selectedColor = "#00d415";
+                this.hoverColor = "#00d415";
+            }
+            case ModeType.SELECT, ModeType.ROTATE -> {
+                this.selectedColor = "#036ffc";
+                this.hoverColor = "#78b0fa";
+            }
+            case ModeType.DELETE -> {
+                this.selectedColor = noColor;
+                this.hoverColor = "#ff0000";
+            }
+            case ModeType.AREA -> {
+                this.selectedColor = "#4269f54a";
+                this.hoverColor = "#78b0fa";
+            }
+            default -> {
+                this.selectedColor = noColor;
+                this.hoverColor = noColor;
+            }
         }
         this.currentMode = currentMode;
     }

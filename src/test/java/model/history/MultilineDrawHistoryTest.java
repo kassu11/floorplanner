@@ -10,7 +10,7 @@ import view.events.DrawUtilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MultilineDrawHistoryTest {
+class MultilineDrawHistoryTest {
 
     private static Controller controller;
 

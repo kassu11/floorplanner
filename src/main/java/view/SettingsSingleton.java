@@ -1,11 +1,10 @@
 package view;
 
 import entity.Settings;
-import org.springframework.core.io.Resource;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 /**
  * Settings singleton class for saving all the settings
@@ -229,7 +228,7 @@ public class SettingsSingleton {
      * @return measurement units
      */
 
-    public HashMap<String, Double> getMeasurementUnits() {
+    public Map<String, Double> getMeasurementUnits() {
         return measurementUnits;
     }
     /**

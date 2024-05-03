@@ -57,13 +57,6 @@ public class Rectangle extends AbstractShape {
         return null;
     }
     /**
-     * Adds a child to the rectangle
-     * @param shape shape to be added
-     */
-    public void addChild(Shape shape) {
-        super.addChild(shape);
-    }
-    /**
      * Draws the rectangle
      * @param gc custom canvas
      */

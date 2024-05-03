@@ -15,7 +15,7 @@ public abstract class ShapeContainer {
     /**
      * Constructor for the shape container
      */
-    public ShapeContainer() {
+    protected ShapeContainer() {
         this.shapes = new ArrayList<>();
     }
     /**

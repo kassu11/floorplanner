@@ -13,7 +13,7 @@ import view.events.SelectUtilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ShapeDeleteHistoryTest {
+class ShapeDeleteHistoryTest {
     private static Controller controller;
 
     @BeforeEach

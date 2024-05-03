@@ -16,5 +16,7 @@ RUN mvn package
 # Install OpenJFX
 RUN apt-get update && apt-get install -y openjfx
 
+REMOVE cache
+
 # Run the main class (assuming your application has a main class)
 CMD ["java", "-jar", "target/floorplanner.jar"]

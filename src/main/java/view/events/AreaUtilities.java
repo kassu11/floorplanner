@@ -13,6 +13,8 @@ import java.util.List;
  * Class for handling area utilities
  */
 public class AreaUtilities {
+    private AreaUtilities() {
+    }
 //    public static void addToArea(Controller controller, double x, double y, CustomCanvas gc) {
 //        SelectUtilities.selectHoveredShape(controller, x, y);
 //        controller.drawAllShapes(gc, Controller.SingletonType.PREVIEW);

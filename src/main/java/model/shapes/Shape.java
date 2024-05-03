@@ -123,15 +123,11 @@ public interface Shape extends Serializable {
      * @param gc custom canvas
      */
     void drawLength(CustomCanvas gc, String unit, double modifier);
+
     /**
      * Assigns an ID to the shape
      */
     public void assignId();
-    /**
-     * Assigns an ID to the shape
-     * @param id ID to be assigned
-     */
-    public void assignId(int id);
     /**
      * Returns the ID of the shape
      * @return ID of the shape

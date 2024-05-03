@@ -7,6 +7,8 @@ import jakarta.persistence.Persistence;
  * Class for creating a connection to the MariaDB database
  */
 public class MariaDBJpaConnection {
+    private MariaDBJpaConnection() {
+    }
     /**
      * Entity manager factory
      */

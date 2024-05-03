@@ -11,7 +11,7 @@ import view.events.DrawUtilities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RectangleDrawHistoryTest {
+class RectangleDrawHistoryTest {
 
     private static Controller controller;
 

@@ -1,11 +1,9 @@
 package view.GUIElements.canvas;
 
-import controller.Controller;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
-import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 import view.SettingsSingleton;
 /**
@@ -27,10 +25,6 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
      * Graphics context
      */
     private GraphicsContext gc;
-    /**
-     * Font
-     */
-    private Font font = new Font("Arial", 12);
     /**
      * Canvas grid
      */
@@ -363,8 +357,8 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     @Override
     public void drawRulerX() {
         double gridSize = settings.getGridSize();
-        double height = settings.getGridHeight();
-        for (int i = 0; i <= height / gridSize; i++) {
+        double gridHeight = settings.getGridHeight();
+        for (int i = 0; i <= gridHeight / gridSize; i++) {
             gc.setLineWidth(1);
             double value = i * gridSize;
             gc.strokeText(String.valueOf((int) value), 0, i * gridSize * zoom);
@@ -376,8 +370,8 @@ public class DrawingCanvas extends Canvas implements CustomCanvas {
     @Override
     public void drawRulerY() {
         double gridSize = settings.getGridSize();
-        double width = settings.getGridWidth();
-        for (int i = 0; i <= width / gridSize; i++) {
+        double gridWidth = settings.getGridWidth();
+        for (int i = 0; i <= gridWidth / gridSize; i++) {
             gc.setLineWidth(1);
             double value = i * gridSize;
             gc.strokeText(String.valueOf((int) value), i * gridSize * zoom, 10);

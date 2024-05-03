@@ -182,7 +182,7 @@ public class HistoryManager {
             controller.setLastPoint(lastPoint);
             for(int i = 0; i < points.length; i++) {
                 points[i].setParentShape(shape);
-                if (isNewPoint[i]) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
+                if (Boolean.TRUE.equals(isNewPoint[i])) controller.getShapeContainer(Controller.SingletonType.FINAL).addShape(points[i]);
                 shape.getPoints().add(points[i]);
             }
 
@@ -206,7 +206,7 @@ public class HistoryManager {
             }
 
             for(int i = 0; i < points.length; i++) {
-                if(isNewPoint[i]) controller.removeShape(points[i], Controller.SingletonType.FINAL);
+                if(Boolean.TRUE.equals(isNewPoint[i])) controller.removeShape(points[i], Controller.SingletonType.FINAL);
                 points[i].removeChild(shape);
                 points[i].setParentShape(null);
             }
