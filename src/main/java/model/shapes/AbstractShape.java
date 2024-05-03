@@ -41,10 +41,15 @@ public abstract class AbstractShape implements Shape {
      * Priority of the shape
      * Id of the shape
      */
-    private int priority, id;
+    private int priority;
     /**
      * Boolean value for selected
      */
+    /**
+     * Boolean value for added to history
+     * HistoryManager uses this value to know if shape has to be deleted on undo
+     */
+    private boolean addedToHistory = false;
     private boolean isSelected;
     /**
      * Constructor for the abstract shape with coordinates
@@ -102,7 +107,7 @@ public abstract class AbstractShape implements Shape {
         points.add(pointC);
         points.add(pointD);
         updateDimensions();
-        this.id = idCounter++;
+        addedToHistory = true;
     }
 
     /**
@@ -157,17 +162,17 @@ public abstract class AbstractShape implements Shape {
         return selectedY;
     }
     /**
-     * Assigns an id to the shape
+     * Flags that the shape has been added to historyManager
      */
-    public void assignId() {
-        if (this.id == 0) this.id = idCounter++;
+    public void addToHistory() {
+        addedToHistory = true;
     }
     /**
-     * Returns the id of the shape
-     * @return id
+     * Returns the added to history boolean value
+     * @return added to history boolean value
      */
-    public int getId() {
-        return this.id;
+    public boolean getAddedToHistory() {
+        return addedToHistory;
     }
     /**
      * Calculates the centroid of the shape

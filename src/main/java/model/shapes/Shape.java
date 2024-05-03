@@ -127,12 +127,12 @@ public interface Shape extends Serializable {
     /**
      * Assigns an ID to the shape
      */
-    public void assignId();
+    public void addToHistory();
     /**
      * Returns the ID of the shape
      * @return ID of the shape
      */
-    public int getId();
+    public boolean getAddedToHistory();
     /**
      * Returns the selected X coordinate
      * @return

@@ -374,19 +374,19 @@ public class Controller {
     public void setCurrentMode(ModeType currentMode) {
         String noColor = "#000000";
         switch (currentMode) {
-            case ModeType.DRAW -> {
+            case DRAW -> {
                 this.selectedColor = "#00d415";
                 this.hoverColor = "#00d415";
             }
-            case ModeType.SELECT, ModeType.ROTATE -> {
+            case SELECT, ROTATE -> {
                 this.selectedColor = "#036ffc";
                 this.hoverColor = "#78b0fa";
             }
-            case ModeType.DELETE -> {
+            case DELETE -> {
                 this.selectedColor = noColor;
                 this.hoverColor = "#ff0000";
             }
-            case ModeType.AREA -> {
+            case AREA -> {
                 this.selectedColor = "#4269f54a";
                 this.hoverColor = "#78b0fa";
             }
