@@ -3,6 +3,7 @@ package view.GUIElements.canvas;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Affine;
 import view.SettingsSingleton;
@@ -29,6 +30,10 @@ public class CustomCanvas extends Canvas {
      * Canvas grid
      */
     private CanvasGrid grid;
+    /**
+     * Last fill color used
+     */
+    private String lastFillColor = null;
     /**
      * Settings singleton
      */
@@ -145,12 +150,39 @@ public class CustomCanvas extends Canvas {
     public void setStrokeColor(String color) {
         gc.setStroke(javafx.scene.paint.Color.web(color));
     }
+
+    /**
+     * Sets the stroke color
+     * @param color
+     */
+    public void setStrokeColor(Paint color) {
+        gc.setStroke(color);
+    }
     /**
      * Sets the fill color with a string
      * @param color
      */
     public void setFillColor(String color) {
+        if (color.equals(lastFillColor)) return;
+        lastFillColor = color;
         gc.setFill(javafx.scene.paint.Color.web(color));
+    }
+
+    /**
+     * Sets the fill color
+     * @param color
+     */
+    public void setFillColor(Paint color) {
+        gc.setFill(color);
+        lastFillColor = null;
+    }
+
+    /**
+     * Gets the fill color
+     * @return fill color
+     */
+    public Paint getFillColor() {
+        return gc.getFill();
     }
     /**
      * Sets the stroke width

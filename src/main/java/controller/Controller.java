@@ -9,10 +9,12 @@ import model.shapeContainers.PreviewShapesSingleton;
 import model.shapeContainers.ShapeContainer;
 import model.shapes.*;
 import view.GUI;
+import view.GUIElements.canvas.CanvasColors;
 import view.GUIElements.canvas.CanvasMath;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 import view.types.ModeType;
+import view.types.ShapeDataType;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
@@ -372,30 +374,31 @@ public class Controller {
     }
     /** The setCurrentMode method that sets the current mode type*/
     public void setCurrentMode(ModeType currentMode) {
-        String noColor = "#000000";
-        switch (currentMode) {
-            case DRAW -> {
-                this.selectedColor = "#00d415";
-                this.hoverColor = "#00d415";
-            }
-            case SELECT, ROTATE -> {
-                this.selectedColor = "#036ffc";
-                this.hoverColor = "#78b0fa";
-            }
-            case DELETE -> {
-                this.selectedColor = noColor;
-                this.hoverColor = "#ff0000";
-            }
-            case AREA -> {
-                this.selectedColor = "#4269f54a";
-                this.hoverColor = "#78b0fa";
-            }
-            default -> {
-                this.selectedColor = noColor;
-                this.hoverColor = noColor;
-            }
-        }
+//        String noColor = "#000000";
+//        switch (currentMode) {
+//            case DRAW -> {
+//                this.selectedColor = "#00d415";
+//                this.hoverColor = "#00d415";
+//            }
+//            case SELECT, ROTATE -> {
+//                this.selectedColor = "#036ffc";
+//                this.hoverColor = "#78b0fa";
+//            }
+//            case DELETE -> {
+//                this.selectedColor = noColor;
+//                this.hoverColor = "#ff0000";
+//            }
+//            case AREA -> {
+//                this.selectedColor = "#4269f54a";
+//                this.hoverColor = "#78b0fa";
+//            }
+//            default -> {
+//                this.selectedColor = noColor;
+//                this.hoverColor = noColor;
+//            }
+//        }
         this.currentMode = currentMode;
+        CanvasColors.updateColorsByMode(currentMode);
     }
 
     /** The updateToolbarLocalization method that updates the localization of all the toolbar texts
@@ -434,7 +437,17 @@ public class Controller {
     }
     /** The setHoveredShape method that sets the hovered shape to the given shape*/
     public void setHoveredShape(Shape hoveredShape) {
+        if(this.hoveredShape != null) {
+            if(this.hoveredShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) {
+                this.hoveredShape.setShapeDataType(ShapeDataType.SELECTED);
+            } else this.hoveredShape.setShapeDataType(ShapeDataType.NORMAL);
+        }
         this.hoveredShape = hoveredShape;
+        if(hoveredShape != null) {
+            if (hoveredShape.getShapeDataType() == ShapeDataType.SELECTED) {
+                hoveredShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
+            } else hoveredShape.setShapeDataType(ShapeDataType.HOVER);
+        }
     }
     /** The getMouseX method that returns the mouse x coordinate*/
     public double getMouseX() {

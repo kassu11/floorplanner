@@ -147,14 +147,18 @@ public class GUI extends Application {
                     }
                 }
                 case AREA -> {
-                    if(selectedShape != null && !event.isShiftDown()) {
-                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+//                    if(selectedShape != null && !event.isShiftDown()) {
+//                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+//                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+//                    }
+//                    if (hoveredShape != null) {
+//                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
+//                        previewGc.clear();
+//                        AreaUtilities.drawArea(controller, previewGc);
+//                    }
+                    if(hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) {
+                        AreaUtilities.addPointToArea(controller);
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-                    }
-                    if (hoveredShape != null) {
-                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
-                        previewGc.clear();
-                        AreaUtilities.drawArea(controller, previewGc);
                     }
                 }
             }
@@ -187,8 +191,8 @@ public class GUI extends Application {
                 }
             }
 
-            previewGc.setFillColor(controller.getSelectedColor());
-            previewGc.setStrokeColor(controller.getSelectedColor());
+//            previewGc.setFillColor(controller.getSelectedColor());
+//            previewGc.setStrokeColor(controller.getSelectedColor());
 
             if (controller.getCurrentMode() == ModeType.DRAW) {
                 DrawUtilities.renderDrawingPreview(controller, mouseX, mouseY, previewGc);
@@ -207,8 +211,8 @@ public class GUI extends Application {
             }
 
             if (hoveredShape != null) {
-                previewGc.setFillColor(controller.getHoverColor());
-                previewGc.setStrokeColor(controller.getHoverColor());
+//                previewGc.setFillColor(controller.getHoverColor());
+//                previewGc.setStrokeColor(controller.getHoverColor());
                 hoveredShape.draw(previewGc);
             }
         });

@@ -1,8 +1,10 @@
 package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
+import view.GUIElements.canvas.CanvasColors;
 import view.GUIElements.canvas.CustomCanvas;
 import view.events.ShapeMath;
+import view.types.ShapeDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +12,6 @@ import java.util.List;
  * Abstract class for handling shapes
  */
 public abstract class AbstractShape implements Shape {
-    /**
-     * Counter for the shape id
-     */
-    private static int idCounter = 1;
     /**
      * X coordinate of the shape
      * Y coordinate of the shape
@@ -37,6 +35,7 @@ public abstract class AbstractShape implements Shape {
      * Parent shape
      */
     private Shape parentShape;
+    private ShapeDataType shapeDataType = ShapeDataType.NORMAL;
     /**
      * Priority of the shape
      * Id of the shape
@@ -301,6 +300,15 @@ public abstract class AbstractShape implements Shape {
     public int getPriority() {
         return priority;
     }
+
+    /**
+     * Sets the priority of the shape
+     * This is used to determine the hovering priority order
+     * @param priority
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
     /**
      * Calculates the distance from the mouse
      * @param x X coordinate
@@ -355,5 +363,42 @@ public abstract class AbstractShape implements Shape {
      */
     public boolean isSelected() {
         return isSelected;
+    }
+
+    /**
+     * Returns the shape data type
+     * @return shape data type
+     */
+    public ShapeDataType getShapeDataType() {
+        return shapeDataType;
+    }
+
+    /**
+     * Sets the shape data type
+     * @param shapeDataType
+     */
+    public void setShapeDataType(ShapeDataType shapeDataType) {
+        this.shapeDataType = shapeDataType;
+    }
+
+    public void updateCanvasColors(CustomCanvas gc) {
+        switch (shapeDataType) {
+            case NORMAL, AREA -> {
+                gc.setStrokeColor(CanvasColors.NORMAL);
+                gc.setFillColor(CanvasColors.NORMAL);
+            }
+            case HOVER -> {
+                gc.setStrokeColor(CanvasColors.HOVER);
+                gc.setFillColor(CanvasColors.HOVER);
+            }
+            case SELECTED -> {
+                gc.setStrokeColor(CanvasColors.SELECTED);
+                gc.setFillColor(CanvasColors.SELECTED);
+            }
+            case SELECTED_HOVER -> {
+                gc.setStrokeColor(CanvasColors.SELECTED_HOVER);
+                gc.setFillColor(CanvasColors.SELECTED_HOVER);
+            }
+        }
     }
 }

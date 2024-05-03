@@ -1,5 +1,6 @@
 package model.shapes;
 
+import javafx.scene.paint.Paint;
 import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;
@@ -17,10 +18,6 @@ public class Point extends AbstractShape {
      */
     private double width = 15, height = 15;
     /**
-     * Priority of the point
-     */
-    private int priority = 1;
-    /**
      * List of dimensions
      */
     private List<Dimension> dimensions = new ArrayList<>();
@@ -31,6 +28,7 @@ public class Point extends AbstractShape {
      */
     public Point(double x, double y) {
         super(x, y);
+        setPriority(1);
     }
     /**
      * Returns the width of the point
@@ -53,6 +51,7 @@ public class Point extends AbstractShape {
      * @param gc custom canvas
      */
     public void draw(CustomCanvas gc) {
+        updateCanvasColors(gc);
         gc.fillOvalWithOutScaling(this.getX(), this.getY(), width, height);
     }
     /**
@@ -101,14 +100,6 @@ public class Point extends AbstractShape {
     public void setCoordinates(double[] coordinates) {
         this.setX(coordinates[0]);
         this.setY(coordinates[1]);
-    }
-    /**
-     * Returns the priority of the point
-     * @return priority of the point
-     */
-    @Override
-    public int getPriority() {
-        return priority;
     }
     /**
      * Adds the point to the shape container

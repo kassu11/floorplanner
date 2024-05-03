@@ -49,6 +49,7 @@ public class Line extends AbstractShape {
      */
     @Override
     public void draw(CustomCanvas gc) {
+        updateCanvasColors(gc);
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
         gc.beginPath();
