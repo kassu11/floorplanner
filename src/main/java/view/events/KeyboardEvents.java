@@ -3,7 +3,9 @@ package view.events;
 import controller.Controller;
 import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
+import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
+import view.types.ModeType;
 import view.types.ShapeType;
 /**
  * Class for handling keyboard events
@@ -39,6 +41,19 @@ public class KeyboardEvents {
                     previewGc.clear();
                 }
                 case CONTROL -> controller.setCtrlDown(true);
+                case A -> {
+                    if(controller.isCtrlDown()) {
+                        controller.setCurrentMode(ModeType.SELECT);
+                        controller.transferAllShapesTo(Controller.SingletonType.PREVIEW);
+                        for(Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
+                            if(shape.getType() == ShapeType.POINT) shape.setSelectedCoordinates(shape.getX() - controller.getMouseX(), shape.getY() - controller.getMouseY());
+                        }
+                        controller.setSelectedShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
+                        controller.setHoveredShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                    }
+                }
                 case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);
                 case Y -> handleHistoryShortCuts(event, controller.getHistoryManager()::redo, previewGc, gc, controller);
                 default -> {
