@@ -5,6 +5,7 @@ import model.shapes.Shape;
 public class PreviewCanvas extends CustomCanvas {
     public PreviewCanvas(double width, double height) {
         super(width, height);
+        setLineWidth(4);
     }
 
     @Override

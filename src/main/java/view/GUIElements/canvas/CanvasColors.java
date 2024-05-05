@@ -13,6 +13,9 @@ public final class CanvasColors {
     public static final Paint DARK_GREEN = Paint.valueOf("#07c400");
     public static final Paint BLACK = Paint.valueOf("#000000");
     public static final Paint YELLOW = Paint.valueOf("#fcba03");
+    public static final Paint GRAY = Paint.valueOf("#c9c9c9");
+    public static final Paint GRID_LINE = GRAY;
+    public static final Paint RULER_TEXT = BLACK;
     public static Paint SELECTED = LIGHT_BLUE;
     public static Paint HOVER = LIGHT_BLUE;
     public static Paint SELECTED_HOVER = PURPLE;
@@ -22,36 +25,23 @@ public final class CanvasColors {
     }
 
     public static void updateColorsByMode(ModeType mode) {
-        HOVER = DARK_LIGHT_BLUE;
-        SELECTED = LIGHT_BLUE;
-        SELECTED_HOVER = LIGHT_BLUE;
-        FINAL_NORMAL = BLACK;
-        PREVIEW_NORMAL = BLACK;
+        SELECTED = SELECTED_HOVER = LIGHT_BLUE;
+        FINAL_NORMAL = PREVIEW_NORMAL = HOVER = BLACK;
         switch (mode) {
-            case SELECT -> {
-                PREVIEW_NORMAL = PURPLE;
-            }
-            case DRAW -> {
-                SELECTED = GREEN;
-                HOVER = DARK_GREEN;
-                SELECTED_HOVER = DARK_GREEN;
-                FINAL_NORMAL = BLACK;
-            }
+            case SELECT -> HOVER = PREVIEW_NORMAL = LIGHT_BLUE;
+            case DRAW -> PREVIEW_NORMAL = GREEN;
             case DELETE -> {
-                HOVER = RED;
+                HOVER = PREVIEW_NORMAL = RED;
                 FINAL_NORMAL = DARK_RED;
             }
             case ROTATE -> {
-                SELECTED = YELLOW;
-                HOVER = YELLOW;
-                SELECTED_HOVER = YELLOW;
-                FINAL_NORMAL = BLACK;
+                HOVER = SELECTED_HOVER = SELECTED = PREVIEW_NORMAL = YELLOW;
             }
             case AREA -> {
-                SELECTED = YELLOW;
-                HOVER = YELLOW;
-                SELECTED_HOVER = YELLOW;
-                FINAL_NORMAL = BLACK;
+                SELECTED = PURPLE;
+                HOVER = PURPLE;
+                SELECTED_HOVER = PURPLE;
+                PREVIEW_NORMAL = PURPLE;
             }
         }
     }

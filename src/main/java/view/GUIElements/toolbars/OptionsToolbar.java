@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.FileManager;
 import view.GUIElements.ComboBoxItem;
-import view.GUIElements.canvas.CustomCanvas;
+import view.GUIElements.canvas.CanvasContainer;
 import view.SettingsSingleton;
 import java.util.Arrays;
 
@@ -31,9 +31,9 @@ public class OptionsToolbar extends CustomToolbar {
      */
     private final Controller controller;
     /**
-     * Custom canvas
+     * Custom canvas container
      */
-    private CustomCanvas gc;
+    private CanvasContainer canvasContainer;
     /**
      * Settings singleton
      */
@@ -50,13 +50,13 @@ public class OptionsToolbar extends CustomToolbar {
      * Constructor for the options toolbar
      * @param stage stage
      * @param controller controller
-     * @param gc custom canvas
+     * @param canvasContainer custom canvas container
      */
 
-    public OptionsToolbar(Stage stage, Controller controller, CustomCanvas gc) {
+    public OptionsToolbar(Stage stage, Controller controller, CanvasContainer canvasContainer) {
         super(stage);
         this.controller = controller;
-        this.gc = gc;
+        this.canvasContainer = canvasContainer;
         this.setOrientation(Orientation.HORIZONTAL);
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
@@ -81,8 +81,8 @@ public class OptionsToolbar extends CustomToolbar {
             settings.setGridWidth(Double.parseDouble(gridWidth.getTextField().getText()));
             settings.setGridHeight(Double.parseDouble(gridHeight.getTextField().getText()));
             settings.setGridSize(Integer.parseInt(gridSize.getTextField().getText()));
-            gc.clear();
-            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasContainer.clear();
+            canvasContainer.updateAllCanvasLayers(controller);
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
 
@@ -121,7 +121,7 @@ public class OptionsToolbar extends CustomToolbar {
                     fileManager.setCurrentFile(selectedFile);
                     fileManager.importFloorPlan();
                     fileWindow.close();
-                    controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    canvasContainer.updateAllCanvasLayers(controller);
                 }
             }
         });
@@ -171,7 +171,7 @@ public class OptionsToolbar extends CustomToolbar {
             settings.setLocaleWithLocaleLanguage((languageSettings.getValue().getKey()));
             settings.setUnitsVisible(showUnits.isSelected());
             settings.setMeasurementUnit(measurementSettings.getValue());
-            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            canvasContainer.updateAllCanvasLayers(controller);
             controller.saveSettings();
             controller.updateToolbarLocalization();
             settingsWindow.close();

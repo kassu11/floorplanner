@@ -22,15 +22,11 @@ public abstract class CustomCanvas extends Canvas {
      * Y coordinate
      * Zoom level
      */
-    private double x, y, zoom;
+    protected double x, y, zoom;
     /**
      * Graphics context
      */
-    private GraphicsContext gc;
-    /**
-     * Canvas grid
-     */
-    private CanvasGrid grid;
+    protected GraphicsContext gc;
     /**
      * Last fill color used
      */
@@ -52,7 +48,6 @@ public abstract class CustomCanvas extends Canvas {
         this.y = 0;
         this.zoom = 1;
         gc = getGraphicsContext2D();
-        grid = new CanvasGrid(this);
     }
     /**
      * Resizes the canvas
@@ -338,13 +333,7 @@ public abstract class CustomCanvas extends Canvas {
     public double getCanvasHeight() {
         return height;
     }
-    /**
-     * Gets the grid
-     * @return grid
-     */
-    public CanvasGrid getGrid() {
-        return grid;
-    }
+
     /**
      * Closes the path
      */
@@ -376,30 +365,6 @@ public abstract class CustomCanvas extends Canvas {
      */
     public void strokeText(String text, double x, double y, double offsetX, double offsetY) {
         gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
-    }
-    /**
-     * Draws the grid
-     */
-    public void drawRulerX() {
-        double gridSize = settings.getGridSize();
-        double gridHeight = settings.getGridHeight();
-        for (int i = 0; i <= gridHeight / gridSize; i++) {
-            gc.setLineWidth(1);
-            double value = i * gridSize;
-            gc.strokeText(String.valueOf((int) value), 0, i * gridSize * zoom);
-        }
-    }
-    /**
-     * Draws the grid
-     */
-    public void drawRulerY() {
-        double gridSize = settings.getGridSize();
-        double gridWidth = settings.getGridWidth();
-        for (int i = 0; i <= gridWidth / gridSize; i++) {
-            gc.setLineWidth(1);
-            double value = i * gridSize;
-            gc.strokeText(String.valueOf((int) value), i * gridSize * zoom, 10);
-        }
     }
     /**
      * Draws a vertical line at x

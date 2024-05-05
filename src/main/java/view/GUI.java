@@ -13,6 +13,7 @@ import model.shapes.Shape;
 import view.GUIElements.Ruler;
 import view.GUIElements.canvas.CanvasContainer;
 import view.GUIElements.canvas.CustomCanvas;
+import view.GUIElements.canvas.GridCanvas;
 import view.GUIElements.toolbars.DrawingToolbar;
 import view.GUIElements.toolbars.OptionsToolbar;
 import view.events.AreaUtilities;
@@ -76,8 +77,9 @@ public class GUI extends Application {
     public void start(Stage stage) {
         BorderPane root = new BorderPane();
 
-        CustomCanvas gc = canvasContainer.getLayer(0);
-        CustomCanvas previewGc = canvasContainer.getLayer(1);
+        GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(0);
+        CustomCanvas gc = canvasContainer.getLayer(1);
+        CustomCanvas previewGc = canvasContainer.getLayer(2);
 
         gc.setLineWidth(5);
         previewGc.setLineWidth(5);
@@ -86,7 +88,7 @@ public class GUI extends Application {
         xRuler.setPadding(new Insets(0, 0, 0, 50));
         Ruler yRuler = new Ruler(true);
 
-        if(settings.isGridEnabled()) gc.getGrid().drawGrid();
+        gridGc.drawGrid();
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
@@ -169,10 +171,11 @@ public class GUI extends Application {
             controller.setMousePosition(event.getX(), event.getY());
             Shape hoveredShape = null;
             controller.setHoveredShape(null);
+            controller.setHoveredPoint(null);
             previewGc.clear();
             previewGc.drawRulerXpointer(event.getX());
             previewGc.drawRulerYpointer(event.getY());
-            controller.setHoveredPoint(null);
+
             double distanceCutOff = controller.getCanvasMath().relativeDistance(15);
             double lowestDistance = distanceCutOff;
 
@@ -191,9 +194,6 @@ public class GUI extends Application {
                 }
             }
 
-//            previewGc.setFillColor(controller.getSelectedColor());
-//            previewGc.setStrokeColor(controller.getSelectedColor());
-
             if (controller.getCurrentMode() == ModeType.DRAW) {
                 DrawUtilities.renderDrawingPreview(controller, mouseX, mouseY, previewGc);
             } else if (controller.getCurrentMode() == ModeType.SELECT && selectedShape != null) {
@@ -211,8 +211,6 @@ public class GUI extends Application {
             }
 
             if (hoveredShape != null) {
-//                previewGc.setFillColor(controller.getHoverColor());
-//                previewGc.setStrokeColor(controller.getHoverColor());
                 hoveredShape.draw(previewGc);
             }
         });
@@ -230,6 +228,7 @@ public class GUI extends Application {
                 canvasContainer.setX(middleX - event.getX());
                 canvasContainer.setY(middleY - event.getY());
                 canvasContainer.clear();
+                gridGc.drawGrid();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             }
@@ -252,6 +251,7 @@ public class GUI extends Application {
             yRuler.updateRuler(zoomLevel);
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            gridGc.drawGrid();
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -279,14 +279,13 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
         drawToolbar.getButtons().get("reset").setOnAction(event -> {
                 controller.removeAllShapes();
-                gc.getGrid().drawGrid();
+                gridGc.drawGrid();
             }
         );
 
         drawToolbar.getButtons().get("rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
-        System.out.println("CANVAS CONTAINER IS : " + canvasContainer.getLayer(0));
 
-        optionBar = new OptionsToolbar(stage, controller, canvasContainer.getLayer(0));
+        optionBar = new OptionsToolbar(stage, controller, canvasContainer);
         optionBar.getButtons().get("settings").setOnAction(event -> optionBar.showSettings());
         optionBar.getButtons().get("file").setOnAction(event -> optionBar.showFile());
 

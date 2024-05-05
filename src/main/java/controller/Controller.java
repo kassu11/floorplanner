@@ -166,13 +166,6 @@ public class Controller {
      */
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
         customCanvas.clear();
-        if(settingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
-        if(settingsSingleton.isUnitsVisible()){
-            customCanvas.drawRulerX();
-            customCanvas.drawRulerY();
-        }
-        customCanvas.setLineWidth(4);
-        customCanvas.setFill(Color.BLACK);
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 

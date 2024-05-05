@@ -5,6 +5,7 @@ import model.shapes.Shape;
 public class FinalCanvas extends CustomCanvas {
     public FinalCanvas(double width, double height) {
         super(width, height);
+        setLineWidth(4);
     }
 
     @Override
