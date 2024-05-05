@@ -380,25 +380,4 @@ public abstract class AbstractShape implements Shape {
     public void setShapeDataType(ShapeDataType shapeDataType) {
         this.shapeDataType = shapeDataType;
     }
-
-    public void updateCanvasColors(CustomCanvas gc) {
-        switch (shapeDataType) {
-            case NORMAL, AREA -> {
-                gc.setStrokeColor(CanvasColors.NORMAL);
-                gc.setFillColor(CanvasColors.NORMAL);
-            }
-            case HOVER -> {
-                gc.setStrokeColor(CanvasColors.HOVER);
-                gc.setFillColor(CanvasColors.HOVER);
-            }
-            case SELECTED -> {
-                gc.setStrokeColor(CanvasColors.SELECTED);
-                gc.setFillColor(CanvasColors.SELECTED);
-            }
-            case SELECTED_HOVER -> {
-                gc.setStrokeColor(CanvasColors.SELECTED_HOVER);
-                gc.setFillColor(CanvasColors.SELECTED_HOVER);
-            }
-        }
-    }
 }

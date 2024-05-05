@@ -51,7 +51,7 @@ public class Point extends AbstractShape {
      * @param gc custom canvas
      */
     public void draw(CustomCanvas gc) {
-        updateCanvasColors(gc);
+        gc.updateCanvasColors(this);
         gc.fillOvalWithOutScaling(this.getX(), this.getY(), width, height);
     }
     /**

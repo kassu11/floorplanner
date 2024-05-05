@@ -6,11 +6,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Affine;
+import model.shapes.Shape;
 import view.SettingsSingleton;
 /**
  * Drawing canvas class
  */
-public class CustomCanvas extends Canvas {
+public abstract class CustomCanvas extends Canvas {
     /**
      * Width
      * Height
@@ -416,4 +417,10 @@ public class CustomCanvas extends Canvas {
         gc.setLineWidth(3);
         gc.strokeLine(0, y, 20, y); // Draws a horizontal line at y
     }
+
+    /**
+     * Updates the canvas colors based on the shape
+     * @param shape
+     */
+    public abstract void updateCanvasColors(Shape shape);
 }

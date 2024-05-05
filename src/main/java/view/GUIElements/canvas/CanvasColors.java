@@ -16,39 +16,42 @@ public final class CanvasColors {
     public static Paint SELECTED = LIGHT_BLUE;
     public static Paint HOVER = LIGHT_BLUE;
     public static Paint SELECTED_HOVER = PURPLE;
-    public static Paint NORMAL = BLACK;
+    public static Paint FINAL_NORMAL = BLACK;
+    public static Paint PREVIEW_NORMAL = BLACK;
     private CanvasColors() {
     }
 
     public static void updateColorsByMode(ModeType mode) {
+        HOVER = DARK_LIGHT_BLUE;
+        SELECTED = LIGHT_BLUE;
+        SELECTED_HOVER = LIGHT_BLUE;
+        FINAL_NORMAL = BLACK;
+        PREVIEW_NORMAL = BLACK;
         switch (mode) {
             case SELECT -> {
-                SELECTED_HOVER = LIGHT_BLUE;
-                SELECTED = LIGHT_BLUE;
-                HOVER = DARK_LIGHT_BLUE;
-                NORMAL = BLACK;
+                PREVIEW_NORMAL = PURPLE;
             }
             case DRAW -> {
                 SELECTED = GREEN;
                 HOVER = DARK_GREEN;
                 SELECTED_HOVER = DARK_GREEN;
-                NORMAL = BLACK;
+                FINAL_NORMAL = BLACK;
             }
             case DELETE -> {
                 HOVER = RED;
-                NORMAL = DARK_RED;
+                FINAL_NORMAL = DARK_RED;
             }
             case ROTATE -> {
                 SELECTED = YELLOW;
                 HOVER = YELLOW;
                 SELECTED_HOVER = YELLOW;
-                NORMAL = BLACK;
+                FINAL_NORMAL = BLACK;
             }
             case AREA -> {
                 SELECTED = YELLOW;
                 HOVER = YELLOW;
                 SELECTED_HOVER = YELLOW;
-                NORMAL = BLACK;
+                FINAL_NORMAL = BLACK;
             }
         }
     }
