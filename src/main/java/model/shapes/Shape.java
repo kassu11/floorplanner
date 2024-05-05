@@ -1,6 +1,7 @@
 package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
+import view.types.ShapeDataType;
 import view.types.ShapeType;
 import view.GUIElements.canvas.CustomCanvas;
 
@@ -127,12 +128,12 @@ public interface Shape extends Serializable {
     /**
      * Assigns an ID to the shape
      */
-    public void assignId();
+    public void addToHistory();
     /**
      * Returns the ID of the shape
      * @return ID of the shape
      */
-    public int getId();
+    public boolean getAddedToHistory();
     /**
      * Returns the selected X coordinate
      * @return
@@ -163,4 +164,11 @@ public interface Shape extends Serializable {
      * @return selected state of the shape
      */
     public boolean isSelected();
+    ShapeDataType getShapeDataType();
+
+    /**
+     * Sets the shape data type
+     * @param shapeDataType
+     */
+    void setShapeDataType(ShapeDataType shapeDataType);
 }

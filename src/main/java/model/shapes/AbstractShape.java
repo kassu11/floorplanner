@@ -1,8 +1,10 @@
 package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
+import view.GUIElements.canvas.CanvasColors;
 import view.GUIElements.canvas.CustomCanvas;
 import view.events.ShapeMath;
+import view.types.ShapeDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +12,6 @@ import java.util.List;
  * Abstract class for handling shapes
  */
 public abstract class AbstractShape implements Shape {
-    /**
-     * Counter for the shape id
-     */
-    private static int idCounter = 1;
     /**
      * X coordinate of the shape
      * Y coordinate of the shape
@@ -37,14 +35,20 @@ public abstract class AbstractShape implements Shape {
      * Parent shape
      */
     private Shape parentShape;
+    private ShapeDataType shapeDataType = ShapeDataType.NORMAL;
     /**
      * Priority of the shape
      * Id of the shape
      */
-    private int priority, id;
+    private int priority;
     /**
      * Boolean value for selected
      */
+    /**
+     * Boolean value for added to history
+     * HistoryManager uses this value to know if shape has to be deleted on undo
+     */
+    private boolean addedToHistory = false;
     private boolean isSelected;
     /**
      * Constructor for the abstract shape with coordinates
@@ -102,7 +106,7 @@ public abstract class AbstractShape implements Shape {
         points.add(pointC);
         points.add(pointD);
         updateDimensions();
-        this.id = idCounter++;
+        addedToHistory = true;
     }
 
     /**
@@ -157,17 +161,17 @@ public abstract class AbstractShape implements Shape {
         return selectedY;
     }
     /**
-     * Assigns an id to the shape
+     * Flags that the shape has been added to historyManager
      */
-    public void assignId() {
-        if (this.id == 0) this.id = idCounter++;
+    public void addToHistory() {
+        addedToHistory = true;
     }
     /**
-     * Returns the id of the shape
-     * @return id
+     * Returns the added to history boolean value
+     * @return added to history boolean value
      */
-    public int getId() {
-        return this.id;
+    public boolean getAddedToHistory() {
+        return addedToHistory;
     }
     /**
      * Calculates the centroid of the shape
@@ -296,6 +300,15 @@ public abstract class AbstractShape implements Shape {
     public int getPriority() {
         return priority;
     }
+
+    /**
+     * Sets the priority of the shape
+     * This is used to determine the hovering priority order
+     * @param priority
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
     /**
      * Calculates the distance from the mouse
      * @param x X coordinate
@@ -350,5 +363,21 @@ public abstract class AbstractShape implements Shape {
      */
     public boolean isSelected() {
         return isSelected;
+    }
+
+    /**
+     * Returns the shape data type
+     * @return shape data type
+     */
+    public ShapeDataType getShapeDataType() {
+        return shapeDataType;
+    }
+
+    /**
+     * Sets the shape data type
+     * @param shapeDataType
+     */
+    public void setShapeDataType(ShapeDataType shapeDataType) {
+        this.shapeDataType = shapeDataType;
     }
 }

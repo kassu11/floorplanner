@@ -1,5 +1,6 @@
 package view.GUIElements.canvas;
 
+import controller.Controller;
 import javafx.scene.layout.GridPane;
 /**
  * Class for handling the canvas container
@@ -8,7 +9,7 @@ public class CanvasContainer extends GridPane {
     /**
      * List of canvases
      */
-    private final CustomCanvas[] layers = new CustomCanvas[2];
+    private final CustomCanvas[] layers = new CustomCanvas[3];
     /**
      * X coordinate
      * Y coordinate
@@ -26,13 +27,21 @@ public class CanvasContainer extends GridPane {
         y = 0;
         zoom = 1;
 
-        for (int i = 0; i < layers.length; i++) {
-            DrawingCanvas canvas = new DrawingCanvas(width, height);
-            layers[i] = canvas;
-            add(canvas, 0, 0);
-        }
+
+        layers[0] = new GridCanvas(width, height);
+        layers[1] = new FinalCanvas(width, height);
+        layers[2] = new PreviewCanvas(width, height);
+
+        for (CustomCanvas canvas : layers) add(canvas, 0, 0);
         setZoom(1);
     }
+
+    public void updateAllCanvasLayers(Controller controller) {
+        controller.drawAllShapes(layers[1], Controller.SingletonType.FINAL);
+        controller.drawAllShapes(layers[2], Controller.SingletonType.PREVIEW);
+        ((GridCanvas)layers[0]).drawGrid();
+    }
+
     /**
      * Returns the layer at the index
      * @param index index

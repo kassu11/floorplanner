@@ -19,7 +19,8 @@ public class Line extends AbstractShape {
     private List<Dimension> dimensions = new ArrayList<>();
     /**
      * Constructor for the line with a list of points
-     * @param points list of points
+     * @param pointA first point
+     * @param pointB end point
      */
     public Line(Point pointA, Point pointB) {
         super(pointA, pointB);
@@ -49,6 +50,7 @@ public class Line extends AbstractShape {
      */
     @Override
     public void draw(CustomCanvas gc) {
+        gc.updateCanvasColors(this);
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
         gc.beginPath();

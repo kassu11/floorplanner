@@ -184,8 +184,8 @@ public class SettingsSingleton {
                 .orElse(LocaleConfig.ENGLISH.getLocale());
     }
     /**
-     * Sets the locale with the locale
-     * @param locale locale
+     * Returns the settings
+     * @return settings
      */
     public Settings getSettings() {
         return new Settings(isDrawGrid, gridHeight, gridWidth, gridSize, locale.getLanguage(), measurementUnit);

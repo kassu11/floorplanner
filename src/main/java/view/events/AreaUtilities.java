@@ -5,6 +5,7 @@ import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
+import view.types.ShapeDataType;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
@@ -15,18 +16,14 @@ import java.util.List;
 public class AreaUtilities {
     private AreaUtilities() {
     }
-//    public static void addToArea(Controller controller, double x, double y, CustomCanvas gc) {
-//        SelectUtilities.selectHoveredShape(controller, x, y);
-//        controller.drawAllShapes(gc, Controller.SingletonType.PREVIEW);
-//        List<Point> points = new ArrayList<>();
-//
-//        for(Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-//            if(shape.getType() == ShapeType.POINT) points.add((Point) shape);
-//        }
-//
-//        double area = calculateArea(points);
-//        gc.fillText(String.valueOf(area), 0, x, y, 0);
-//    }
+
+    public static void addPointToArea(Controller controller) {
+        Point point = controller.getHoveredPoint();
+        if (point == null) return;
+        Point areaPoint = controller.createAbsolutePoint(point.getX(), point.getY(), Controller.SingletonType.FINAL);
+        areaPoint.setShapeDataType(ShapeDataType.AREA);
+        areaPoint.setPriority(2);
+    }
     /**
      * Draws the area of shapes in the preview ShapeContainer
      * @param controller controller

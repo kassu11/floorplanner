@@ -9,10 +9,12 @@ import model.shapeContainers.PreviewShapesSingleton;
 import model.shapeContainers.ShapeContainer;
 import model.shapes.*;
 import view.GUI;
+import view.GUIElements.canvas.CanvasColors;
 import view.GUIElements.canvas.CanvasMath;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 import view.types.ModeType;
+import view.types.ShapeDataType;
 import view.types.ShapeType;
 
 import java.util.ArrayList;
@@ -164,13 +166,6 @@ public class Controller {
      */
     public void drawAllShapes(CustomCanvas customCanvas, SingletonType type) {
         customCanvas.clear();
-        if(settingsSingleton.isGridEnabled() && type == SingletonType.FINAL) customCanvas.getGrid().drawGrid();
-        if(settingsSingleton.isUnitsVisible()){
-            customCanvas.drawRulerX();
-            customCanvas.drawRulerY();
-        }
-        customCanvas.setLineWidth(4);
-        customCanvas.setFill(Color.BLACK);
         for (Shape shape : getShapeContainer(type).getShapes()) {
             shape.draw(customCanvas);
 
@@ -372,30 +367,31 @@ public class Controller {
     }
     /** The setCurrentMode method that sets the current mode type*/
     public void setCurrentMode(ModeType currentMode) {
-        String noColor = "#000000";
-        switch (currentMode) {
-            case ModeType.DRAW -> {
-                this.selectedColor = "#00d415";
-                this.hoverColor = "#00d415";
-            }
-            case ModeType.SELECT, ModeType.ROTATE -> {
-                this.selectedColor = "#036ffc";
-                this.hoverColor = "#78b0fa";
-            }
-            case ModeType.DELETE -> {
-                this.selectedColor = noColor;
-                this.hoverColor = "#ff0000";
-            }
-            case ModeType.AREA -> {
-                this.selectedColor = "#4269f54a";
-                this.hoverColor = "#78b0fa";
-            }
-            default -> {
-                this.selectedColor = noColor;
-                this.hoverColor = noColor;
-            }
-        }
+//        String noColor = "#000000";
+//        switch (currentMode) {
+//            case DRAW -> {
+//                this.selectedColor = "#00d415";
+//                this.hoverColor = "#00d415";
+//            }
+//            case SELECT, ROTATE -> {
+//                this.selectedColor = "#036ffc";
+//                this.hoverColor = "#78b0fa";
+//            }
+//            case DELETE -> {
+//                this.selectedColor = noColor;
+//                this.hoverColor = "#ff0000";
+//            }
+//            case AREA -> {
+//                this.selectedColor = "#4269f54a";
+//                this.hoverColor = "#78b0fa";
+//            }
+//            default -> {
+//                this.selectedColor = noColor;
+//                this.hoverColor = noColor;
+//            }
+//        }
         this.currentMode = currentMode;
+        CanvasColors.updateColorsByMode(currentMode);
     }
 
     /** The updateToolbarLocalization method that updates the localization of all the toolbar texts
@@ -426,7 +422,17 @@ public class Controller {
     }
     /** The setSelectedShape method that sets the selected shape to the given shape*/
     public void setSelectedShape(Shape selectedShape) {
+        if(this.selectedShape != null) {
+            if(this.selectedShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) {
+                this.selectedShape.setShapeDataType(ShapeDataType.HOVER);
+            } else this.selectedShape.setShapeDataType(ShapeDataType.NORMAL);
+        }
         this.selectedShape = selectedShape;
+        if(selectedShape != null) {
+            if (selectedShape.getShapeDataType() == ShapeDataType.HOVER) {
+                selectedShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
+            } else selectedShape.setShapeDataType(ShapeDataType.SELECTED);
+        }
     }
     /** The getHoveredShape method that returns the hovered shape*/
     public Shape getHoveredShape() {
@@ -434,6 +440,14 @@ public class Controller {
     }
     /** The setHoveredShape method that sets the hovered shape to the given shape*/
     public void setHoveredShape(Shape hoveredShape) {
+        if (this.hoveredShape != null) {
+            if(this.hoveredShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.SELECTED);
+            else if(this.hoveredShape.getShapeDataType() == ShapeDataType.HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.NORMAL);
+        }
+        if(hoveredShape != null) {
+            if (hoveredShape.getShapeDataType() == ShapeDataType.SELECTED) hoveredShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
+            else hoveredShape.setShapeDataType(ShapeDataType.HOVER);
+        }
         this.hoveredShape = hoveredShape;
     }
     /** The getMouseX method that returns the mouse x coordinate*/

@@ -27,6 +27,7 @@ public class HistoryManager {
     private Controller controller;
     /**
      * Boolean for undo and redo
+     * Prevents the recursive undo and redo calls from undoAndRedo method
      */
     private boolean undoRedo = false;
     /**
@@ -86,13 +87,13 @@ public class HistoryManager {
         undoRedo = false;
     }
     /**
-     * Assigns a shape to the history manager
-     * @param shape shape to assign
-     * @return boolean value for assigning the shape
+     * Tests if shape has been added to history
+     * If not adds it to history
+     * @param shape shape to test
      */
-    private boolean assignShape(Shape shape) {
-        if (shape.getId() != 0)  return false;
-        shape.assignId();
+    private boolean isNewToHistory(Shape shape) {
+        if (shape.getAddedToHistory()) return false;
+        shape.addToHistory();
         return true;
     }
     /**
@@ -100,7 +101,7 @@ public class HistoryManager {
      * @param point point to add
      */
     public void addFirstPoint(Point point) {
-        boolean isNewPoint = this.assignShape(point);
+        boolean isNewPoint = this.isNewToHistory(point);
         ShapeType mode = controller.getCurrentShapeType();
 
         HistoryHandler redo = () -> {
@@ -134,7 +135,7 @@ public class HistoryManager {
         Point[] points = shape.getPoints().toArray(new Point[0]);
         Point lastPoint = controller.getLastPoint();
         Point newPoint = null;
-        for (Point point : points) if(this.assignShape(point)) newPoint = point;
+        for (Point point : points) if(this.isNewToHistory(point)) newPoint = point;
         Point finalNewPoint = newPoint;
 
         HistoryHandler redo = () -> {
@@ -171,9 +172,9 @@ public class HistoryManager {
         Boolean[] isNewPoint = new Boolean[points.length];
         Point lastPoint = controller.getLastPoint();
 
-        for (int i = 0; i < points.length; i++) isNewPoint[i] = this.assignShape(points[i]);
+        for (int i = 0; i < points.length; i++) isNewPoint[i] = this.isNewToHistory(points[i]);
         for (int i = 0; i < shapes.length; i++) {
-            this.assignShape(shapes[i]);
+            this.isNewToHistory(shapes[i]);
             childShapePoints[i * 2] = shapes[i].getPoints().get(0);
             childShapePoints[i * 2 + 1] = shapes[i].getPoints().get(1);
         }
@@ -217,8 +218,8 @@ public class HistoryManager {
         addEvent(redo, undo);
     }
     /**
-     * Adds a point to the history manager
-     * @param point point to add
+     * Undo the first shape selection
+     * @param shapes shapes that are selected
      */
     public void startSelection(List<Shape> shapes) {
         ModeType currentMode = controller.getCurrentMode();
