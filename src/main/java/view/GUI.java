@@ -14,6 +14,7 @@ import view.GUIElements.Ruler;
 import view.GUIElements.canvas.CanvasContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.GUIElements.canvas.GridCanvas;
+import view.GUIElements.canvas.RulerHandsCanvas;
 import view.GUIElements.toolbars.DrawingToolbar;
 import view.GUIElements.toolbars.OptionsToolbar;
 import view.events.AreaUtilities;
@@ -83,12 +84,10 @@ public class GUI extends Application {
     public void start(Stage stage) {
         BorderPane root = new BorderPane();
 
-        GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(0);
-        CustomCanvas gc = canvasContainer.getLayer(1);
-        CustomCanvas previewGc = canvasContainer.getLayer(2);
-
-        gc.setLineWidth(5);
-        previewGc.setLineWidth(5);
+        RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(0);
+        GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(1);
+        CustomCanvas gc = canvasContainer.getLayer(2);
+        CustomCanvas previewGc = canvasContainer.getLayer(3);
 
         Ruler xRuler = new Ruler(false);
         xRuler.setPadding(new Insets(0, 0, 0, 50));
@@ -188,8 +187,7 @@ public class GUI extends Application {
             controller.setHoveredShape(null);
             controller.setHoveredPoint(null);
             previewGc.clear();
-            previewGc.drawRulerXpointer(event.getX());
-            previewGc.drawRulerYpointer(event.getY());
+            rulerHandGc.drawRulerHands(event.getX(), event.getY());
 
             double distanceCutOff = controller.getCanvasMath().relativeDistance(15);
             double lowestDistance = distanceCutOff;
@@ -244,6 +242,7 @@ public class GUI extends Application {
         });
 
         canvasContainer.setOnMouseDragged(event -> {
+            rulerHandGc.drawRulerHands(event.getX(), event.getY());
             if (event.getButton() == MouseButton.MIDDLE) {
                 canvasContainer.setX(middleX - event.getX());
                 canvasContainer.setY(middleY - event.getY());

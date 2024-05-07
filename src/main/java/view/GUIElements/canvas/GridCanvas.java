@@ -2,9 +2,6 @@ package view.GUIElements.canvas;
 
 import model.shapes.Shape;
 import view.SettingsSingleton;
-
-import static javafx.scene.paint.Color.LIGHTGRAY;
-
 public class GridCanvas extends CustomCanvas {
     private final SettingsSingleton settings = SettingsSingleton.getInstance();
     public GridCanvas(double width, double height) {
@@ -46,9 +43,21 @@ public class GridCanvas extends CustomCanvas {
     void drawRulerX() {
         double gridSize = settings.getGridSize();
         double gridHeight = settings.getGridHeight();
-        for (int i = 0; i <= gridHeight / gridSize; i++) {
-            double value = i * gridSize;
-            gc.strokeText(String.valueOf((int) value), 0, i * gridSize * zoom);
+        double gridWidth = settings.getGridWidth();
+        double minValue = 1;
+        double minGapBetweenText = 75;
+        gc.setFill(CanvasColors.GRAY);
+        gc.fillRect(0, 0, getWidth(), 20);
+        gc.setFill(CanvasColors.BLACK);
+        gc.fillRect(-this.x + 0 * zoom, 0, gridWidth * zoom, 20);
+        gc.setStroke(CanvasColors.GREEN);
+
+        double startValue = Math.max(Math.floor(this.x / minGapBetweenText) * minGapBetweenText / zoom, 0);
+        double offset = this.x < 0 ? -this.x : -this.x % minGapBetweenText;
+        for (int i = 0; i <= 50; i++) {
+            double textPosition = i * minGapBetweenText;
+            double value = textPosition / zoom + startValue;
+            gc.strokeText(String.valueOf((int) value), offset + textPosition, 20);
         }
     }
     /**
@@ -59,7 +68,7 @@ public class GridCanvas extends CustomCanvas {
         double gridWidth = settings.getGridWidth();
         for (int i = 0; i <= gridWidth / gridSize; i++) {
             double value = i * gridSize;
-            gc.strokeText(String.valueOf((int) value), i * gridSize * zoom, 10);
+//            gc.strokeText(String.valueOf((int) value), i * gridSize * zoom, 10);
         }
     }
 

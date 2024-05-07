@@ -366,22 +366,6 @@ public abstract class CustomCanvas extends Canvas {
     public void strokeText(String text, double x, double y, double offsetX, double offsetY) {
         gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
     }
-    /**
-     * Draws a vertical line at x
-     * @param x
-     */
-    public void drawRulerXpointer(double x) {
-        gc.setLineWidth(3);
-        gc.strokeLine(x, 0, x, 20); // Draws a vertical line at x
-    }
-    /**
-     * Draws a horizontal line at y
-     * @param y
-     */
-    public void drawRulerYpointer(double y) {
-        gc.setLineWidth(3);
-        gc.strokeLine(0, y, 20, y); // Draws a horizontal line at y
-    }
 
     /**
      * Updates the canvas colors based on the shape
