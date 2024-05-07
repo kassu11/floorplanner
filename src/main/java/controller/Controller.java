@@ -2,7 +2,6 @@ package controller;
 // Can you update the documentation of this file to use @param and @return?
 import dao.SettingsDao;
 import entity.Settings;
-import javafx.scene.paint.Color;
 import model.history.HistoryManager;
 import model.shapeContainers.FinalShapesSingleton;
 import model.shapeContainers.PreviewShapesSingleton;
@@ -55,6 +54,8 @@ public class Controller {
     /** The hover color and selected color variables */
     private String hoverColor, selectedColor;
     /** The SingletonType enum */
+    /** The points of the area shape */
+    private List<Point> areaShapes = new ArrayList<>();
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -422,17 +423,10 @@ public class Controller {
     }
     /** The setSelectedShape method that sets the selected shape to the given shape*/
     public void setSelectedShape(Shape selectedShape) {
-        if(this.selectedShape != null) {
-            if(this.selectedShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) {
-                this.selectedShape.setShapeDataType(ShapeDataType.HOVER);
-            } else this.selectedShape.setShapeDataType(ShapeDataType.NORMAL);
-        }
+        if(this.selectedShape != null) this.selectedShape.removeShapeDataType(ShapeDataType.SELECTED);
+        if(selectedShape != null) selectedShape.addShapeDataType(ShapeDataType.SELECTED);
+
         this.selectedShape = selectedShape;
-        if(selectedShape != null) {
-            if (selectedShape.getShapeDataType() == ShapeDataType.HOVER) {
-                selectedShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
-            } else selectedShape.setShapeDataType(ShapeDataType.SELECTED);
-        }
     }
     /** The getHoveredShape method that returns the hovered shape*/
     public Shape getHoveredShape() {
@@ -440,14 +434,8 @@ public class Controller {
     }
     /** The setHoveredShape method that sets the hovered shape to the given shape*/
     public void setHoveredShape(Shape hoveredShape) {
-        if (this.hoveredShape != null) {
-            if(this.hoveredShape.getShapeDataType() == ShapeDataType.SELECTED_HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.SELECTED);
-            else if(this.hoveredShape.getShapeDataType() == ShapeDataType.HOVER) this.hoveredShape.setShapeDataType(ShapeDataType.NORMAL);
-        }
-        if(hoveredShape != null) {
-            if (hoveredShape.getShapeDataType() == ShapeDataType.SELECTED) hoveredShape.setShapeDataType(ShapeDataType.SELECTED_HOVER);
-            else hoveredShape.setShapeDataType(ShapeDataType.HOVER);
-        }
+        if (this.hoveredShape != null) this.hoveredShape.removeShapeDataType(ShapeDataType.HOVER);
+        if(hoveredShape != null) hoveredShape.addShapeDataType(ShapeDataType.HOVER);
         this.hoveredShape = hoveredShape;
     }
     /** The getMouseX method that returns the mouse x coordinate*/
@@ -495,5 +483,13 @@ public class Controller {
             ((Line) shape).addDimension(dimension);
         }
         return dimension;
+    }
+
+    /**
+     * The getAreaShapes method that returns the list of area shapes
+     * @return areaShapes
+     */
+    public List<Point> getAreaShapes() {
+        return areaShapes;
     }
 }

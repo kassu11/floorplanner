@@ -21,7 +21,12 @@ import view.events.DrawUtilities;
 import view.events.KeyboardEvents;
 import view.events.SelectUtilities;
 import view.types.ModeType;
+import view.types.ShapeDataType;
 import view.types.ShapeType;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * GUI class for the main application
  */
@@ -164,9 +169,13 @@ public class GUI extends Application {
 //                        previewGc.clear();
 //                        AreaUtilities.drawArea(controller, previewGc);
 //                    }
-                    if(hoveredShape != null && hoveredShape.getType() == ShapeType.POINT) {
-                        AreaUtilities.addPointToArea(controller);
-                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                    if (hoveredShape == null) return;
+                    if(hoveredShape.getType() == ShapeType.POINT && hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
+                        Point point = AreaUtilities.createAreaPoint(controller);
+                        controller.getAreaShapes().add(point);
+                        point.draw(gc);
+                        previewGc.clear();
+                        AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
                     }
                 }
             }
@@ -208,8 +217,7 @@ public class GUI extends Application {
 
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
             } else if(controller.getCurrentMode() == ModeType.AREA) {
-                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
-                AreaUtilities.drawArea(controller, previewGc);
+                AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
             } else if (controller.getCurrentMode() == ModeType.ROTATE && selectedShape != null) {
                 if (!event.isShiftDown()) SelectUtilities.rotateSelectedShape(controller, mouseX, mouseY);
                 else SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
@@ -243,6 +251,10 @@ public class GUI extends Application {
                 gridGc.drawGrid();
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+
+                if (controller.getCurrentMode() == ModeType.AREA) {
+                    AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
+                }
             }
             else if(event.getButton() == MouseButton.PRIMARY && controller.getCurrentMode() == ModeType.SELECT) {
                 double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
@@ -267,8 +279,12 @@ public class GUI extends Application {
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
             xRuler.updateRuler(zoomLevel);
             yRuler.updateRuler(zoomLevel);
+
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            if (controller.getCurrentMode() == ModeType.AREA) {
+                AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
+            }
             gridGc.drawGrid();
         });
 

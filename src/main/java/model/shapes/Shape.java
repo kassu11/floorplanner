@@ -1,7 +1,6 @@
 package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
-import view.types.ShapeDataType;
 import view.types.ShapeType;
 import view.GUIElements.canvas.CustomCanvas;
 
@@ -163,12 +162,12 @@ public interface Shape extends Serializable {
      * Returns the selected state of the shape
      * @return selected state of the shape
      */
-    public boolean isSelected();
-    ShapeDataType getShapeDataType();
+    boolean isSelected();
+    int getShapeDataType();
+    void setShapeDataType(int shapeDataType);
 
-    /**
-     * Sets the shape data type
-     * @param shapeDataType
-     */
-    void setShapeDataType(ShapeDataType shapeDataType);
+    void addShapeDataType(int shapeDataType);
+
+    void removeShapeDataType(int shapeDataType);
+    boolean containsShapeDataType(int shapeDataType);
 }

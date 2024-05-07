@@ -1,15 +1,9 @@
 package view.types;
 
-public enum ShapeDataType {
-    /**
-     * Default shape data type
-     */
-    NORMAL,
-    HOVER,
-    SELECTED,
-    SELECTED_HOVER,
-    /**
-     * Shapes displaying the area
-     */
-    AREA
+public final class ShapeDataType {
+    public static final int NORMAL = 1<<0;
+    public static final int HOVER = 1<<1;
+    public static final int SELECTED = 1<<2;
+    public static final int DISABLED = 1<<3;
+    public static final int AREA = 1<<4;
 }

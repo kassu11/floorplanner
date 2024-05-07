@@ -1,7 +1,6 @@
 package model.shapes;
 
 import model.shapeContainers.ShapeContainer;
-import view.GUIElements.canvas.CanvasColors;
 import view.GUIElements.canvas.CustomCanvas;
 import view.events.ShapeMath;
 import view.types.ShapeDataType;
@@ -35,7 +34,11 @@ public abstract class AbstractShape implements Shape {
      * Parent shape
      */
     private Shape parentShape;
-    private ShapeDataType shapeDataType = ShapeDataType.NORMAL;
+    /**
+     * The data type of the shape
+     * The value is saved as a bit flag
+     */
+    private int shapeDataType = ShapeDataType.NORMAL;
     /**
      * Priority of the shape
      * Id of the shape
@@ -369,7 +372,7 @@ public abstract class AbstractShape implements Shape {
      * Returns the shape data type
      * @return shape data type
      */
-    public ShapeDataType getShapeDataType() {
+    public int getShapeDataType() {
         return shapeDataType;
     }
 
@@ -377,7 +380,30 @@ public abstract class AbstractShape implements Shape {
      * Sets the shape data type
      * @param shapeDataType
      */
-    public void setShapeDataType(ShapeDataType shapeDataType) {
+    public void setShapeDataType(int shapeDataType) {
         this.shapeDataType = shapeDataType;
+    }
+
+    /**
+     * Adds a shape data type to the bit flag
+     * @param shapeDataType
+     */
+    public void addShapeDataType(int shapeDataType) {
+        this.shapeDataType |= shapeDataType;
+    }
+
+    /**
+     * Removes a shape data type from the bit flag
+     * @param shapeDataType
+     */
+    public void removeShapeDataType(int shapeDataType) {
+        this.shapeDataType &= ~shapeDataType;
+    }
+
+    /**
+     * Checks if the shape data type contains a specific shape data type
+     */
+    public boolean containsShapeDataType(int shapeDataType) {
+        return (this.shapeDataType & shapeDataType) == shapeDataType;
     }
 }
