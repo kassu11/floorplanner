@@ -316,6 +316,10 @@ public class GUI extends Application {
                 gridGc.drawGrid();
             }
         );
+        drawToolbar.getButtons().get("door").setOnAction(event -> {
+            controller.setCurrentShape(ShapeType.DOOR);
+            drawToolbar.changeMode(ModeType.DRAW);
+        });
 
         drawToolbar.getButtons().get("rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
 

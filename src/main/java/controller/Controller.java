@@ -128,6 +128,7 @@ public class Controller {
                 yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
+            case DOOR -> new Door(pointA, pointB);
             default -> null;
         };
         if (singletonType != null) {
