@@ -6,7 +6,7 @@ import view.SettingsSingleton;
 public class GridCanvas extends CustomCanvas {
     private final SettingsSingleton settings = SettingsSingleton.getInstance();
     private final double minGapBetweenText = 75;
-    private final double maxGapBetweenText = 150;
+    private final double maxGapBetweenText = 250;
     private Font rulerFont = new Font("Arial", 10);
     public GridCanvas(double width, double height) {
         super(width, height);
@@ -38,6 +38,7 @@ public class GridCanvas extends CustomCanvas {
             gc.setStroke(CanvasColors.RULER_TEXT);
             drawRulerX();
             drawRulerY();
+            gc.fillRect(0, 0, 20, 20);
         }
 
     }
@@ -54,27 +55,22 @@ public class GridCanvas extends CustomCanvas {
         gc.setStroke(CanvasColors.WHITE);
 
         double getRulerGapDivider = getRulerGapDivider();
-        double gapBetweenText = Math.round(getRulerGapDivider * zoom);
-//        System.out.println(gapBetweenText);
+        double gapBetweenText = getRulerGapDivider * zoom;
 
         double positiveStartValue = Math.max(Math.floor(this.x / gapBetweenText) * gapBetweenText / zoom, 0);
-        double negativeStartValue = Math.min(Math.floor((this.x + getWidth()) / gapBetweenText) * gapBetweenText / zoom, 0);
-        double offset = this.x < 0 ? -this.x : -this.x % gapBetweenText;
-        double negOffset = offset > getWidth() ? getWidth() + offset % getWidth() : offset;
-//        System.out.println(positiveStartValue);
+        double positiveOffset = this.x < 0 ? -this.x : -this.x % gapBetweenText;
         for (int i = 0; i < 50; i++) {
             double textPosition = i * gapBetweenText;
             double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), offset + textPosition, 10);
+            gc.strokeText(String.valueOf((int) value), positiveOffset + textPosition, 10);
         }
+
+        double negativeStartValue = -this.x > getWidth() ? getWidth() - (this.x + getWidth()) % gapBetweenText : -this.x;
+        double negativeOffset = Math.max(Math.floor((-this.x - getWidth()) / gapBetweenText) * gapBetweenText / zoom, 0);
         for (int i = 0; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
-            double value = Math.round((textPosition / zoom + negativeStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            if (i == 0) {
-                System.out.println(value + "    " + (negOffset));
-            }
-//            System.out.println(offset + textPosition);
-            gc.strokeText(String.valueOf((int) value), negOffset + textPosition, 10);
+            double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
+            gc.strokeText(String.valueOf((int) value), negativeStartValue + textPosition, 10);
         }
     }
 
@@ -82,7 +78,7 @@ public class GridCanvas extends CustomCanvas {
         double minValue = Math.ceil(this.minGapBetweenText / zoom);
         double maxValue = this.maxGapBetweenText / zoom;
         double gridSize = settings.getGridSize();
-        Double[] gapDividers = new Double[]{gridSize, 500.0, 100.0, 50.0, 25.0, 15.0, 10.0, 5.0, 2.0};
+        Double[] gapDividers = new Double[]{gridSize, 500.0, 100.0, 25.0, 10.0, 5.0};
         if (minValue < 1 && maxValue < 1) return 1;
 
         for(Double divider : gapDividers) {
@@ -98,11 +94,30 @@ public class GridCanvas extends CustomCanvas {
      * Draws the horizontal ruler numbers
      */
     void drawRulerY() {
-        double gridSize = settings.getGridSize();
-        double gridWidth = settings.getGridWidth();
-        for (int i = 0; i <= gridWidth / gridSize; i++) {
-            double value = i * gridSize;
-//            gc.strokeText(String.valueOf((int) value), i * gridSize * zoom, 10);
+        double gridHeight = settings.getGridHeight();
+        gc.setFill(CanvasColors.LIGHT_GRAY);
+        gc.fillRect(0, 0, 20, getHeight());
+        gc.setFill(CanvasColors.DARK_GRAY);
+        gc.fillRect(0, -this.y + 0 * zoom, 20, gridHeight * zoom);
+        gc.setStroke(CanvasColors.WHITE);
+
+        double getRulerGapDivider = getRulerGapDivider();
+        double gapBetweenText = getRulerGapDivider * zoom;
+
+        double positiveStartValue = Math.max(Math.floor(this.y / gapBetweenText) * gapBetweenText / zoom, 0);
+        double positiveOffset = this.y < 0 ? -this.y : -this.y % gapBetweenText;
+        for (int i = 0; i < 50; i++) {
+            double textPosition = i * gapBetweenText;
+            double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
+            gc.strokeText(String.valueOf((int) value), 10, positiveOffset + textPosition);
+        }
+
+        double negativeStartValue = -this.y > getHeight() ? getHeight() - (this.y + getHeight()) % gapBetweenText : -this.y;
+        double negativeOffset = Math.max(Math.floor((-this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
+        for (int i = 0; i < 50; i++) {
+            double textPosition = i * -gapBetweenText;
+            double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
+            gc.strokeText(String.valueOf((int) value), 10, negativeStartValue + textPosition);
         }
     }
 
