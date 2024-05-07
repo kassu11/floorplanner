@@ -38,9 +38,9 @@ public class CanvasContainer extends GridPane {
     }
 
     public void updateAllCanvasLayers(Controller controller) {
-        controller.drawAllShapes(layers[1], Controller.SingletonType.FINAL);
-        controller.drawAllShapes(layers[2], Controller.SingletonType.PREVIEW);
-        ((GridCanvas)layers[0]).drawGrid();
+        controller.drawAllShapes(layers[2], Controller.SingletonType.FINAL);
+        controller.drawAllShapes(layers[3], Controller.SingletonType.PREVIEW);
+        ((GridCanvas)layers[1]).drawGrid();
     }
 
     /**
