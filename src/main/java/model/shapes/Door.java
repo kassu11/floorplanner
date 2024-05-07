@@ -14,11 +14,13 @@ public class Door extends AbstractShape{
         gc.updateCanvasColors(this);
         Point pointA = this.getPoints().get(0);
         Point pointB = this.getPoints().get(1);
+        double distanceBetweenPoints = Math.abs(pointA.getX() - pointB.getX());
+
         gc.beginPath();
         gc.moveTo(pointA.getX(), pointA.getY());
         gc.lineTo(pointB.getX(), pointB.getY());
         gc.stroke();
-        gc.strokeArc(pointA.getX(), pointA.getY(), pointA.getX() - pointB.getX(), 50, 180, 90, ArcType.OPEN);
+        gc.strokeArc(pointA.getX(), pointA.getY() + distanceBetweenPoints, distanceBetweenPoints*2, distanceBetweenPoints , 0, 90, ArcType.OPEN);
     }
 
     @Override
