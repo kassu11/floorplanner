@@ -17,25 +17,26 @@ public class AreaUtilities {
     private AreaUtilities() {
     }
 
-    public static void addPointToArea(Controller controller) {
+    public static Point createAreaPoint(Controller controller) {
         Point point = controller.getHoveredPoint();
-        if (point == null) return;
-        Point areaPoint = controller.createAbsolutePoint(point.getX(), point.getY(), Controller.SingletonType.FINAL);
+        Point areaPoint =
+            point == null ?
+                controller.createAbsolutePoint(controller.getMouseX(), controller.getMouseY(), Controller.SingletonType.FINAL)
+                : controller.createAbsolutePoint(point.getX(), point.getY(), Controller.SingletonType.FINAL);
+
         areaPoint.setShapeDataType(ShapeDataType.AREA);
         areaPoint.setPriority(2);
+        return areaPoint;
     }
     /**
      * Draws the area of shapes in the preview ShapeContainer
      * @param controller controller
      * @param gc custom canvas
      */
-    public static void drawArea(Controller controller, CustomCanvas gc) {
-        List<Point> points = new ArrayList<>();
+    public static void drawArea(Controller controller, List<Point> points, CustomCanvas gc) {
         double x = 0, y = 0;
         gc.beginPath();
-        for(Shape point : controller.getShapes(Controller.SingletonType.PREVIEW)) {
-            if(point.getType() != ShapeType.POINT) continue;
-            points.add((Point) point);
+        for(Shape point : points) {
             x += point.getX();
             y += point.getY();
             if (points.size() == 1) gc.moveTo(point.getX(), point.getY());

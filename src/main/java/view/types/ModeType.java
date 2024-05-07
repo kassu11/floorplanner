@@ -11,5 +11,5 @@ public enum ModeType {
      * Sizing mode
      * Area mode
      */
-    DRAW, SELECT, DELETE, ROTATE, SIZING, AREA
+    DRAW, SELECT, DELETE, ROTATE, SIZING, AREA;
 }

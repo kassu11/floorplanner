@@ -65,6 +65,11 @@ public class DrawingToolbar extends CustomToolbar {
             modeMenu.setOnAction(event -> controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType()));
             modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
         }
+        if (mode != ModeType.AREA) {
+            controller.getAreaShapes().forEach(shape -> controller.removeShape(shape, Controller.SingletonType.FINAL));
+            controller.getAreaShapes().clear();
+        }
+
     }
     /**
      * Updates the localization of all the text in the toolbar
