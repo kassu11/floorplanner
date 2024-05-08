@@ -19,7 +19,7 @@ public final class CanvasColors {
     public static final Paint WHITE = Paint.valueOf("#ffffff");
     public static final Paint GRID_LINE = GRAY;
     public static final Paint RULER_TEXT = BLACK;
-    public static final Paint RULER = BLACK;
+    public static final Paint RULER = RED;
     public static Paint SELECTED = LIGHT_BLUE;
     public static Paint HOVER = LIGHT_BLUE;
     public static Paint SELECTED_HOVER = PURPLE;

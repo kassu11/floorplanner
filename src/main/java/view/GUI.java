@@ -84,8 +84,8 @@ public class GUI extends Application {
     public void start(Stage stage) {
         BorderPane root = new BorderPane();
 
-        RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(0);
-        GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(1);
+        GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(0);
+        RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(1);
         CustomCanvas gc = canvasContainer.getLayer(2);
         CustomCanvas previewGc = canvasContainer.getLayer(3);
 

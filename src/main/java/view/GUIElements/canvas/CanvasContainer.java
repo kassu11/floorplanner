@@ -28,8 +28,8 @@ public class CanvasContainer extends GridPane {
         zoom = 1;
 
 
-        layers[0] = new RulerHandsCanvas(width, height);
-        layers[1] = new GridCanvas(width, height);
+        layers[0] = new GridCanvas(width, height);
+        layers[1] = new RulerHandsCanvas(width, height);
         layers[2] = new FinalCanvas(width, height);
         layers[3] = new PreviewCanvas(width, height);
 
@@ -40,7 +40,7 @@ public class CanvasContainer extends GridPane {
     public void updateAllCanvasLayers(Controller controller) {
         controller.drawAllShapes(layers[2], Controller.SingletonType.FINAL);
         controller.drawAllShapes(layers[3], Controller.SingletonType.PREVIEW);
-        ((GridCanvas)layers[1]).drawGrid();
+        ((GridCanvas)layers[0]).drawGrid();
     }
 
     /**

@@ -12,11 +12,18 @@ public class GridCanvas extends CustomCanvas {
     private Font rulerFont = new Font("Arial", 10);
     private final Affine original = gc.getTransform();
     private final Affine rotate = new Affine();
+    private final double rulerHeight = 15;
+    private final double textPaddingBottom = 4;
+    private final double textPaddingLeft = 3;
+    private final double l1LineHeight = 10;
+    private final double l2LineHeight = 3;
+    private final double l3LineHeight = 6;
     public GridCanvas(double width, double height) {
         super(width, height);
         setLineWidth(.5);
         gc.setFont(rulerFont);
         rotate.appendRotation(-90, 0, 0);
+        gc.setImageSmoothing(false);
     }
 
     public void drawGrid() {
@@ -43,7 +50,7 @@ public class GridCanvas extends CustomCanvas {
             gc.setStroke(CanvasColors.RULER_TEXT);
             drawRulerX();
             drawRulerY();
-            gc.fillRect(0, 0, 20, 20);
+            gc.fillRect(0, 0, rulerHeight, rulerHeight);
         }
 
     }
@@ -54,10 +61,11 @@ public class GridCanvas extends CustomCanvas {
     void drawRulerX() {
         double gridWidth = settings.getGridWidth();
         gc.setFill(CanvasColors.LIGHT_GRAY);
-        gc.fillRect(0, 0, getWidth(), 20);
+        gc.fillRect(0, 0, getWidth(), rulerHeight);
         gc.setFill(CanvasColors.DARK_GRAY);
-        gc.fillRect(-this.x + 0 * zoom, 0, gridWidth * zoom, 20);
+        gc.fillRect(-this.x + 0 * zoom, 0, gridWidth * zoom, rulerHeight);
         gc.setStroke(CanvasColors.WHITE);
+        gc.setFill(CanvasColors.WHITE);
         gc.setTextAlign(TextAlignment.LEFT);
 
         double getRulerGapDivider = getRulerGapDivider();
@@ -68,7 +76,14 @@ public class GridCanvas extends CustomCanvas {
         for (int i = 0; i < 50; i++) {
             double textPosition = i * gapBetweenText;
             double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), positiveOffset + textPosition, 10);
+            double oneTenth = gapBetweenText / 10;
+            for(int j = 1; j < 10; j++) {
+                double height = j == 5 ? l3LineHeight : l2LineHeight;
+                gc.fillRect(positiveOffset + textPosition - j * oneTenth, rulerHeight - height, 1, height);
+            }
+//            gc.fillRect(positiveOffset + textPosition - 5 * oneTenth, rulerHeight - l3LineHeight, 1, l3LineHeight);
+            gc.fillRect(positiveOffset + textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
+            gc.strokeText(String.valueOf((int) value), positiveOffset + textPosition + textPaddingLeft, rulerHeight - textPaddingBottom);
         }
 
         double negativeStartValue = -this.x > getWidth() ? getWidth() - (this.x + getWidth()) % gapBetweenText : -this.x;
@@ -76,7 +91,13 @@ public class GridCanvas extends CustomCanvas {
         for (int i = 1; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
             double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), negativeStartValue + textPosition, 10);
+            double oneTenth = gapBetweenText / 10;
+            for(int j = 1; j < 10; j++) {
+                double height = j == 5 ? l3LineHeight : l2LineHeight;
+                gc.fillRect(negativeStartValue + textPosition - j * oneTenth, height, 1, height);
+            }
+            gc.fillRect(negativeStartValue + textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
+            gc.strokeText(String.valueOf((int) value), negativeStartValue + textPosition + textPaddingLeft, rulerHeight - textPaddingBottom);
         }
     }
 
@@ -103,10 +124,11 @@ public class GridCanvas extends CustomCanvas {
         double gridHeight = settings.getGridHeight();
 
         gc.setFill(CanvasColors.LIGHT_GRAY);
-        gc.fillRect(0, 0, 20, getHeight());
+        gc.fillRect(0, 0, rulerHeight, getHeight());
         gc.setFill(CanvasColors.DARK_GRAY);
-        gc.fillRect(0, -this.y + 0 * zoom, 20, gridHeight * zoom);
+        gc.fillRect(0, -this.y + 0 * zoom, rulerHeight, gridHeight * zoom);
         gc.setStroke(CanvasColors.WHITE);
+        gc.setFill(CanvasColors.WHITE);
         gc.setTextAlign(TextAlignment.RIGHT);
         gc.setTransform(rotate);
 
@@ -118,7 +140,13 @@ public class GridCanvas extends CustomCanvas {
         for (int i = 0; i < 50; i++) {
             double textPosition = i * gapBetweenText;
             double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), positiveOffset - textPosition, 10);
+            double oneTenth = gapBetweenText / 10;
+            for(int j = 1; j < 10; j++) {
+                double height = j == 5 ? l3LineHeight : l2LineHeight;
+                gc.fillRect(positiveOffset - textPosition - j * oneTenth, rulerHeight - height, 1, height);
+            }
+            gc.fillRect(positiveOffset - textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
+            gc.strokeText(String.valueOf((int) value), positiveOffset - textPosition - textPaddingLeft, rulerHeight - textPaddingBottom);
         }
 
         double negativeStartValue = Math.max(Math.floor((-this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
@@ -126,7 +154,13 @@ public class GridCanvas extends CustomCanvas {
         for (int i = 1; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
             double value = Math.round((textPosition / zoom - negativeStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.format("- %d", (int) Math.abs(value)), -negativeOffset - textPosition, 10);
+            double oneTenth = gapBetweenText / 10;
+            for(int j = 1; j < 10; j++) {
+                double height = j == 5 ? l3LineHeight : l2LineHeight;
+                gc.fillRect(-negativeOffset - textPosition - j * oneTenth, rulerHeight - height, 1, height);
+            }
+            gc.fillRect(-negativeOffset - textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
+            gc.strokeText(String.format("- %d", (int) Math.abs(value)), -negativeOffset - textPosition - textPaddingLeft, rulerHeight - textPaddingBottom);
         }
         gc.setTransform(original);
     }
