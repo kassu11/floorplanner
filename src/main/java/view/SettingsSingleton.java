@@ -50,8 +50,8 @@ public class SettingsSingleton {
         measurementUnits.put("cm", 1.0);
         measurementUnits.put("dm", 0.1);
         measurementUnits.put("m", 0.01);
-        measurementUnits.put("in", 0.393701);
-        measurementUnits.put("ft", 0.0328084);
+        measurementUnits.put("in", 1.0);
+        measurementUnits.put("ft", 1.0);
     }
     /**
      * Returns the instance
