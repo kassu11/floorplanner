@@ -128,7 +128,16 @@ public class Controller {
                 yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
-            case DOOR -> new Door(pointA, pointB);
+            case DOOR -> {
+                Door door = new Door(pointA, pointB);
+                if(singletonType != null) {
+                    transferSingleShapeTo(door.getArcPoint(), singletonType);
+                    transferSingleShapeTo(door.getLine(), singletonType);
+                    transferSingleShapeTo(door.getArc(), singletonType);
+                }
+                yield door;
+            }
+
             default -> null;
         };
         if (singletonType != null) {
