@@ -266,10 +266,11 @@ public class SelectUtilities {
 	public static void drawSelectionBox(Controller controller, CustomCanvas gc, double x1, double y1, double x2, double y2) {
 		controller.createShape(x1, y1, x2, y2, ShapeType.RECTANGLE, null).draw(gc);
 	}
-	public static void selectShapesInsideBox(Controller controller, CustomCanvas gc, double mouseX, double mouseY, double x1, double y1, double x2, double y2){
+	public static void selectShapesInsideBox(Controller controller, double mouseX, double mouseY, double x1, double y1, double x2, double y2){
 		List<Shape> selectedPoints = new ArrayList<>();
-		System.out.println("MouseX: " + mouseX + " MouseY: " + mouseY + " X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2: " + y2);
-		for(Shape shape : controller.getShapes(Controller.SingletonType.FINAL)){
+		boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
+
+		for(Shape shape : controller.getShapes(Controller.SingletonType.FINAL)) {
 			if(shape.getType() == ShapeType.POINT && isInsideSelectionBox(shape.getX(), shape.getY(), x1, y1, x2, y2)){
 				selectedPoints.add(shape);
 			}
@@ -281,7 +282,9 @@ public class SelectUtilities {
 		});
 		controller.setSelectedShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
 		controller.setHoveredShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
-		controller.drawAllShapes(gc, Controller.SingletonType.PREVIEW);
+
+		if (isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+		else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 	}
 	public static boolean isInsideSelectionBox(double x, double y, double x1, double y1, double x2, double y2) {
 		double minX = Math.min(x1, x2);

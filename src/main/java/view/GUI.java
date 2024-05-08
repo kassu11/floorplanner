@@ -120,8 +120,8 @@ public class GUI extends Application {
                     double minDistance = controller.getCanvasMath().relativeDistance(15);
                     double distanceFromInitialSelect = Math.hypot(initialSelectionX - mouseX, initialSelectionY - mouseY);
                     if(distanceFromInitialSelect > minDistance) {
-                        SelectUtilities.selectShapesInsideBox(controller, previewGc, mouseX, mouseY, initialSelectionX, initialSelectionY, mouseX, mouseY);
-
+                        SelectUtilities.selectShapesInsideBox(controller, mouseX, mouseY, initialSelectionX, initialSelectionY, mouseX, mouseY);
+                        controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                     } else if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
@@ -236,7 +236,9 @@ public class GUI extends Application {
             else if(event.getButton() == MouseButton.PRIMARY && controller.getCurrentMode() == ModeType.SELECT) {
                 initialSelectionX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
                 initialSelectionY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
-                if(!event.isShiftDown()) controller.transferAllShapesTo(Controller.SingletonType.FINAL);
+                if(!event.isShiftDown() && controller.getSelectedShape() != null) {
+                    SelectUtilities.finalizeSelectedShapes(controller, gc, event.getX(), event.getY());
+                }
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             }
         });
@@ -260,6 +262,7 @@ public class GUI extends Application {
                 double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
                 controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                 SelectUtilities.drawSelectionBox(controller, previewGc, mouseX, mouseY, initialSelectionX, initialSelectionY);
+                SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
             }
         });
 
