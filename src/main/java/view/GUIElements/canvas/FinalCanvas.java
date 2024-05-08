@@ -6,7 +6,7 @@ import view.types.ShapeDataType;
 public class FinalCanvas extends CustomCanvas {
     public FinalCanvas(double width, double height) {
         super(width, height);
-        setLineWidth(4);
+        setLineWidth(5);
     }
 
     @Override

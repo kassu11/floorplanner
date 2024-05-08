@@ -9,7 +9,7 @@ public class CanvasContainer extends GridPane {
     /**
      * List of canvases
      */
-    private final CustomCanvas[] layers = new CustomCanvas[3];
+    private final CustomCanvas[] layers = new CustomCanvas[4];
     /**
      * X coordinate
      * Y coordinate
@@ -29,16 +29,17 @@ public class CanvasContainer extends GridPane {
 
 
         layers[0] = new GridCanvas(width, height);
-        layers[1] = new FinalCanvas(width, height);
-        layers[2] = new PreviewCanvas(width, height);
+        layers[1] = new RulerHandsCanvas(width, height);
+        layers[2] = new FinalCanvas(width, height);
+        layers[3] = new PreviewCanvas(width, height);
 
         for (CustomCanvas canvas : layers) add(canvas, 0, 0);
         setZoom(1);
     }
 
     public void updateAllCanvasLayers(Controller controller) {
-        controller.drawAllShapes(layers[1], Controller.SingletonType.FINAL);
-        controller.drawAllShapes(layers[2], Controller.SingletonType.PREVIEW);
+        controller.drawAllShapes(layers[2], Controller.SingletonType.FINAL);
+        controller.drawAllShapes(layers[3], Controller.SingletonType.PREVIEW);
         ((GridCanvas)layers[0]).drawGrid();
     }
 
