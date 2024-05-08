@@ -1,6 +1,8 @@
 package view.GUIElements.canvas;
 
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Affine;
 import model.shapes.Shape;
 import view.SettingsSingleton;
 public class GridCanvas extends CustomCanvas {
@@ -8,10 +10,13 @@ public class GridCanvas extends CustomCanvas {
     private final double minGapBetweenText = 75;
     private final double maxGapBetweenText = 250;
     private Font rulerFont = new Font("Arial", 10);
+    private final Affine original = gc.getTransform();
+    private final Affine rotate = new Affine();
     public GridCanvas(double width, double height) {
         super(width, height);
         setLineWidth(.5);
         gc.setFont(rulerFont);
+        rotate.appendRotation(-90, 0, 0);
     }
 
     public void drawGrid() {
@@ -53,6 +58,7 @@ public class GridCanvas extends CustomCanvas {
         gc.setFill(CanvasColors.DARK_GRAY);
         gc.fillRect(-this.x + 0 * zoom, 0, gridWidth * zoom, 20);
         gc.setStroke(CanvasColors.WHITE);
+        gc.setTextAlign(TextAlignment.LEFT);
 
         double getRulerGapDivider = getRulerGapDivider();
         double gapBetweenText = getRulerGapDivider * zoom;
@@ -95,30 +101,39 @@ public class GridCanvas extends CustomCanvas {
      */
     void drawRulerY() {
         double gridHeight = settings.getGridHeight();
+
         gc.setFill(CanvasColors.LIGHT_GRAY);
         gc.fillRect(0, 0, 20, getHeight());
         gc.setFill(CanvasColors.DARK_GRAY);
         gc.fillRect(0, -this.y + 0 * zoom, 20, gridHeight * zoom);
         gc.setStroke(CanvasColors.WHITE);
+        gc.setTextAlign(TextAlignment.RIGHT);
 
         double getRulerGapDivider = getRulerGapDivider();
         double gapBetweenText = getRulerGapDivider * zoom;
 
         double positiveStartValue = Math.max(Math.floor(this.y / gapBetweenText) * gapBetweenText / zoom, 0);
-        double positiveOffset = this.y < 0 ? -this.y : -this.y % gapBetweenText;
+        double positiveOffset = this.y < 0 ? this.y : this.y % gapBetweenText;
+
+//        Affine original = gc.getTransform();
+//        Affine affine = new Affine();
+//        affine.appendRotation(-90, 0, 0);
+//        System.out.println(getWidth());
+        gc.setTransform(rotate);
         for (int i = 0; i < 50; i++) {
             double textPosition = i * gapBetweenText;
             double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), 10, positiveOffset + textPosition);
+            gc.strokeText(String.valueOf((int) value), positiveOffset - textPosition, 10);
         }
 
-        double negativeStartValue = -this.y > getHeight() ? getHeight() - (this.y + getHeight()) % gapBetweenText : -this.y;
-        double negativeOffset = Math.max(Math.floor((-this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
+        double negativeStartValue = this.y > getHeight() ? getHeight() - (-this.y + getHeight()) % gapBetweenText : this.y;
+        double negativeOffset = Math.max(Math.floor((this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
         for (int i = 0; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
             double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), 10, negativeStartValue + textPosition);
+            gc.strokeText(String.valueOf((int) value), negativeStartValue - textPosition, 10);
         }
+        gc.setTransform(original);
     }
 
     @Override
