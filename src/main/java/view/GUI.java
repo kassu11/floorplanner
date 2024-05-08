@@ -22,6 +22,8 @@ import view.types.ModeType;
 import view.types.ShapeDataType;
 import view.types.ShapeType;
 
+import java.util.List;
+
 /**
  * GUI class for the main application
  */
@@ -155,17 +157,24 @@ public class GUI extends Application {
                     }
                 }
                 case AREA -> {
-                    if (hoveredShape == null) return;
-                    if(hoveredShape.getType() == ShapeType.POINT && hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
+                    if (hoveredShape == null || hoveredShape.getType() != ShapeType.POINT) return;
+                    if (hoveredShape.containsShapeDataType(ShapeDataType.AREA)) {
+                        List<Point> areas = controller.getAreaShapes();
+                        controller.setSelectedShape(hoveredShape);
+                        int i = -1;
+                        while(++i < areas.size()) {
+                            areas.add(areas.get(i));
+                            if (areas.get(i) == hoveredShape) break;
+                        }
+                        while(i-- >= 0) areas.remove(0);
+                    } else if (hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
                         Point point = AreaUtilities.createAreaPoint(controller);
                         controller.getAreaShapes().add(point);
                         controller.setSelectedShape(point);
-                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         previewGc.clear();
                         AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
-                        System.out.println("New area");
-                        System.out.println(point);
                     }
+                    controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 }
             }
         });

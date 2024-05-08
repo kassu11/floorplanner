@@ -3,6 +3,7 @@ package view.events;
 import controller.Controller;
 import javafx.scene.input.KeyEvent;
 import model.history.HistoryHandler;
+import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ModeType;
@@ -56,6 +57,17 @@ public class KeyboardEvents {
                 }
                 case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);
                 case Y -> handleHistoryShortCuts(event, controller.getHistoryManager()::redo, previewGc, gc, controller);
+                case DELETE -> {
+                    if(controller.getSelectedShape() != null && controller.getCurrentMode() == ModeType.AREA) {
+                        Point selectedShape = (Point)controller.getSelectedShape();
+                        controller.getAreaShapes().remove(selectedShape);
+                        controller.getShapes(Controller.SingletonType.FINAL).remove(selectedShape);
+                        controller.setSelectedShape(controller.getAreaShapes().isEmpty() ? null : controller.getAreaShapes().getLast());
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+                        previewGc.clear();
+                        AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
+                    }
+                }
                 default -> {
                 }
             }
