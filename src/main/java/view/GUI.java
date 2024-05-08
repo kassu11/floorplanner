@@ -155,22 +155,16 @@ public class GUI extends Application {
                     }
                 }
                 case AREA -> {
-//                    if(selectedShape != null && !event.isShiftDown()) {
-//                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-//                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-//                    }
-//                    if (hoveredShape != null) {
-//                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
-//                        previewGc.clear();
-//                        AreaUtilities.drawArea(controller, previewGc);
-//                    }
                     if (hoveredShape == null) return;
                     if(hoveredShape.getType() == ShapeType.POINT && hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
                         Point point = AreaUtilities.createAreaPoint(controller);
                         controller.getAreaShapes().add(point);
-                        point.draw(gc);
+                        controller.setSelectedShape(point);
+                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         previewGc.clear();
                         AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
+                        System.out.println("New area");
+                        System.out.println(point);
                     }
                 }
             }

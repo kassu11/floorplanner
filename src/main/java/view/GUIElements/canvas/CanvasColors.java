@@ -46,7 +46,7 @@ public final class CanvasColors {
                 HOVER = SELECTED_HOVER = SELECTED = PREVIEW_NORMAL = YELLOW;
             }
             case AREA -> {
-                SELECTED = PURPLE;
+                SELECTED = RED;
                 HOVER = PURPLE;
                 SELECTED_HOVER = PURPLE;
                 PREVIEW_NORMAL = PURPLE;
