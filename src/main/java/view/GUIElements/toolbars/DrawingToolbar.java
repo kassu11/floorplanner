@@ -3,6 +3,8 @@ package view.GUIElements.toolbars;
 import controller.Controller;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import view.SettingsSingleton;
 import view.types.ModeType;
@@ -45,6 +47,12 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(new Button(settings.getLocalizationString("rotate")), "rotate");
         addButton(new Button(settings.getLocalizationString("reset")), "reset");
         addButton(new Button(settings.getLocalizationString("area")), "area");
+        ImageView icon = new ImageView(new Image("icons/select.png"));
+        Button test = new Button();
+        test.setGraphic(icon);
+        icon.setFitWidth(24);
+        icon.setFitHeight(24);
+        getItems().add(test);
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);

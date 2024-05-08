@@ -4,13 +4,13 @@ import controller.Controller;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.shapes.Dimension;
 import model.shapes.Point;
 import model.shapes.Shape;
-import view.GUIElements.Ruler;
 import view.GUIElements.canvas.*;
 import view.GUIElements.toolbars.DrawingToolbar;
 import view.GUIElements.toolbars.OptionsToolbar;
@@ -85,10 +85,6 @@ public class GUI extends Application {
         CustomCanvas previewGc = canvasContainer.getLayer(2);
         RulerCanvas rulerGc = (RulerCanvas) canvasContainer.getLayer(3);
         RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(4);
-
-        Ruler xRuler = new Ruler(false);
-        xRuler.setPadding(new Insets(0, 0, 0, 50));
-        Ruler yRuler = new Ruler(true);
 
         gridGc.drawGrid();
         rulerGc.drawRuler();
@@ -275,8 +271,6 @@ public class GUI extends Application {
 
             canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
-            xRuler.updateRuler(zoomLevel);
-            yRuler.updateRuler(zoomLevel);
 
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
@@ -329,6 +323,8 @@ public class GUI extends Application {
         root.setCenter(canvasBorder);
 
         Scene view = new Scene(root, canvasWidth, canvasHeight);
+        root.getStyleClass().add("dark");
+        view.getStylesheets().add("main.css");
 
         stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
