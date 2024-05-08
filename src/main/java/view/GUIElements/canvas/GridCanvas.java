@@ -73,7 +73,7 @@ public class GridCanvas extends CustomCanvas {
 
         double negativeStartValue = -this.x > getWidth() ? getWidth() - (this.x + getWidth()) % gapBetweenText : -this.x;
         double negativeOffset = Math.max(Math.floor((-this.x - getWidth()) / gapBetweenText) * gapBetweenText / zoom, 0);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 1; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
             double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
             gc.strokeText(String.valueOf((int) value), negativeStartValue + textPosition, 10);
@@ -108,30 +108,25 @@ public class GridCanvas extends CustomCanvas {
         gc.fillRect(0, -this.y + 0 * zoom, 20, gridHeight * zoom);
         gc.setStroke(CanvasColors.WHITE);
         gc.setTextAlign(TextAlignment.RIGHT);
+        gc.setTransform(rotate);
 
         double getRulerGapDivider = getRulerGapDivider();
         double gapBetweenText = getRulerGapDivider * zoom;
 
         double positiveStartValue = Math.max(Math.floor(this.y / gapBetweenText) * gapBetweenText / zoom, 0);
         double positiveOffset = this.y < 0 ? this.y : this.y % gapBetweenText;
-
-//        Affine original = gc.getTransform();
-//        Affine affine = new Affine();
-//        affine.appendRotation(-90, 0, 0);
-//        System.out.println(getWidth());
-        gc.setTransform(rotate);
         for (int i = 0; i < 50; i++) {
             double textPosition = i * gapBetweenText;
             double value = Math.round((textPosition / zoom + positiveStartValue) / getRulerGapDivider) * getRulerGapDivider;
             gc.strokeText(String.valueOf((int) value), positiveOffset - textPosition, 10);
         }
 
-        double negativeStartValue = this.y > getHeight() ? getHeight() - (-this.y + getHeight()) % gapBetweenText : this.y;
-        double negativeOffset = Math.max(Math.floor((this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
-        for (int i = 0; i < 50; i++) {
+        double negativeStartValue = Math.max(Math.floor((-this.y - getHeight()) / gapBetweenText) * gapBetweenText / zoom, 0);
+        double negativeOffset = -this.y > getHeight() ? getHeight() - (this.y + getHeight()) % gapBetweenText : -this.y;
+        for (int i = 1; i < 50; i++) {
             double textPosition = i * -gapBetweenText;
-            double value = Math.round((textPosition / zoom - negativeOffset) / getRulerGapDivider) * getRulerGapDivider;
-            gc.strokeText(String.valueOf((int) value), negativeStartValue - textPosition, 10);
+            double value = Math.round((textPosition / zoom - negativeStartValue) / getRulerGapDivider) * getRulerGapDivider;
+            gc.strokeText(String.format("- %d", (int) Math.abs(value)), -negativeOffset - textPosition, 10);
         }
         gc.setTransform(original);
     }
