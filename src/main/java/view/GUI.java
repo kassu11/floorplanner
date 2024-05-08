@@ -237,7 +237,7 @@ public class GUI extends Application {
                 initialSelectionX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
                 initialSelectionY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
                 if(!event.isShiftDown() && controller.getSelectedShape() != null) {
-                    SelectUtilities.finalizeSelectedShapes(controller, gc, event.getX(), event.getY());
+                    SelectUtilities.finalizeSelectedShapes(controller, gc, initialSelectionX, initialSelectionY);
                 }
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             }
