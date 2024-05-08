@@ -367,6 +367,10 @@ public abstract class CustomCanvas extends Canvas {
         gc.strokeText(text, -this.x + x * zoom + offsetX, -this.y + y * zoom + offsetY);
     }
 
+    public void fillRect(double x, double y, double width, double height) {
+        gc.fillRect(-this.x + x * zoom, -this.y + y * zoom, width * zoom, height * zoom);
+    }
+
     /**
      * Updates the canvas colors based on the shape
      * @param shape

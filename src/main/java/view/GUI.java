@@ -11,10 +11,7 @@ import model.shapes.Dimension;
 import model.shapes.Point;
 import model.shapes.Shape;
 import view.GUIElements.Ruler;
-import view.GUIElements.canvas.CanvasContainer;
-import view.GUIElements.canvas.CustomCanvas;
-import view.GUIElements.canvas.GridCanvas;
-import view.GUIElements.canvas.RulerHandsCanvas;
+import view.GUIElements.canvas.*;
 import view.GUIElements.toolbars.DrawingToolbar;
 import view.GUIElements.toolbars.OptionsToolbar;
 import view.events.AreaUtilities;
@@ -25,7 +22,6 @@ import view.types.ModeType;
 import view.types.ShapeDataType;
 import view.types.ShapeType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,15 +81,17 @@ public class GUI extends Application {
         BorderPane root = new BorderPane();
 
         GridCanvas gridGc = (GridCanvas) canvasContainer.getLayer(0);
-        RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(1);
-        CustomCanvas gc = canvasContainer.getLayer(2);
-        CustomCanvas previewGc = canvasContainer.getLayer(3);
+        CustomCanvas gc = canvasContainer.getLayer(1);
+        CustomCanvas previewGc = canvasContainer.getLayer(2);
+        RulerCanvas rulerGc = (RulerCanvas) canvasContainer.getLayer(3);
+        RulerHandsCanvas rulerHandGc = (RulerHandsCanvas) canvasContainer.getLayer(4);
 
         Ruler xRuler = new Ruler(false);
         xRuler.setPadding(new Insets(0, 0, 0, 50));
         Ruler yRuler = new Ruler(true);
 
         gridGc.drawGrid();
+        rulerGc.drawRuler();
 
         canvasContainer.setOnMouseClicked(event -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
@@ -159,23 +157,24 @@ public class GUI extends Application {
                     }
                 }
                 case AREA -> {
-//                    if(selectedShape != null && !event.isShiftDown()) {
-//                        controller.transferAllShapesTo(Controller.SingletonType.FINAL);
-//                        controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-//                    }
-//                    if (hoveredShape != null) {
-//                        SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
-//                        previewGc.clear();
-//                        AreaUtilities.drawArea(controller, previewGc);
-//                    }
-                    if (hoveredShape == null) return;
-                    if(hoveredShape.getType() == ShapeType.POINT && hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
+                    if (hoveredShape == null || hoveredShape.getType() != ShapeType.POINT) return;
+                    if (hoveredShape.containsShapeDataType(ShapeDataType.AREA)) {
+                        List<Point> areas = controller.getAreaShapes();
+                        controller.setSelectedShape(hoveredShape);
+                        int i = -1;
+                        while(++i < areas.size()) {
+                            areas.add(areas.get(i));
+                            if (areas.get(i) == hoveredShape) break;
+                        }
+                        while(i-- >= 0) areas.remove(0);
+                    } else if (hoveredShape.containsShapeDataType(ShapeDataType.NORMAL)) {
                         Point point = AreaUtilities.createAreaPoint(controller);
                         controller.getAreaShapes().add(point);
-                        point.draw(gc);
+                        controller.setSelectedShape(point);
                         previewGc.clear();
                         AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
                     }
+                    controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                 }
             }
         });
@@ -248,10 +247,7 @@ public class GUI extends Application {
             if (event.getButton() == MouseButton.MIDDLE) {
                 canvasContainer.setX(middleX - event.getX());
                 canvasContainer.setY(middleY - event.getY());
-                canvasContainer.clear();
-                gridGc.drawGrid();
-                controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-                controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                canvasContainer.updateAllCanvasLayers(controller);
 
                 if (controller.getCurrentMode() == ModeType.AREA) {
                     AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
@@ -288,6 +284,7 @@ public class GUI extends Application {
                 AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
             }
             gridGc.drawGrid();
+            rulerGc.drawRuler();
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -313,11 +310,7 @@ public class GUI extends Application {
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
-        drawToolbar.getButtons().get("reset").setOnAction(event -> {
-                controller.removeAllShapes();
-                gridGc.drawGrid();
-            }
-        );
+        drawToolbar.getButtons().get("reset").setOnAction(event -> controller.resetApplication());
 
         drawToolbar.getButtons().get("rotate").setOnAction(event -> drawToolbar.changeMode(ModeType.ROTATE));
 

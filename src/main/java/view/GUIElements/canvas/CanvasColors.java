@@ -18,7 +18,11 @@ public final class CanvasColors {
     public static final Paint DARK_GRAY = Paint.valueOf("#1d1e1e");
     public static final Paint WHITE = Paint.valueOf("#ffffff");
     public static final Paint GRID_LINE = GRAY;
-    public static final Paint RULER_TEXT = BLACK;
+    public static final Paint RULER_TEXT = WHITE;
+    public static final Paint RULER_CORNER = BLACK;
+    public static final Paint RULER_OUTER = LIGHT_GRAY;
+    public static final Paint RULER_INNER = BLACK;
+    public static final Paint GRID_BACKGROUND = WHITE;
     public static final Paint RULER = RED;
     public static Paint SELECTED = LIGHT_BLUE;
     public static Paint HOVER = LIGHT_BLUE;
@@ -42,7 +46,7 @@ public final class CanvasColors {
                 HOVER = SELECTED_HOVER = SELECTED = PREVIEW_NORMAL = YELLOW;
             }
             case AREA -> {
-                SELECTED = PURPLE;
+                SELECTED = RED;
                 HOVER = PURPLE;
                 SELECTED_HOVER = PURPLE;
                 PREVIEW_NORMAL = PURPLE;
