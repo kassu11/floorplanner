@@ -84,8 +84,6 @@ public class FileManager {
             e.printStackTrace();
         }
     }
-
-
     /**
      * Imports the floor plan
      */
