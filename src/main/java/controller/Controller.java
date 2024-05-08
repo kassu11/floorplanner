@@ -327,10 +327,11 @@ public class Controller {
     /** The removeAllShapes method that removes all shapes from the canvas
      *
      */
-    public void removeAllShapes() {
+    public void resetApplication() {
         finalShapes.clearShapes();
         previewShapes.clearShapes();
-        gui.getCanvasContainer().clear();
+        gui.getCanvasContainer().updateAllCanvasLayers(this);
+        areaShapes.clear();
         historyManager.reset();
     }
 
