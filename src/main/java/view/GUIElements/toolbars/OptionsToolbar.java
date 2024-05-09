@@ -53,7 +53,6 @@ public class OptionsToolbar extends CustomToolbar {
         super(stage);
         this.controller = controller;
         this.canvasContainer = canvasContainer;
-        fileManager = new FileManager(canvasContainer, controller);
         this.setOrientation(Orientation.HORIZONTAL);
 
         addButton(new Button(settings.getLocalizationString("file")), "file");
@@ -81,6 +80,8 @@ public class OptionsToolbar extends CustomToolbar {
             canvasContainer.updateAllCanvasLayers(controller);
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
+
+        fileManager = new FileManager(canvasContainer, controller);
 
     }
     /**
@@ -152,7 +153,6 @@ public class OptionsToolbar extends CustomToolbar {
             settingsWindow.close();
         });
     }
-
     /**
      * Updates the localization of all the text in the toolbar
      */
@@ -174,6 +174,8 @@ public class OptionsToolbar extends CustomToolbar {
         }
     }
     public void showFile() {
+        setCursorCoordinates();
+        fileManager.setCursorCoordinates(getCursorX() + getHeight(), getCursorY() + getButtons().get("file").getHeight());
         fileManager.showFile();
     }
 }
