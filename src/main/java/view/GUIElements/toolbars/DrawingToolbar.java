@@ -54,15 +54,6 @@ public class DrawingToolbar extends CustomToolbar {
         getItems().add(new javafx.scene.control.Separator());
         addButton(createIconButton(SvgConfig.CLEAR.getSvgName(), settings.getLocalizationString("reset")), "reset");
 
-
-        ImageView icon = new ImageView(new Image("icons/select.png"));
-        Button test = new Button();
-        test.setGraphic(icon);
-        icon.setFitWidth(24);
-        icon.setFitHeight(24);
-        Button test2 = createIconButton(SvgConfig.RECTANGLE.getSvgName(), settings.getLocalizationString("select"));
-        //getItems().add(test2);
-
         // Set up the mode menu
         this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
         this.rectangleMode = new CustomMenuItem(settings.getLocalizationString("rectangle"), ShapeType.RECTANGLE);
@@ -104,6 +95,7 @@ public class DrawingToolbar extends CustomToolbar {
         rectangleMode.setText(settings.getLocalizationString("rectangle"));
         circleMode.setText(settings.getLocalizationString("circle"));
         multilineMode.setText(settings.getLocalizationString("multiline"));
+        doorMode.setText(settings.getLocalizationString("door"));
     }
 
     public static Button createIconButton(String svg, String tooltip) {
