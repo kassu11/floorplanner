@@ -137,6 +137,10 @@ public class OptionsToolbar extends CustomToolbar {
 
         Scene settingsScene = new Scene(settingsLayout, 400, 400);
 
+        settingsLayout.getStyleClass().add("dark");
+        settingsLayout.getStyleClass().add("root");
+        settingsScene.getStylesheets().add("main.css");
+
         settingsWindow.setScene(settingsScene);
         settingsWindow.show();
 
