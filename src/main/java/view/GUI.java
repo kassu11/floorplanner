@@ -181,7 +181,6 @@ public class GUI extends Application {
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             Shape selectedShape = controller.getSelectedShape();
-            controller.setMousePosition(event.getX(), event.getY());
             Shape hoveredShape = null;
             controller.setHoveredShape(null);
             controller.setHoveredPoint(null);
@@ -193,6 +192,7 @@ public class GUI extends Application {
 
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+            controller.setMousePosition(mouseX, mouseY);
 
             for (Shape shape : controller.getShapes(Controller.SingletonType.FINAL)) {
                 double distance = shape.calculateDistanceFromMouse(mouseX, mouseY);
