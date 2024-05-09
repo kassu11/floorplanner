@@ -371,4 +371,8 @@ public abstract class CustomCanvas extends Canvas {
      * @param shape
      */
     public abstract void updateCanvasColors(Shape shape);
+
+    public void setLineDashes(double... dashes) {
+        gc.setLineDashes(dashes);
+    }
 }

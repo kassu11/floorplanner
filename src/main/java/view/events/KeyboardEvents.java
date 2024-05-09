@@ -35,7 +35,7 @@ public class KeyboardEvents {
             switch (event.getCode()) {
                 case DIGIT1 -> controller.setCurrentShape(ShapeType.LINE);
                 case DIGIT2 -> controller.setCurrentShape(ShapeType.RECTANGLE);
-                case DIGIT3 -> controller.setCurrentShape(ShapeType.CIRCLE);
+                case DIGIT3 -> controller.setCurrentShape(ShapeType.DOOR);
                 case DIGIT4 -> controller.setCurrentShape(ShapeType.MULTILINE);
                 case ESCAPE -> {
                     controller.setLastPoint(null);
@@ -53,6 +53,13 @@ public class KeyboardEvents {
                         controller.setHoveredShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                    }
+                }
+                case R -> {
+                    if (controller.getCurrentMode() == ModeType.DRAW && controller.getCurrentShapeType() == ShapeType.DOOR) {
+                        controller.setFlipDoors(!controller.isFlipDoors());
+                        controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                        DrawUtilities.renderDrawingPreview(controller, controller.getMouseX(), controller.getMouseY(), previewGc);
                     }
                 }
                 case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);

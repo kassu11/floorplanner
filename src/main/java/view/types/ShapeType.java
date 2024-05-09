@@ -11,5 +11,5 @@ public enum ShapeType {
      * Circle
      * Custom shape
      */
-    POINT, LINE, MULTILINE, RECTANGLE, CIRCLE, CUSTOMSHAPE
+    POINT, LINE, MULTILINE, RECTANGLE, CIRCLE, CUSTOMSHAPE, DOOR
 }
