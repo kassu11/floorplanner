@@ -58,6 +58,7 @@ public class KeyboardEvents {
                 }
                 case A -> {
                     if(controller.isCtrlDown()) {
+                        boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
                         controller.setCurrentMode(ModeType.SELECT);
                         controller.transferAllShapesTo(Controller.SingletonType.PREVIEW);
                         for(Shape shape : controller.getShapes(Controller.SingletonType.PREVIEW)) {
@@ -65,6 +66,8 @@ public class KeyboardEvents {
                         }
                         controller.setSelectedShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
                         controller.setHoveredShape(controller.getShapes(Controller.SingletonType.PREVIEW).getFirst());
+                        if (isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
+                        else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
                         controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                     }
