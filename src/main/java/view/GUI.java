@@ -282,19 +282,19 @@ public class GUI extends Application {
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            settings.setGridWidth(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasWidth = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            canvasContainer.updateAllCanvasLayers(controller);
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            settings.setGridHeight(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasHeight = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            canvasContainer.updateAllCanvasLayers(controller);
         });
 
 
