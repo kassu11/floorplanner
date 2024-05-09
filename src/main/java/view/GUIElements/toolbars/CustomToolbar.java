@@ -1,5 +1,6 @@
 package view.GUIElements.toolbars;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.stage.Stage;
@@ -38,7 +39,7 @@ abstract class CustomToolbar extends ToolBar {
      */
     public void addButton(Button button, String key) {
         this.getItems().add(button);
-        this.getItems().add(new javafx.scene.control.Separator());
+        Insets insets = new Insets(5, 5, 5, 5);
         buttons.put(key, button);
     }
     /**
