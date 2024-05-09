@@ -26,7 +26,7 @@ public class DrawingToolbar extends CustomToolbar {
      * Circle mode
      * Multiline mode
      */
-    private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode;
+    private CustomMenuItem lineMode, rectangleMode, circleMode, multilineMode, doorMode;
     /**
      * Controller
      */
@@ -68,7 +68,8 @@ public class DrawingToolbar extends CustomToolbar {
         this.rectangleMode = new CustomMenuItem(settings.getLocalizationString("rectangle"), ShapeType.RECTANGLE);
         this.circleMode = new CustomMenuItem(settings.getLocalizationString("circle"), ShapeType.CIRCLE);
         this.multilineMode = new CustomMenuItem(settings.getLocalizationString("multiline"), ShapeType.MULTILINE);
-        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode);
+        this.doorMode = new CustomMenuItem(settings.getLocalizationString("door"), ShapeType.DOOR);
+        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode, doorMode);
     }
     /**
      * Changes the draw mode

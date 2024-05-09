@@ -15,9 +15,9 @@ public class RulerCanvas extends CustomCanvas {
     private final double rulerHeight = 15;
     private final double textPaddingBottom = 4;
     private final double textPaddingLeft = 3;
-    private final double l1LineHeight = 10;
-    private final double l2LineHeight = 3;
-    private final double l3LineHeight = 6;
+    private final double l1LineHeight = 12;
+    private final double l2LineHeight = 5;
+    private final double l3LineHeight = 8;
     public RulerCanvas(double width, double height) {
         super(width, height);
         setLineWidth(.5);
@@ -28,13 +28,12 @@ public class RulerCanvas extends CustomCanvas {
 
     public void drawRuler() {
         clear();
-        if (settings.isUnitsVisible()) {
-            beginPath();
-            drawHorizontalRuler();
-            drawVerticalRuler();
-            gc.setFill(CanvasColors.RULER_CORNER);
-            gc.fillRect(0, 0, rulerHeight, rulerHeight);
-        }
+
+        beginPath();
+        drawHorizontalRuler();
+        drawVerticalRuler();
+        gc.setFill(CanvasColors.RULER_CORNER);
+        gc.fillRect(0, 0, rulerHeight, rulerHeight);
     }
 
     /**

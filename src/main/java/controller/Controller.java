@@ -56,6 +56,7 @@ public class Controller {
     /** The SingletonType enum */
     /** The points of the area shape */
     private List<Point> areaShapes = new ArrayList<>();
+    private boolean flipDoors = false;
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -128,6 +129,11 @@ public class Controller {
                 yield rectangle;
             }
             case CIRCLE -> new Circle(pointA, pointB);
+            case DOOR -> {
+                Door door = new Door(pointA, pointB);
+                door.setFlipped(flipDoors);
+                yield door;
+            }
             default -> null;
         };
         if (singletonType != null) {
@@ -369,29 +375,6 @@ public class Controller {
     }
     /** The setCurrentMode method that sets the current mode type*/
     public void setCurrentMode(ModeType currentMode) {
-//        String noColor = "#000000";
-//        switch (currentMode) {
-//            case DRAW -> {
-//                this.selectedColor = "#00d415";
-//                this.hoverColor = "#00d415";
-//            }
-//            case SELECT, ROTATE -> {
-//                this.selectedColor = "#036ffc";
-//                this.hoverColor = "#78b0fa";
-//            }
-//            case DELETE -> {
-//                this.selectedColor = noColor;
-//                this.hoverColor = "#ff0000";
-//            }
-//            case AREA -> {
-//                this.selectedColor = "#4269f54a";
-//                this.hoverColor = "#78b0fa";
-//            }
-//            default -> {
-//                this.selectedColor = noColor;
-//                this.hoverColor = noColor;
-//            }
-//        }
         this.currentMode = currentMode;
         CanvasColors.updateColorsByMode(currentMode);
         gui.updateButtonEnabled();
@@ -493,5 +476,13 @@ public class Controller {
      */
     public List<Point> getAreaShapes() {
         return areaShapes;
+    }
+
+    public boolean isFlipDoors() {
+        return flipDoors;
+    }
+
+    public void setFlipDoors(boolean flipDoors) {
+        this.flipDoors = flipDoors;
     }
 }

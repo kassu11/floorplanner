@@ -177,7 +177,6 @@ public class GUI extends Application {
         // This is the preview drawing
         canvasContainer.setOnMouseMoved(event -> {
             Shape selectedShape = controller.getSelectedShape();
-            controller.setMousePosition(event.getX(), event.getY());
             Shape hoveredShape = null;
             controller.setHoveredShape(null);
             controller.setHoveredPoint(null);
@@ -189,6 +188,7 @@ public class GUI extends Application {
 
             double mouseX = controller.getCanvasMath().relativeXtoAbsoluteX(event.getX());
             double mouseY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
+            controller.setMousePosition(mouseX, mouseY);
 
             for (Shape shape : controller.getShapes(Controller.SingletonType.FINAL)) {
                 double distance = shape.calculateDistanceFromMouse(mouseX, mouseY);
@@ -239,7 +239,6 @@ public class GUI extends Application {
         });
 
         canvasContainer.setOnMouseDragged(event -> {
-            rulerHandGc.drawRulerHands(event.getX(), event.getY());
             if (event.getButton() == MouseButton.MIDDLE) {
                 canvasContainer.setX(middleX - event.getX());
                 canvasContainer.setY(middleY - event.getY());
@@ -247,6 +246,9 @@ public class GUI extends Application {
 
                 if (controller.getCurrentMode() == ModeType.AREA) {
                     AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
+                }
+                else if (controller.getCurrentMode() == ModeType.DRAW) {
+                    DrawUtilities.renderDrawingPreview(controller, controller.getMouseX(), controller.getMouseY(), previewGc);
                 }
             }
             else if(event.getButton() == MouseButton.PRIMARY && controller.getCurrentMode() == ModeType.SELECT) {
@@ -256,6 +258,7 @@ public class GUI extends Application {
                 SelectUtilities.drawSelectionBox(controller, previewGc, mouseX, mouseY, initialSelectionX, initialSelectionY);
                 SelectUtilities.updateSelectionCoordinates(controller, mouseX, mouseY);
             }
+            rulerHandGc.drawRulerHands(event.getX(), event.getY());
         });
 
         final double minScale = .05, maxScale = 150.0;
@@ -272,29 +275,29 @@ public class GUI extends Application {
             canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
 
-            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
-            controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            canvasContainer.updateAllCanvasLayers(controller);
             if (controller.getCurrentMode() == ModeType.AREA) {
                 AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
             }
-            gridGc.drawGrid();
-            rulerGc.drawRuler();
+            else if (controller.getCurrentMode() == ModeType.DRAW) {
+                DrawUtilities.renderDrawingPreview(controller, controller.getMouseX(), controller.getMouseY(), previewGc);
+            }
         });
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            settings.setGridWidth(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasWidth = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            canvasContainer.updateAllCanvasLayers(controller);
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            settings.setGridHeight(newVal.intValue());
             optionBar.updateResolution();
             controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             canvasHeight = newVal.intValue();
             canvasContainer.resizeCanvas(canvasWidth, canvasHeight);
+            canvasContainer.updateAllCanvasLayers(controller);
         });
 
 
