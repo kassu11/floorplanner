@@ -1,7 +1,6 @@
 package view.GUIElements.canvas;
 
 import model.shapes.Shape;
-import view.types.ShapeDataType;
 
 public class PreviewCanvas extends CustomCanvas {
     public PreviewCanvas(double width, double height) {

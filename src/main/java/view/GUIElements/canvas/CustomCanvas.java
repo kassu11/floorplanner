@@ -7,7 +7,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Affine;
 import model.shapes.Shape;
-import view.SettingsSingleton;
 /**
  * Drawing canvas class
  */
@@ -32,15 +31,11 @@ public abstract class CustomCanvas extends Canvas {
      */
     private String lastFillColor = null;
     /**
-     * Settings singleton
-     */
-    private SettingsSingleton settings = SettingsSingleton.getInstance();
-    /**
      * Constructor for the drawing canvas
      * @param width width
      * @param height height
      */
-    public CustomCanvas(double width, double height) {
+    protected CustomCanvas(double width, double height) {
         super(width, height);
         this.width = width;
         this.height = height;

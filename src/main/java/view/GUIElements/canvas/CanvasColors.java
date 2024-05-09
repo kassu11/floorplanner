@@ -42,14 +42,14 @@ public final class CanvasColors {
                 HOVER = PREVIEW_NORMAL = RED;
                 FINAL_NORMAL = DARK_RED;
             }
-            case ROTATE -> {
-                HOVER = SELECTED_HOVER = SELECTED = PREVIEW_NORMAL = YELLOW;
-            }
+            case ROTATE -> HOVER = SELECTED_HOVER = SELECTED = PREVIEW_NORMAL = YELLOW;
             case AREA -> {
                 SELECTED = RED;
                 HOVER = PURPLE;
                 SELECTED_HOVER = PURPLE;
                 PREVIEW_NORMAL = PURPLE;
+            }
+            default -> {
             }
         }
     }

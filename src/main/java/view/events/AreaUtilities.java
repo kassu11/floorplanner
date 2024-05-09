@@ -6,9 +6,6 @@ import model.shapes.Shape;
 import view.GUIElements.canvas.CustomCanvas;
 import view.SettingsSingleton;
 import view.types.ShapeDataType;
-import view.types.ShapeType;
-
-import java.util.ArrayList;
 import java.util.List;
 /**
  * Class for handling area utilities

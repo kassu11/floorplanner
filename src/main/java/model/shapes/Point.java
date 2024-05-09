@@ -1,6 +1,5 @@
 package model.shapes;
 
-import javafx.scene.paint.Paint;
 import model.shapeContainers.ShapeContainer;
 import view.GUIElements.canvas.CustomCanvas;
 import view.types.ShapeType;

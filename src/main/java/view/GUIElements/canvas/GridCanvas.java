@@ -1,7 +1,6 @@
 package view.GUIElements.canvas;
 
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import model.shapes.Shape;
 import view.SettingsSingleton;
