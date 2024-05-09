@@ -46,7 +46,6 @@ public class RulerCanvas extends CustomCanvas {
         gc.fillRect(0, 0, getWidth(), rulerHeight);
         gc.setFill(CanvasColors.RULER_INNER);
         gc.fillRect(-this.x + 0 * zoom, 0, gridWidth * zoom, rulerHeight);
-        gc.setStroke(CanvasColors.RULER_TEXT);
         gc.setFill(CanvasColors.RULER_TEXT);
         gc.setTextAlign(TextAlignment.LEFT);
 
@@ -77,7 +76,7 @@ public class RulerCanvas extends CustomCanvas {
             gc.fillRect(startValue + textPosition - j * oneTenth, rulerHeight - height, 1, height);
         }
         gc.fillRect(startValue + textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
-        gc.strokeText(formatRulerValue(textValue), startValue + textPosition + textPaddingLeft, rulerHeight - textPaddingBottom);
+        gc.fillText(formatRulerValue(textValue), startValue + textPosition + textPaddingLeft, rulerHeight - textPaddingBottom);
     }
 
     private double getRulerGapDivider() {
@@ -106,7 +105,6 @@ public class RulerCanvas extends CustomCanvas {
         gc.fillRect(0, 0, rulerHeight, getHeight());
         gc.setFill(CanvasColors.DARK_GRAY);
         gc.fillRect(0, -this.y + 0 * zoom, rulerHeight, gridHeight * zoom);
-        gc.setStroke(CanvasColors.RULER_TEXT);
         gc.setFill(CanvasColors.RULER_TEXT);
         gc.setTextAlign(TextAlignment.RIGHT);
         gc.setTransform(rotate);
@@ -133,11 +131,7 @@ public class RulerCanvas extends CustomCanvas {
     }
 
     private String formatRulerValue(double value) {
-        if (value < 0) {
-            return String.format("- %d", (int) -value);
-        } else {
-            return String.valueOf((int) value);
-        }
+        return String.valueOf((int) value);
     }
 
     private void verticalLines(double gapBetweenText, double negativeOffset, double textPosition, double rulerValue) {
@@ -147,7 +141,7 @@ public class RulerCanvas extends CustomCanvas {
             gc.fillRect(negativeOffset - textPosition - j * oneTenth, rulerHeight - height, 1, height);
         }
         gc.fillRect(negativeOffset - textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
-        gc.strokeText(formatRulerValue(rulerValue), negativeOffset - textPosition - textPaddingLeft, rulerHeight - textPaddingBottom);
+        gc.fillText(formatRulerValue(rulerValue), negativeOffset - textPosition - textPaddingLeft, rulerHeight - textPaddingBottom);
     }
 
     @Override

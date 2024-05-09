@@ -1,8 +1,13 @@
 package view.GUIElements.toolbars;
 
 import controller.Controller;
+import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import view.SettingsSingleton;
 import view.types.ModeType;
@@ -39,12 +44,24 @@ public class DrawingToolbar extends CustomToolbar {
         super(stage);
         this.controller = controller;
         this.setOrientation(Orientation.VERTICAL);
-        addButton(new Button(settings.getLocalizationString("select")), "select");
+        addButton(createIconButton(SvgConfig.CURSOR.getSvgName(), settings.getLocalizationString("select")), "select");
+        getItems().add(new javafx.scene.control.Separator());
         addButton(new Button(settings.getLocalizationString("mode")), "mode");
-        addButton(new Button(settings.getLocalizationString("delete")), "delete");
-        addButton(new Button(settings.getLocalizationString("rotate")), "rotate");
-        addButton(new Button(settings.getLocalizationString("reset")), "reset");
-        addButton(new Button(settings.getLocalizationString("area")), "area");
+        getItems().add(new javafx.scene.control.Separator());
+        addButton(createIconButton(SvgConfig.ERASER.getSvgName(), settings.getLocalizationString("delete")), "delete");
+        addButton(createIconButton(SvgConfig.ROTATE.getSvgName(), settings.getLocalizationString("rotate")), "rotate");
+        addButton(createIconButton(SvgConfig.AREA.getSvgName(), settings.getLocalizationString("area")), "area");
+        getItems().add(new javafx.scene.control.Separator());
+        addButton(createIconButton(SvgConfig.CLEAR.getSvgName(), settings.getLocalizationString("reset")), "reset");
+
+
+        ImageView icon = new ImageView(new Image("icons/select.png"));
+        Button test = new Button();
+        test.setGraphic(icon);
+        icon.setFitWidth(24);
+        icon.setFitHeight(24);
+        Button test2 = createIconButton(SvgConfig.RECTANGLE.getSvgName(), settings.getLocalizationString("select"));
+        //getItems().add(test2);
 
         // Set up the mode menu
         this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
@@ -76,12 +93,38 @@ public class DrawingToolbar extends CustomToolbar {
      */
     public void updateLocalization(){
         for(String key : getButtons().keySet()){
-            getButtons().get(key).setText(settings.getLocalizationString(key));
+            if(!getButtons().get(key).getText().isEmpty()) {
+                getButtons().get(key).setText(settings.getLocalizationString(key));
+            } else {
+                getButtons().get(key).setTooltip(new Tooltip(settings.getLocalizationString(key)));
+            }
         }
         lineMode.setText(settings.getLocalizationString("line"));
         rectangleMode.setText(settings.getLocalizationString("rectangle"));
         circleMode.setText(settings.getLocalizationString("circle"));
         multilineMode.setText(settings.getLocalizationString("multiline"));
+    }
+
+    public static Button createIconButton(String svg, String tooltip) {
+        SVGPath path = new SVGPath();
+        path.setContent(svg);
+        Bounds bounds = path.getBoundsInLocal();
+
+        double scaleFactor = 24 / Math.max(bounds.getWidth(), bounds.getHeight());
+        path.setScaleX(scaleFactor);
+        path.setScaleY(scaleFactor);
+        path.getStyleClass().clear();
+        path.getStyleClass().add("button-icon");
+
+        Button button = new Button();
+        button.setPickOnBounds(true);
+        button.setTooltip(new Tooltip(tooltip));
+        button.setGraphic(path);
+        button.setAlignment(Pos.CENTER);
+        button.getStyleClass().clear();
+        button.getStyleClass().add("icon-button");
+
+        return button;
     }
 
 }

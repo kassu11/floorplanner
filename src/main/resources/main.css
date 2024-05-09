@@ -1,0 +1,112 @@
+* {
+    -fx-font-color: white;
+    -fx-white-38: rgba(255, 255, 255, 0.38);
+    -fx-white-60: rgba(255, 255, 255, 0.60);
+    -fx-white-87: rgba(255, 255, 255, 0.87);
+    -fx-dark-37: rgba(0, 0, 0, 0.37);
+    -fx-dark-60: rgba(0, 0, 0, 0.60);
+    -fx-dark-87: rgba(0, 0, 0, 0.87);
+    -fx-dark-600: #2d2d2d;
+    -fx-dark-500: #3d3d3d;
+    -fx-dark-400: #4d4d4d;
+    -fx-dark-900: black;
+    -fx-dark-p-00dp: #1D1E22;
+    -fx-dark-p-03dp: #2F3034;
+    -fx-dark-p-04dp: #313236;
+    -fx-dark-p-12dp: #3D3D41;
+    -fx-dark-p-24dp: #414245;
+    -fx-primary-50: #E8EAF6;
+    -fx-primary-100: #C5CAE9;
+    -fx-primary-200: #9FA8DA;
+    -fx-primary-300: #7986CB;
+}
+
+.dark .root {
+    -fx-text-fill: -fx-white-87;
+}
+
+.dark .tool-bar {
+    -fx-background-color: -fx-dark-p-04dp;
+    -fx-spacing: 10px;
+}
+
+.dark .button {
+    -fx-background-color: -fx-dark-p-12dp;
+    -fx-text-fill: -fx-white-87;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1;
+    -fx-border-color: -fx-white-38;
+}
+
+.dark .button:hover {
+    -fx-background-color: -fx-dark-p-24dp;
+}
+
+.dark .button:focused {
+    -fx-border-color: -fx-primary-50;
+}
+
+.dark .button:pressed {
+    -fx-background-color: -fx-dark-p-03dp;
+}
+
+.dark .separator .line {
+    -fx-background-color: -fx-dark-900;
+    -fx-pref-height: 2;
+    -fx-pref-width: 2;
+    -fx-border-color: -fx-white-38;
+}
+
+.dark .label {
+    -fx-text-fill: -fx-white-87;
+}
+
+.dark .text-field {
+    -fx-background-color: -fx-dark-p-00dp;
+    -fx-text-fill: -fx-white-87;
+}
+
+.dark .icon-button .button-icon {
+    -fx-fill: -fx-white-87;
+}
+
+.dark .icon-button {
+    -fx-pref-height: 36;
+    -fx-pref-width: 36;
+    -fx-min-height: 36;
+    -fx-min-width: 36;
+    -fx-max-height: 36;
+    -fx-max-width: 36;
+    -fx-border-radius: 5px;
+    -fx-background-color: -fx-dark-p-24dp;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+}
+
+.dark .icon-button:hover {
+    -fx-background-color: -fx-primary-100;
+    -fx-border-width: 2;
+    -fx-border-color: -fx-primary-50;
+    -fx-border-radius: 5px;
+}
+
+.dark .icon-button:focused {
+    -fx-border-color: -fx-primary-50;
+}
+
+.dark .icon-button:hover .button-icon {
+    -fx-fill: -fx-dark-87;
+}
+
+.dark .icon-button .enabled {
+    -fx-background-color: -fx-primary-200;
+    -fx-border-width: 2;
+    -fx-border-color: -fx-primary-100;
+    -fx-border-radius: 5px;
+}
+
+.dark .icon-button .enabled .button-icon {
+    -fx-fill: -fx-dark-87;
+}
