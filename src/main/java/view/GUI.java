@@ -350,4 +350,21 @@ public class GUI extends Application {
         drawToolbar.updateLocalization();
         optionBar.updateLocalization();
     }
+
+    public void updateButtonEnabled(){
+        if (drawToolbar == null) return;
+        drawToolbar.getButtons().get("mode").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("select").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("delete").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("area").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("rotate").getStyleClass().remove("enabled");
+
+        switch(controller.getCurrentMode()){
+            case DRAW -> drawToolbar.getButtons().get("mode").getStyleClass().add("enabled");
+            case SELECT -> drawToolbar.getButtons().get("select").getStyleClass().add("enabled");
+            case DELETE -> drawToolbar.getButtons().get("delete").getStyleClass().add("enabled");
+            case AREA -> drawToolbar.getButtons().get("area").getStyleClass().add("enabled");
+            case ROTATE -> drawToolbar.getButtons().get("rotate").getStyleClass().add("enabled");
+        }
+    }
 }

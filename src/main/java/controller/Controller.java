@@ -377,6 +377,7 @@ public class Controller {
     public void setCurrentMode(ModeType currentMode) {
         this.currentMode = currentMode;
         CanvasColors.updateColorsByMode(currentMode);
+        gui.updateButtonEnabled();
     }
 
     /** The updateToolbarLocalization method that updates the localization of all the toolbar texts

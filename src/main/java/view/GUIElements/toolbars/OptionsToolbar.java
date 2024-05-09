@@ -53,12 +53,11 @@ public class OptionsToolbar extends CustomToolbar {
         super(stage);
         this.controller = controller;
         this.canvasContainer = canvasContainer;
-        fileManager = new FileManager(canvasContainer, controller);
         this.setOrientation(Orientation.HORIZONTAL);
 
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
-        this.getItems().add(new Separator());
+        //this.getItems().add(new Separator());
         addButton(new Button(settings.getLocalizationString("gridSizeButton")), "gridSizeButton");
 
         TextFieldWithLabel gridWidth = new TextFieldWithLabel("gridWidth", String.format("%.0f", settings.getGridWidth()));
@@ -69,7 +68,7 @@ public class OptionsToolbar extends CustomToolbar {
 
         for (TextFieldWithLabel textField : textFields) {
             textField.setMaxWidth(100);
-            if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
+            //if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
             this.getItems().add(textField);
         }
 
@@ -81,6 +80,8 @@ public class OptionsToolbar extends CustomToolbar {
             canvasContainer.updateAllCanvasLayers(controller);
             System.out.println("Grid size set to " + settings.getGridWidth() + "x" + settings.getGridHeight());
         });
+
+        fileManager = new FileManager(canvasContainer, controller);
 
     }
     /**
@@ -136,6 +137,10 @@ public class OptionsToolbar extends CustomToolbar {
 
         Scene settingsScene = new Scene(settingsLayout, 400, 400);
 
+        settingsLayout.getStyleClass().add("dark");
+        settingsLayout.getStyleClass().add("root");
+        settingsScene.getStylesheets().add("main.css");
+
         settingsWindow.setScene(settingsScene);
         settingsWindow.show();
 
@@ -152,7 +157,6 @@ public class OptionsToolbar extends CustomToolbar {
             settingsWindow.close();
         });
     }
-
     /**
      * Updates the localization of all the text in the toolbar
      */
@@ -174,6 +178,8 @@ public class OptionsToolbar extends CustomToolbar {
         }
     }
     public void showFile() {
+        setCursorCoordinates();
+        fileManager.setCursorCoordinates(getCursorX() + getHeight(), getCursorY() + getButtons().get("file").getHeight());
         fileManager.showFile();
     }
 }

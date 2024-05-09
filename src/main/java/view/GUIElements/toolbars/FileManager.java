@@ -1,19 +1,12 @@
 package view.GUIElements.toolbars;
 
 import controller.Controller;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.control.ContextMenu;
 import view.GUIElements.canvas.CanvasContainer;
 import view.SettingsSingleton;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-
-import static javafx.geometry.Pos.CENTER;
 
 public class FileManager {
     /**
@@ -21,61 +14,53 @@ public class FileManager {
      */
     private SettingsSingleton settings = SettingsSingleton.getInstance();
     private model.FileManager fileManager = model.FileManager.getInstance();
+    private ContextMenu selectionMenu = new ContextMenu();
     private CanvasContainer canvasContainer;
     private Controller controller;
+    private double x, y;
     /**
      * Shows the file window
      */
     public FileManager(CanvasContainer canvasContainer, Controller controller) {
         this.canvasContainer = canvasContainer;
         this.controller = controller;
+        selectionMenu.getItems().add(new CustomMenuItem(settings.getLocalizationString("saveFloorplan")));
+        selectionMenu.getItems().add(new CustomMenuItem(settings.getLocalizationString("loadFloorplan")));
     }
     public void showFile() {
-        Stage fileWindow = new Stage();
-
-        fileWindow.setTitle("File");
-        Button exportButton = new Button(settings.getLocalizationString("saveFloorplan"));
-        Button importButton = new Button(settings.getLocalizationString("loadFloorplan"));
-
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Filter all ser files", "ser");
         fileChooser.setDialogTitle("File Explorer");
         fileChooser.setFileFilter(filter);
         fileChooser.setCurrentDirectory(new File("./src/main/resources/"));
 
-        exportButton.setOnAction(e -> {
-            int response = fileChooser.showSaveDialog(null);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = new File(fileManager.addFileFormat(fileChooser.getSelectedFile().getAbsolutePath()));
-                fileManager.setCurrentFile(selectedFile);
-                fileManager.exportFloorPlan();
-                fileWindow.close();
-            }
-        });
+        selectionMenu.getItems().getFirst().setOnAction(e -> exportFloorPlan(fileChooser));
+        selectionMenu.getItems().getLast().setOnAction(e -> importFloorPlan(fileChooser));
+        selectionMenu.show(canvasContainer, x, y);
 
-        importButton.setOnAction(e -> {
-            int response = fileChooser.showOpenDialog(null);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                if (fileManager.checkFileFormat(selectedFile.getName())) {
-                    fileManager.setCurrentFile(selectedFile);
-                    fileManager.importFloorPlan();
-                    fileWindow.close();
-                    canvasContainer.updateAllCanvasLayers(controller);
-                }
-            }
-        });
-
-        Insets defaultInsets = new Insets(10, 10, 10, 10);
-
-        VBox fileLayout = new VBox(exportButton, importButton);
-        fileLayout.setPadding(defaultInsets);
-        fileLayout.setSpacing(10);
-        fileLayout.setAlignment(CENTER);
-
-        Scene fileScene = new Scene(fileLayout, 200, 100);
-
-        fileWindow.setScene(fileScene);
-        fileWindow.show();
     }
+    public void exportFloorPlan(JFileChooser fileChooser) {
+        int response = fileChooser.showSaveDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = new File(fileManager.addFileFormat(fileChooser.getSelectedFile().getAbsolutePath()));
+            fileManager.setCurrentFile(selectedFile);
+            fileManager.exportFloorPlan();
+        }
+    }
+    public void importFloorPlan(JFileChooser fileChooser) {
+        int response = fileChooser.showOpenDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
+            if (fileManager.checkFileFormat(selectedFile.getName())) {
+                fileManager.setCurrentFile(selectedFile);
+                fileManager.importFloorPlan();
+                canvasContainer.updateAllCanvasLayers(controller);
+            }
+        }
+    }
+    public void setCursorCoordinates(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
 }
