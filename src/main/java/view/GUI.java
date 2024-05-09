@@ -63,6 +63,11 @@ public class GUI extends Application {
      */
     private DrawingToolbar drawToolbar;
     /**
+     * When you are area selecting, the mouse press will have already completed the selection, so we need to skip the mouse click event
+     * This boolean is used to skip the selection inside the mouse click event
+     */
+    private boolean skipSelection = false;
+    /**
      * Init method
      */
 
@@ -116,6 +121,8 @@ public class GUI extends Application {
                     if(distanceFromInitialSelect > minDistance) {
                         SelectUtilities.selectShapesInsideBox(controller, mouseX, mouseY, initialSelectionX, initialSelectionY, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+                    } else if (skipSelection) {
+                        skipSelection = false;
                     } else if (hoveredShape != null && (selectedShape == null || event.isShiftDown())) {
                         SelectUtilities.selectHoveredShape(controller, mouseX, mouseY);
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
@@ -233,6 +240,8 @@ public class GUI extends Application {
                 initialSelectionY = controller.getCanvasMath().relativeYtoAbsoluteY(event.getY());
                 if(!event.isShiftDown() && controller.getSelectedShape() != null) {
                     SelectUtilities.finalizeSelectedShapes(controller, gc, initialSelectionX, initialSelectionY);
+                    previewGc.clear();
+                    skipSelection = true;
                 }
                 controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
             }

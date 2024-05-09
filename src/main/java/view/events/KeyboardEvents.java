@@ -33,15 +33,29 @@ public class KeyboardEvents {
     public static KeyboardEventHandler onKeyPressed(CustomCanvas previewGc, CustomCanvas gc, Controller controller) {
         return (KeyEvent event) -> {
             switch (event.getCode()) {
-                case DIGIT1 -> controller.setCurrentShape(ShapeType.LINE);
-                case DIGIT2 -> controller.setCurrentShape(ShapeType.RECTANGLE);
-                case DIGIT3 -> controller.setCurrentShape(ShapeType.DOOR);
-                case DIGIT4 -> controller.setCurrentShape(ShapeType.MULTILINE);
+                case DIGIT1 -> setCurrentShape(controller, ShapeType.LINE);
+                case DIGIT2 -> setCurrentShape(controller, ShapeType.MULTILINE);
+                case DIGIT3 -> setCurrentShape(controller, ShapeType.DOOR);
+                case DIGIT4 -> setCurrentShape(controller, ShapeType.RECTANGLE);
                 case ESCAPE -> {
-                    controller.setLastPoint(null);
-                    previewGc.clear();
+                    if (controller.getCurrentMode() == ModeType.DRAW) {
+                        if (controller.getCurrentShapeType() == ShapeType.MULTILINE) {
+                            controller.setLastPoint(null);
+                            previewGc.clear();
+                        } else if(controller.getLastPoint() != null) {
+                            controller.getHistoryManager().undo();
+                        }
+                    }
                 }
                 case CONTROL -> controller.setCtrlDown(true);
+                case B -> controller.setCurrentMode(ModeType.DRAW);
+                case S -> controller.setCurrentMode(ModeType.SELECT);
+                case E -> controller.setCurrentMode(ModeType.DELETE);
+                case N -> {
+                    if (controller.isCtrlDown()) {
+                        controller.resetApplication();
+                    }
+                }
                 case A -> {
                     if(controller.isCtrlDown()) {
                         controller.setCurrentMode(ModeType.SELECT);
@@ -60,6 +74,8 @@ public class KeyboardEvents {
                         controller.setFlipDoors(!controller.isFlipDoors());
                         controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
                         DrawUtilities.renderDrawingPreview(controller, controller.getMouseX(), controller.getMouseY(), previewGc);
+                    } else {
+                        controller.setCurrentMode(ModeType.ROTATE);
                     }
                 }
                 case Z -> handleHistoryShortCuts(event, controller.getHistoryManager()::undo, previewGc, gc, controller);
@@ -80,6 +96,13 @@ public class KeyboardEvents {
             }
         };
     }
+
+    private static void setCurrentShape(Controller controller, ShapeType shapeType) {
+        controller.setCurrentShape(shapeType);
+        controller.setCurrentMode(ModeType.DRAW);
+    }
+
+
     /**
      * Handles the key released event
      * @param previewGc preview custom canvas
