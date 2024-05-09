@@ -57,7 +57,7 @@ public class OptionsToolbar extends CustomToolbar {
 
         addButton(new Button(settings.getLocalizationString("file")), "file");
         addButton(new Button(settings.getLocalizationString("settings")), "settings");
-        this.getItems().add(new Separator());
+        //this.getItems().add(new Separator());
         addButton(new Button(settings.getLocalizationString("gridSizeButton")), "gridSizeButton");
 
         TextFieldWithLabel gridWidth = new TextFieldWithLabel("gridWidth", String.format("%.0f", settings.getGridWidth()));
@@ -68,7 +68,7 @@ public class OptionsToolbar extends CustomToolbar {
 
         for (TextFieldWithLabel textField : textFields) {
             textField.setMaxWidth(100);
-            if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
+            //if (textFields.indexOf(textField) != 0) this.getItems().add(new Separator());
             this.getItems().add(textField);
         }
 

@@ -30,6 +30,7 @@
 .dark .tool-bar {
     -fx-background-color: -fx-dark-p-04dp;
     -fx-spacing: 10px;
+
 }
 
 /* menus */
@@ -89,6 +90,7 @@
 
 .dark .button:pressed {
     -fx-background-color: -fx-dark-p-03dp;
+    -fx-border-color: -fx-white-38;
 }
 
 .dark .separator .line {
@@ -126,7 +128,7 @@
 
 .dark .icon-button:hover {
     -fx-background-color: -fx-primary-100;
-    -fx-border-width: 2;
+    -fx-border-width: 1;
     -fx-border-color: -fx-primary-50;
     -fx-border-radius: 5px;
 }
@@ -139,13 +141,13 @@
     -fx-fill: -fx-dark-87;
 }
 
-.dark .icon-button .enabled {
+.dark .icon-button.enabled {
     -fx-background-color: -fx-primary-200;
-    -fx-border-width: 2;
+    -fx-border-width: 1;
     -fx-border-color: -fx-primary-100;
     -fx-border-radius: 5px;
 }
 
-.dark .icon-button .enabled .button-icon {
+.dark .icon-button.enabled .button-icon {
     -fx-fill: -fx-dark-87;
 }

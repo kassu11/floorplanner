@@ -46,7 +46,7 @@ public class DrawingToolbar extends CustomToolbar {
         this.setOrientation(Orientation.VERTICAL);
         addButton(createIconButton(SvgConfig.CURSOR.getSvgName(), settings.getLocalizationString("select")), "select");
         getItems().add(new javafx.scene.control.Separator());
-        addButton(new Button(settings.getLocalizationString("mode")), "mode");
+        addButton(createIconButton(SvgConfig.DOOR.getSvgName(), settings.getLocalizationString("mode")), "mode");
         getItems().add(new javafx.scene.control.Separator());
         addButton(createIconButton(SvgConfig.ERASER.getSvgName(), settings.getLocalizationString("delete")), "delete");
         addButton(createIconButton(SvgConfig.ROTATE.getSvgName(), settings.getLocalizationString("rotate")), "rotate");
