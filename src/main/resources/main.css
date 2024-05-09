@@ -11,6 +11,8 @@
     -fx-dark-400: #4d4d4d;
     -fx-dark-900: black;
     -fx-dark-p-00dp: #1D1E22;
+    -fx-dark-p-01dp: #28292D;
+    -fx-dark-p-02dp: #2D2E31;
     -fx-dark-p-03dp: #2F3034;
     -fx-dark-p-04dp: #313236;
     -fx-dark-p-06dp: #36373A;
@@ -50,15 +52,40 @@
 }
 
 .dark .combo-box {
+    -fx-background-color: -fx-dark-p-12dp;
     -fx-border-color: -fx-white-38;
-    -fx-background-insets: 0;
+    -fx-border-radius: 5px;
 }
 
-.dark .combo-box .list-view .list-cell, .dark .combo-box .list-cell {
+.dark .combo-box:hover {
+    -fx-background-color: -fx-dark-p-24dp;
+}
+
+.dark .combo-box:pressed {
+    -fx-background-color: -fx-dark-p-03dp;
+}
+
+.dark .combo-box:focused {
+    -fx-border-color: -fx-primary-50;
+}
+
+.dark .combo-box .arrow {
+    -fx-background-color: -fx-white-87;
+}
+
+
+.dark .combo-box .list-cell{
+    -fx-text-fill: -fx-white-87;
+}
+
+.dark .combo-box .list-view {
+    -fx-background-color: -fx-dark-p-12dp;
+}
+
+.dark .combo-box .list-view .list-cell {
+    -fx-text-fill: -fx-white-87;
     -fx-background-color: -fx-dark-p-12dp;
     -fx-border-color: -fx-dark-p-12dp;
-    -fx-text-fill: -fx-white-87;
-    -fx-background-insets: 0;
 }
 
 .dark .combo-box .list-view .list-cell:hover, .dark .combo-box .list-view .list-cell:focused {
@@ -67,9 +94,48 @@
     -fx-border-color: -fx-primary-300;
 }
 
+.dark .check-box {
+    -fx-text-fill: -fx-white-87;
+    -fx-background-color: -fx-dark-p-04dp;
+    -fx-border-color: -fx-dark-p-04dp;
+    -fx-padding: 3px;
+}
+
+.dark .check-box:focused .box {
+    -fx-background-color: -fx-dark-p-00dp;
+}
+
+.dark .check-box .box {
+    -fx-background-color: -fx-dark-p-01dp;
+}
+.dark .check-box:selected .mark {
+    -fx-background-color: -fx-white-87;
+}
+
+/*
+.dark .combo-box .list-view .list-cell, .dark .combo-box .list-cell {
+    -fx-background-color: -fx-dark-p-12dp;
+    -fx-border-color: -fx-dark-p-12dp;
+    -fx-text-fill: -fx-white-87;
+    -fx-background-insets: 0;
+}
+*/
+/*
+.dark .combo-box .list-view .list-cell:hover, .dark .combo-box:hover {
+    -fx-background-color: -fx-dark-p-24dp;
+}
+*/
+
+/*
+.dark .combo-box .list-view .list-cell:hover, .dark .combo-box .list-view .list-cell:focused {
+    -fx-text-fill: -fx-dark-87;
+    -fx-background-color : -fx-primary-200;
+    -fx-border-color: -fx-primary-300;
+} */
+
 /* buttons */
 
-.dark .button, .dark .combo-box, .dark .check-box {
+.dark .button {
     -fx-background-color: -fx-dark-p-12dp;
     -fx-text-fill: -fx-white-87;
     -fx-background-insets: 0;
@@ -79,7 +145,7 @@
     -fx-border-color: -fx-white-38;
 }
 
-.dark .button:hover, .dark .combo-box:hover {
+.dark .button:hover {
     -fx-background-color: -fx-dark-p-24dp;
 }
 

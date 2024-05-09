@@ -337,6 +337,7 @@ public class GUI extends Application {
         Scene view = new Scene(root, canvasWidth, canvasHeight);
         root.getStyleClass().add("dark");
         view.getStylesheets().add("main.css");
+        updateButtonEnabled();
 
         stage.setTitle("Floor Plan Creator");
         stage.setScene(view);
