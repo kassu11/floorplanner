@@ -15,20 +15,27 @@ public class Door extends Line {
     }
 
     public void draw(CustomCanvas gc) {
+        gc.setLineDashes(10, 10);
         super.draw(gc);
         Point hingePoint = this.getPoints().getLast();
         Point endPoint = this.getPoints().getFirst();
         gc.beginPath();
-        double distance = Math.hypot(hingePoint.getX() - endPoint.getX(), hingePoint.getY() - endPoint.getY());
+        double deltaY = hingePoint.getY() - endPoint.getY();
+        double deltaX = hingePoint.getX() - endPoint.getX();
+        double distance = Math.hypot(deltaX, deltaY);
         double angle = Math.atan2(endPoint.getY() - hingePoint.getY(), endPoint.getX() - hingePoint.getX()) / Math.PI * 180;
         double startAngle = (360 - angle) % 360 + (flipped ? 270 : 0);
-//        System.out.println((360 - Math.atan2(endPoint.getY() - hingePoint.getY(), endPoint.getX() - hingePoint.getX()) / Math.PI * 180) % 360);
-//        System.out.println(Math.abs((Math.atan2(endPoint.getY() - hingePoint.getY(), endPoint.getX() - hingePoint.getX()) / Math.PI * 180) - 180) % 360);
+
         gc.arc(hingePoint.getX(), hingePoint.getY(), distance, distance, startAngle, 90);
+        double endLineX = flipped ? hingePoint.getX() + (deltaY) : hingePoint.getX() - (deltaY);
+        double endLineY = flipped ? hingePoint.getY() - hingePoint.getX() + endPoint.getX() : hingePoint.getY() + deltaX;
         gc.stroke();
-//        gc.setStroke(Color.BLACK);
-//        gc.setLineWidth(2);
-//        gc.strokeLine(getPointA().getX(), getPointA().getY(), getPointB().getX(), getPointB().getY());
+        gc.beginPath();
+        gc.setLineDashes();
+        gc.moveTo(hingePoint.getX(), hingePoint.getY());
+        gc.lineTo(endLineX, endLineY);
+        gc.stroke();
+
     }
 
     public boolean isFlipped() {
