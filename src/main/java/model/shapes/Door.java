@@ -25,14 +25,17 @@ public class Door extends Line{
         double slopeA = calculateSlope(pointA, pointB);
         double slopeB = calculateSlope(pointA, arcPoint);
         double lengthOfAngle = Math.toDegrees(Math.atan((Math.abs(slopeA - slopeB) / (1 + slopeA * slopeB))));
-        if(pointB.getX() < pointA.getX()){
-            lengthOfAngle = 180 - lengthOfAngle;
+        if(pointB.getX() < pointA.getX() ){
+            startAngle = 0;
+        }
+        if(pointB.getY() < pointA.getY()){
+            startAngle = 90;
         }
         arc.setAngleLength((int) lengthOfAngle);
         arc.setHeight(distanceBetweenPoints);
         arc.setRadiusX(distanceBetweenPoints);
         arc.setRadiusY(distanceBetweenPoints);
-        arc.setStartAngle(90);
+        arc.setStartAngle(startAngle);
 
         line.draw(gc);
         arc.draw(gc);
