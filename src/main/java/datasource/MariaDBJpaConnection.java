@@ -25,7 +25,12 @@ public class MariaDBJpaConnection {
     public static EntityManager getInstance() {
         if (em==null) {
             if (emf==null) {
-                emf = Persistence.createEntityManagerFactory("floorplannerDatasource");
+                try {
+                    emf = Persistence.createEntityManagerFactory("floorplannerDatasource");
+                } catch (org.hibernate.service.spi.ServiceException e) {
+                    return null;
+                }
+
             }
             em = emf.createEntityManager();
         }
