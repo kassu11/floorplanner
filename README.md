@@ -4,6 +4,8 @@ This project provides users with an easy-to-use and efficient tool for designing
 
 If you would like to go more into detail about the projects code structure, there are plenty of [UML graphs](https://github.com/kassu11/floorplanner/tree/main/UML-graphs) about the inner workings of the program.
 
+For more detailed information on how each method works, here is a link to the [Javadoc](https://users.metropolia.fi/~aaposs/javadoc/) that was created for this project.
+
 ### Shortcuts keys
 
 A short list of all the default shortcut keys that the application supports.
