@@ -163,11 +163,30 @@ public interface Shape extends Serializable {
      * @return selected state of the shape
      */
     boolean isSelected();
+    /**
+     * Returns the shape data type
+     * @return shape data type
+     */
     int getShapeDataType();
+    /**
+     * Sets the shape data type
+     * @param shapeDataType shape data type
+     */
     void setShapeDataType(int shapeDataType);
-
+    /**
+     * Adds a shape data type
+     * @param shapeDataType shape data type
+     */
     void addShapeDataType(int shapeDataType);
-
+    /**
+     * Removes a shape data type
+     * @param shapeDataType shape data type
+     */
     void removeShapeDataType(int shapeDataType);
+    /**
+     * Checks if the shape contains a shape data type
+     * @param shapeDataType shape data type
+     * @return true if the shape contains the shape data type
+     */
     boolean containsShapeDataType(int shapeDataType);
 }

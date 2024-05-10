@@ -375,7 +375,9 @@ public class GUI extends Application {
         drawToolbar.updateLocalization();
         optionBar.updateLocalization();
     }
-
+    /**
+     * Updates the button to be enabled
+     */
     public void updateButtonEnabled(){
         if (drawToolbar == null) return;
         drawToolbar.getButtons().get("line").getStyleClass().remove("enabled");

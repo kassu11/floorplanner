@@ -169,11 +169,16 @@ public class Line extends AbstractShape {
         gc.fillText(text, radians, this.getCentroidX(), this.getCentroidY(), textOffset);
         gc.setTransform(original);
     }
-
+    /**
+     * Adds a dimension to the line
+     * @param dimension dimension to be added
+     */
     public void addDimension(Dimension dimension) {
         dimensions.add(dimension);
     }
-
+    /**
+     * The line to match dimensions
+     */
     public void resizeToDimensions() {
         dimensions.forEach(Dimension::resize);
     }

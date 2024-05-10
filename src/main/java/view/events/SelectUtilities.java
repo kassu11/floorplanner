@@ -266,6 +266,16 @@ public class SelectUtilities {
 	public static void drawSelectionBox(Controller controller, CustomCanvas gc, double x1, double y1, double x2, double y2) {
 		controller.createShape(x1, y1, x2, y2, ShapeType.RECTANGLE, null).draw(gc);
 	}
+	/**
+	 * Selects the shapes inside the selection box
+	 * @param controller controller
+	 * @param mouseX X coordinate
+	 * @param mouseY Y coordinate
+	 * @param x1 X1 coordinate
+	 * @param y1 Y1 coordinate
+	 * @param x2 X2 coordinate
+	 * @param y2 Y2 coordinate
+	 */
 	public static void selectShapesInsideBox(Controller controller, double mouseX, double mouseY, double x1, double y1, double x2, double y2){
 		List<Shape> selectedPoints = new ArrayList<>();
 		boolean isNewSelection = controller.getShapes(Controller.SingletonType.PREVIEW).isEmpty();
@@ -286,6 +296,16 @@ public class SelectUtilities {
 		if (isNewSelection) controller.getHistoryManager().startSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 		else controller.getHistoryManager().addToSelection(controller.getShapes(Controller.SingletonType.PREVIEW));
 	}
+	/**
+	 * Checks if the point is inside the selection box
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param x1 X1 coordinate
+	 * @param y1 Y1 coordinate
+	 * @param x2 X2 coordinate
+	 * @param y2 Y2 coordinate
+	 * @return true if the point is inside the selection box
+	 */
 	public static boolean isInsideSelectionBox(double x, double y, double x1, double y1, double x2, double y2) {
 		double minX = Math.min(x1, x2);
 		double maxX = Math.max(x1, x2);

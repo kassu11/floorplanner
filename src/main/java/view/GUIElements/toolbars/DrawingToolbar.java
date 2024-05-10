@@ -96,6 +96,12 @@ public class DrawingToolbar extends CustomToolbar {
         }
     }
 
+    /**
+     * Creates a button that has an svg icon and a tooltip
+     * @param svg
+     * @param tooltip
+     * @return
+     */
     public static Button createIconButton(String svg, String tooltip) {
         SVGPath path = new SVGPath();
         path.setContent(svg);

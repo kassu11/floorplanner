@@ -13,7 +13,10 @@ public class Door extends Line {
     public Door(Point pointA, Point pointB) {
         super(pointA, pointB);
     }
-
+    /**
+     * Draws the door and all shapes related to it
+     * @param gc custom canvas
+     */
     public void draw(CustomCanvas gc) {
         gc.setLineDashes(10, 10);
         super.draw(gc);
@@ -37,11 +40,17 @@ public class Door extends Line {
         gc.stroke();
 
     }
-
+    /**
+     * Returns if the door is flipped
+     * @return if the door is flipped
+     */
     public boolean isFlipped() {
         return flipped;
     }
-
+    /**
+     * Sets if the door is flipped
+     * @param flipped if the door is flipped
+     */
     public void setFlipped(boolean flipped) {
         this.flipped = flipped;
     }

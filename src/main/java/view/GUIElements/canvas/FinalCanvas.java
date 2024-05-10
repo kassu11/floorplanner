@@ -2,13 +2,18 @@ package view.GUIElements.canvas;
 
 import model.shapes.Shape;
 import view.types.ShapeDataType;
-
+/**
+ * Final canvas class where all the drawn shapes are displayed
+ */
 public class FinalCanvas extends CustomCanvas {
     public FinalCanvas(double width, double height) {
         super(width, height);
         setLineWidth(5);
     }
-
+    /**
+     * Updates the canvas colors
+     * @param shape shape
+     */
     @Override
     public void updateCanvasColors(Shape shape) {
         if (shape == null) return;

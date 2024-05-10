@@ -27,6 +27,9 @@ public class FileManager {
         selectionMenu.getItems().add(new CustomMenuItem(settings.getLocalizationString("saveFloorplan")));
         selectionMenu.getItems().add(new CustomMenuItem(settings.getLocalizationString("loadFloorplan")));
     }
+    /**
+     * Shows the file window
+     */
     public void showFile() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Filter all ser files", "ser");
@@ -39,6 +42,10 @@ public class FileManager {
         selectionMenu.show(canvasContainer, x, y);
 
     }
+    /**
+     * Exports the floor plan
+     * @param fileChooser file chooser
+     */
     public void exportFloorPlan(JFileChooser fileChooser) {
         int response = fileChooser.showSaveDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
@@ -47,6 +54,10 @@ public class FileManager {
             fileManager.exportFloorPlan();
         }
     }
+    /**
+     * Imports the floor plan
+     * @param fileChooser file chooser
+     */
     public void importFloorPlan(JFileChooser fileChooser) {
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
@@ -58,6 +69,11 @@ public class FileManager {
             }
         }
     }
+    /**
+     * Sets the cursor coordinates
+     * @param x x
+     * @param y y
+     */
     public void setCursorCoordinates(double x, double y) {
         this.x = x;
         this.y = y;

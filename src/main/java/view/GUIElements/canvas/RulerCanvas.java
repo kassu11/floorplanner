@@ -5,19 +5,63 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import model.shapes.Shape;
 import view.SettingsSingleton;
+/**
+ * Ruler canvas class where the rulers are displayed
+ */
 public class RulerCanvas extends CustomCanvas {
+    /**
+     * Settings singleton
+     */
     private final SettingsSingleton settings = SettingsSingleton.getInstance();
+    /**
+     * Minimum gap between text
+     */
     private final double minGapBetweenText = 75;
+    /**
+     * Maximum gap between text
+     */
     private final double maxGapBetweenText = 250;
+    /**
+     * Ruler font
+     */
     private Font rulerFont = new Font("Arial", 11);
+    /**
+     * Original affine
+     */
     private final Affine original = gc.getTransform();
+    /**
+     * Rotate affine
+     */
     private final Affine rotate = new Affine();
+    /**
+     * Ruler height
+     */
     private final double rulerHeight = 15;
+    /**
+     * Text padding bottom
+     */
     private final double textPaddingBottom = 4;
+    /**
+     * Text padding left
+     */
     private final double textPaddingLeft = 3;
+    /**
+     * The line height for line l1
+     */
     private final double l1LineHeight = 12;
+    /**
+     * The line height for line l2
+     */
     private final double l2LineHeight = 5;
+    /**
+     * The line height for line l3
+     */
     private final double l3LineHeight = 8;
+    /**
+     * Constructor for the ruler canvas
+     * @param width width
+     * @param height height
+     */
     public RulerCanvas(double width, double height) {
         super(width, height);
         setLineWidth(.5);
@@ -25,7 +69,9 @@ public class RulerCanvas extends CustomCanvas {
         rotate.appendRotation(-90, 0, 0);
         gc.setImageSmoothing(false);
     }
-
+    /**
+     * Method that draws both rulers onto the sides of the drawing canvas
+     */
     public void drawRuler() {
         clear();
 
@@ -128,7 +174,11 @@ public class RulerCanvas extends CustomCanvas {
         }
         gc.setTransform(original);
     }
-
+    /**
+     * Formats the ruler value
+     * @param value value
+     * @return formatted value
+     */
     private String formatRulerValue(double value) {
         return String.valueOf((int) value);
     }
@@ -142,7 +192,10 @@ public class RulerCanvas extends CustomCanvas {
         gc.fillRect(negativeOffset - textPosition, rulerHeight - l1LineHeight, 1, l1LineHeight);
         gc.fillText(formatRulerValue(rulerValue), negativeOffset - textPosition - textPaddingLeft, rulerHeight - textPaddingBottom);
     }
-
+    /**
+     * Method to update the canvas colors, but you cannot update the colors of the ruler canvas
+     * @param shape shape
+     */
     @Override
     public void updateCanvasColors(Shape shape) {
         System.out.println("YOU SHOULD NOT UPDATE THE RULER CANVAS COLORS!");

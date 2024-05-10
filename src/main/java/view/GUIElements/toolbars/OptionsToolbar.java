@@ -176,6 +176,9 @@ public class OptionsToolbar extends CustomToolbar {
             if(textField.getKey().equals("gridHeight")) textField.getTextField().setText(String.format("%.0f", settings.getGridHeight()));
         }
     }
+    /**
+     * Shows the file window
+     */
     public void showFile() {
         setCursorCoordinates();
         fileManager.setCursorCoordinates(getCursorX() + getHeight(), getCursorY() + getButtons().get("file").getHeight());

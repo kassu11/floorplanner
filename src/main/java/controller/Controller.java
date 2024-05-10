@@ -53,10 +53,14 @@ public class Controller {
     private double mouseX, mouseY;
     /** The hover color and selected color variables */
     private String hoverColor, selectedColor;
-    /** The SingletonType enum */
     /** The points of the area shape */
     private List<Point> areaShapes = new ArrayList<>();
+    /** The boolean value of whether the doors are flipped */
     private boolean flipDoors = false;
+    /**
+     * Singleton type enum that is used to determine which ShapeContainer to use
+     */
+
 
     public enum SingletonType {
         FINAL, PREVIEW
@@ -478,10 +482,17 @@ public class Controller {
         return areaShapes;
     }
 
+    /**
+     * Returns boolean value of whether the doors are flipped
+     * @return
+     */
     public boolean isFlipDoors() {
         return flipDoors;
     }
-
+    /**
+     * Sets the flip doors boolean value
+     * @param flipDoors
+     */
     public void setFlipDoors(boolean flipDoors) {
         this.flipDoors = flipDoors;
     }
