@@ -313,20 +313,20 @@ public class GUI extends Application {
 
         drawToolbar = new DrawingToolbar(controller, stage);
         drawToolbar.getButtons().get("line").setOnAction(event -> {
-            drawToolbar.changeMode(ModeType.DRAW);
             controller.setCurrentShape(ShapeType.LINE);
+            drawToolbar.changeMode(ModeType.DRAW);
         });
         drawToolbar.getButtons().get("multiline").setOnAction(event -> {
-            drawToolbar.changeMode(ModeType.DRAW);
             controller.setCurrentShape(ShapeType.MULTILINE);
+            drawToolbar.changeMode(ModeType.DRAW);
         });
         drawToolbar.getButtons().get("rectangle").setOnAction(event -> {
-            drawToolbar.changeMode(ModeType.DRAW);
             controller.setCurrentShape(ShapeType.RECTANGLE);
+            drawToolbar.changeMode(ModeType.DRAW);
         });
         drawToolbar.getButtons().get("door").setOnAction(event -> {
-            drawToolbar.changeMode(ModeType.DRAW);
             controller.setCurrentShape(ShapeType.DOOR);
+            drawToolbar.changeMode(ModeType.DRAW);
         });
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
