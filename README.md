@@ -6,6 +6,8 @@ If you would like to go more into detail about the projects code structure, ther
 
 For more detailed information on how each method works, here is a link to the [Javadoc](https://users.metropolia.fi/~aaposs/javadoc/) that was created for this project.
 
+The UX design system can be viewed from the [Figma-UX-Design_System](https://github.com/kassu11/floorplanner/tree/main/Figma-UX-Design-System) folder.
+
 ### Shortcuts keys
 
 A short list of all the default shortcut keys that the application supports.
