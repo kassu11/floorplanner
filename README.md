@@ -2,6 +2,28 @@
 
 This project provides users with an easy-to-use and efficient tool for designing and creating floorplans. It offers a variety of features that facilitate design, such as measuring dimensions and calculating total area. This project is open-source.
 
+If you would like to go more into detailt about the projects code structure, there are plenty of [UML graphs](https://github.com/kassu11/floorplanner/tree/main/UML-graphs) about the inner workings of the program.
+
+### Shortcuts keys
+
+A short list of all the default shortcut keys that the application supports.
+
+| Keys | Action |
+|----------|------|
+| <kbd>ctrl</kbd> + <kbd>a</kbd> | Select all shapes |
+| <kbd>ctrl</kbd> + <kbd>n</kbd> | New file |
+| <kbd>ctrl</kbd> + <kbd>z</kbd> | Undo action |
+| <kbd>ctrl</kbd> + <kbd>y</kbd> | Redo action |
+| <kbd>1</kbd> | Set draw shape to line |
+| <kbd>2</kbd> | Set draw shape to multiline |
+| <kbd>3</kbd> | Set draw shape to door |
+| <kbd>4</kbd> | Set draw shape to rectangle |
+| <kbd>s</kbd> | Activate select tool |
+| <kbd>e</kbd> | Activate delete tool |
+| <kbd>r</kbd> | Activate rotate tool / flip door when drawing |
+| <kbd>b</kbd> | Activate drawing mode with the last selected shape (default is line) |
+| <kbd>a</kbd> | Activate area tool |
+
 ### Built with
 
 - [![Java][Java.java]][Java-url]
