@@ -91,7 +91,6 @@ public class OptionsToolbar extends CustomToolbar {
         Stage settingsWindow = new Stage();
 
         settingsWindow.setTitle(settings.getLocalizationString("settings"));
-        CheckBox showAreas = new CheckBox(settings.getLocalizationString("showAreas"));
         Label shapeLabel = new Label(settings.getLocalizationString("shapeSettings"));
 
         ComboBox<ComboBoxItem> languageSettings = new ComboBox<>();
@@ -123,7 +122,7 @@ public class OptionsToolbar extends CustomToolbar {
         HBox measurementSettingsLayout = new HBox(new Label(settings.getLocalizationString("measurementUnit")), measurementSettings);
         measurementSettingsLayout.setSpacing(10);
 
-        VBox shapeSettingsLayout = new VBox(shapeLabel , showAreas, showGrid, showUnits, saveButton);
+        VBox shapeSettingsLayout = new VBox(shapeLabel, showGrid, showUnits, saveButton);
         shapeSettingsLayout.setPadding(defaultInsets);
         shapeSettingsLayout.setSpacing(10);
 

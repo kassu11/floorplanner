@@ -26,10 +26,12 @@ public class GridCanvas extends CustomCanvas {
 
     public void drawGrid() {
         clear();
+        gc.setFill(CanvasColors.GRID_BACKGROUND);
+        double width = settings.getGridWidth();
+        double height = settings.getGridHeight();
+        fillRect(0, 0, width, height);
         if (settings.isGridEnabled()) {
             beginPath();
-            double width = settings.getGridWidth();
-            double height = settings.getGridHeight();
             int gridSize = settings.getGridSize();
             for (int i = 0; i < width; i += gridSize) {
                 moveTo(i, 0);
@@ -39,8 +41,6 @@ public class GridCanvas extends CustomCanvas {
                 moveTo(0, i);
                 lineTo(width, i);
             }
-            gc.setFill(CanvasColors.GRID_BACKGROUND);
-            fillRect(0, 0, width, height);
             stroke();
         }
     }

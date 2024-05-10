@@ -312,7 +312,22 @@ public class GUI extends Application {
 
 
         drawToolbar = new DrawingToolbar(controller, stage);
-        drawToolbar.getButtons().get("mode").setOnAction(event -> drawToolbar.changeMode(ModeType.DRAW));
+        drawToolbar.getButtons().get("line").setOnAction(event -> {
+            drawToolbar.changeMode(ModeType.DRAW);
+            controller.setCurrentShape(ShapeType.LINE);
+        });
+        drawToolbar.getButtons().get("multiline").setOnAction(event -> {
+            drawToolbar.changeMode(ModeType.DRAW);
+            controller.setCurrentShape(ShapeType.MULTILINE);
+        });
+        drawToolbar.getButtons().get("rectangle").setOnAction(event -> {
+            drawToolbar.changeMode(ModeType.DRAW);
+            controller.setCurrentShape(ShapeType.RECTANGLE);
+        });
+        drawToolbar.getButtons().get("door").setOnAction(event -> {
+            drawToolbar.changeMode(ModeType.DRAW);
+            controller.setCurrentShape(ShapeType.DOOR);
+        });
         drawToolbar.getButtons().get("select").setOnAction(event -> drawToolbar.changeMode(ModeType.SELECT));
         drawToolbar.getButtons().get("delete").setOnAction(event -> drawToolbar.changeMode(ModeType.DELETE));
         drawToolbar.getButtons().get("area").setOnAction(event -> drawToolbar.changeMode(ModeType.AREA));
@@ -363,14 +378,24 @@ public class GUI extends Application {
 
     public void updateButtonEnabled(){
         if (drawToolbar == null) return;
-        drawToolbar.getButtons().get("mode").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("line").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("rectangle").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("multiline").getStyleClass().remove("enabled");
+        drawToolbar.getButtons().get("door").getStyleClass().remove("enabled");
         drawToolbar.getButtons().get("select").getStyleClass().remove("enabled");
         drawToolbar.getButtons().get("delete").getStyleClass().remove("enabled");
         drawToolbar.getButtons().get("area").getStyleClass().remove("enabled");
         drawToolbar.getButtons().get("rotate").getStyleClass().remove("enabled");
 
         switch(controller.getCurrentMode()){
-            case DRAW -> drawToolbar.getButtons().get("mode").getStyleClass().add("enabled");
+            case DRAW -> {
+                switch(controller.getCurrentShapeType()){
+                    case LINE -> drawToolbar.getButtons().get("line").getStyleClass().add("enabled");
+                    case RECTANGLE -> drawToolbar.getButtons().get("rectangle").getStyleClass().add("enabled");
+                    case MULTILINE -> drawToolbar.getButtons().get("multiline").getStyleClass().add("enabled");
+                    case DOOR -> drawToolbar.getButtons().get("door").getStyleClass().add("enabled");
+                }
+            }
             case SELECT -> drawToolbar.getButtons().get("select").getStyleClass().add("enabled");
             case DELETE -> drawToolbar.getButtons().get("delete").getStyleClass().add("enabled");
             case AREA -> drawToolbar.getButtons().get("area").getStyleClass().add("enabled");

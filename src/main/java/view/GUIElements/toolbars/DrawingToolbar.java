@@ -45,9 +45,12 @@ public class DrawingToolbar extends CustomToolbar {
         this.controller = controller;
         this.setOrientation(Orientation.VERTICAL);
         addButton(createIconButton(SvgConfig.CURSOR.getSvgName(), settings.getLocalizationString("select")), "select");
-        getItems().add(new javafx.scene.control.Separator());
-        addButton(createIconButton(SvgConfig.DOOR.getSvgName(), settings.getLocalizationString("mode")), "mode");
-        getItems().add(new javafx.scene.control.Separator());
+        getItems().add(new javafx.scene.control.Separator());       // Drawing modes start here
+        addButton(createIconButton(SvgConfig.LINE.getSvgName(), settings.getLocalizationString("line")), "line");
+        addButton(createIconButton(SvgConfig.RECTANGLE.getSvgName(), settings.getLocalizationString("rectangle")), "rectangle");
+        addButton(createIconButton(SvgConfig.MULTILINE.getSvgName(), settings.getLocalizationString("multiline")), "multiline");
+        addButton(createIconButton(SvgConfig.DOOR.getSvgName(), settings.getLocalizationString("door")), "door");
+        getItems().add(new javafx.scene.control.Separator());       // Drawing modes end here
         addButton(createIconButton(SvgConfig.ERASER.getSvgName(), settings.getLocalizationString("delete")), "delete");
         addButton(createIconButton(SvgConfig.ROTATE.getSvgName(), settings.getLocalizationString("rotate")), "rotate");
         addButton(createIconButton(SvgConfig.AREA.getSvgName(), settings.getLocalizationString("area")), "area");
@@ -55,12 +58,12 @@ public class DrawingToolbar extends CustomToolbar {
         addButton(createIconButton(SvgConfig.CLEAR.getSvgName(), settings.getLocalizationString("reset")), "reset");
 
         // Set up the mode menu
-        this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
-        this.rectangleMode = new CustomMenuItem(settings.getLocalizationString("rectangle"), ShapeType.RECTANGLE);
-        this.circleMode = new CustomMenuItem(settings.getLocalizationString("circle"), ShapeType.CIRCLE);
-        this.multilineMode = new CustomMenuItem(settings.getLocalizationString("multiline"), ShapeType.MULTILINE);
-        this.doorMode = new CustomMenuItem(settings.getLocalizationString("door"), ShapeType.DOOR);
-        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode, doorMode);
+//        this.lineMode = new CustomMenuItem(settings.getLocalizationString("line"), ShapeType.LINE);
+//        this.rectangleMode = new CustomMenuItem(settings.getLocalizationString("rectangle"), ShapeType.RECTANGLE);
+//        this.circleMode = new CustomMenuItem(settings.getLocalizationString("circle"), ShapeType.CIRCLE);
+//        this.multilineMode = new CustomMenuItem(settings.getLocalizationString("multiline"), ShapeType.MULTILINE);
+//        this.doorMode = new CustomMenuItem(settings.getLocalizationString("door"), ShapeType.DOOR);
+//        this.modeMenu.getItems().addAll(rectangleMode, circleMode, lineMode, multilineMode, doorMode);
     }
     /**
      * Changes the draw mode
@@ -70,10 +73,10 @@ public class DrawingToolbar extends CustomToolbar {
         setCursorCoordinates();
         controller.setCurrentMode(mode);
         modeMenu.hide();
-        if (mode == ModeType.DRAW) {
-            modeMenu.setOnAction(event -> controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType()));
-            modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
-        }
+//        if (mode == ModeType.DRAW) {
+//            modeMenu.setOnAction(event -> controller.setCurrentShape(((CustomMenuItem) event.getTarget()).getShapeType()));
+//            modeMenu.show(this, getCursorX() + this.getWidth(), getCursorY() + getButtons().get("mode").getHeight());
+//        }
         if (mode != ModeType.AREA) {
             controller.getAreaShapes().forEach(shape -> controller.removeShape(shape, Controller.SingletonType.FINAL));
             controller.getAreaShapes().clear();
@@ -91,11 +94,6 @@ public class DrawingToolbar extends CustomToolbar {
                 getButtons().get(key).setTooltip(new Tooltip(settings.getLocalizationString(key)));
             }
         }
-        lineMode.setText(settings.getLocalizationString("line"));
-        rectangleMode.setText(settings.getLocalizationString("rectangle"));
-        circleMode.setText(settings.getLocalizationString("circle"));
-        multilineMode.setText(settings.getLocalizationString("multiline"));
-        doorMode.setText(settings.getLocalizationString("door"));
     }
 
     public static Button createIconButton(String svg, String tooltip) {
