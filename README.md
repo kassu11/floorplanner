@@ -2,7 +2,7 @@
 
 This project provides users with an easy-to-use and efficient tool for designing and creating floorplans. It offers a variety of features that facilitate design, such as measuring dimensions and calculating total area. This project is open-source.
 
-If you would like to go more into detailt about the projects code structure, there are plenty of [UML graphs](https://github.com/kassu11/floorplanner/tree/main/UML-graphs) about the inner workings of the program.
+If you would like to go more into detail about the projects code structure, there are plenty of [UML graphs](https://github.com/kassu11/floorplanner/tree/main/UML-graphs) about the inner workings of the program.
 
 ### Shortcuts keys
 
