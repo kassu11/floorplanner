@@ -284,7 +284,10 @@ public class GUI extends Application {
             canvasContainer.setX(canvasContainer.getX() * scale + deltaX);
             canvasContainer.setY(canvasContainer.getY() * scale + deltaY);
 
-            canvasContainer.updateAllCanvasLayers(controller);
+            controller.drawAllShapes(gc, Controller.SingletonType.FINAL);
+            controller.drawAllShapes(previewGc, Controller.SingletonType.PREVIEW);
+            gridGc.drawGrid();
+            rulerGc.drawRuler();
             if (controller.getCurrentMode() == ModeType.AREA) {
                 AreaUtilities.drawArea(controller, controller.getAreaShapes(), previewGc);
             }
